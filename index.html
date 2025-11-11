@@ -12,88 +12,86 @@
         background: #000;
         font-family: Arial, sans-serif;
         color: white;
-        background: url("catkitsune-logo.png") no-repeat center/cover fixed;
-        filter: brightness(1.1);
+        background: url("catkitsune-logo.png") center/cover no-repeat fixed;
+        filter: brightness(1.15);
     }
 
-    /* Logo */
     .logo {
         position: fixed;
         top: 20px;
         left: 20px;
-        height: 65px;
-        pointer-events: none;
-        filter: drop-shadow(0 0 12px cyan);
+        height: 70px;
+        filter: drop-shadow(0 0 10px cyan);
     }
 
-    /* Wallet Button */
-    #connectButton, #disconnectButton {
+    #walletButton {
         position: fixed;
         top: 25px;
         right: 25px;
-        padding: 12px 20px;
+        padding: 12px 22px;
         border: 1px solid cyan;
-        color: cyan;
-        background: rgba(0,255,255,0.12);
         border-radius: 10px;
+        font-size: 16px;
+        background: rgba(0,255,255,0.12);
+        color: cyan;
         cursor: pointer;
         backdrop-filter: blur(6px);
         transition: 0.3s;
     }
-    #connectButton:hover, #disconnectButton:hover {
+
+    #walletButton:hover {
         background: rgba(0,255,255,0.4);
     }
-
 </style>
+
 </head>
 <body>
 
-<img src="catkitsune-logo.png" class="logo">
+<img src="catkitsune-logo.png" class="logo" />
 
-<button id="connectButton">Connect Wallet</button>
-<button id="disconnectButton" style="display:none;">Disconnect</button>
+<button id="walletButton">Connect Wallet</button>
 
 <script>
-    let account = null;
+    let currentAccount = null;
 
-    async function connect() {
-        if (typeof window.ethereum === "undefined") {
-            alert("MetaMask is not installed. Install it from metamask.io");
+    async function connectWallet() {
+        if (!window.ethereum) {
+            alert("MetaMask is not installed. Download it from https://metamask.io");
             return;
         }
-        try {
-            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-            account = accounts[0];
-            updateUI();
-        } catch (err) {
-            console.error(err);
-        }
+
+        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+        currentAccount = accounts[0];
+        updateWalletUI();
     }
 
-    function disconnect() {
-        account = null;
-        updateUI();
-    }
+    function updateWalletUI() {
+        const btn = document.getElementById("walletButton");
 
-    function updateUI() {
-        const connectBtn = document.getElementById("connectButton");
-        const disconnectBtn = document.getElementById("disconnectButton");
-
-        if (account) {
-            connectBtn.innerText = account.substring(0, 6) + "..." + account.slice(-4);
-            connectBtn.style.borderColor = "#00ffae";
-            connectBtn.style.color = "#00ffae";
-            disconnectBtn.style.display = "block";
+        if (currentAccount) {
+            let short = currentAccount.slice(0, 6) + "..." + currentAccount.slice(-4);
+            btn.textContent = short;
+            btn.onclick = disconnectWallet;
         } else {
-            connectBtn.innerText = "Connect Wallet";
-            connectBtn.style.borderColor = "cyan";
-            connectBtn.style.color = "cyan";
-            disconnectBtn.style.display = "none";
+            btn.textContent = "Connect Wallet";
+            btn.onclick = connectWallet;
         }
     }
 
-    document.getElementById("connectButton").onclick = connect;
-    document.getElementById("disconnectButton").onclick = disconnect;
+    function disconnectWallet() {
+        currentAccount = null;
+        updateWalletUI();
+    }
+
+    // Auto restore session
+    if (window.ethereum) {
+        ethereum.request({ method: 'eth_accounts' }).then((accounts) => {
+            if (accounts.length > 0) {
+                currentAccount = accounts[0];
+            }
+            updateWalletUI();
+        });
+    }
 </script>
 
 </body>
