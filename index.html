@@ -1,74 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CatKitSune</title>
-
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        overflow: hidden;
-        color: white;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CatKitSune</title>
+  <style>
+    :root{
+      --bg:#0a0f12;
+      --text:#e6faff;
+      --cyan:#00e6ff;
+      --cyanDim:rgba(0,230,255,.25);
     }
-
-    /* Background */
-    .bg {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: url("background.png") center center / cover no-repeat;
-        animation: flow 8s ease-in-out infinite alternate;
-        filter: brightness(1.1) contrast(1.2);
+    *{box-sizing:border-box}
+    html,body{
+      margin:0; padding:0; height:100%;
+      background:var(--bg); color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-
-    @keyframes flow {
-        0% { transform: scale(1.03); }
-        100% { transform: scale(1.12); }
+    /* Felső sáv elemei */
+    .topbar{
+      position:fixed; inset:0 0 auto 0; height:74px;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:12px 18px; pointer-events:none;
     }
-
-    /* Logo top-left */
-    .logo {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        width: 200px;
+    .brand{
+      display:flex; align-items:center; gap:12px; pointer-events:auto;
     }
-
-    /* Wallet button top-right */
-    .wallet-btn {
-        position: fixed;
-        top: 25px;
-        right: 30px;
-        padding: 12px 22px;
-        border-radius: 10px;
-        border: 1px solid cyan;
-        background: rgba(0,255,255,0.15);
-        color: cyan;
-        backdrop-filter: blur(6px);
-        cursor: pointer;
-        font-size: 16px;
-        transition: 0.3s;
+    .brand img{
+      height:48px; width:auto; display:block;
+      object-fit:contain; border-radius:10px;
+      /* finom neon fény a kép körül */
+      filter: drop-shadow(0 0 14px var(--cyanDim));
     }
-
-    .wallet-btn:hover {
-        background: rgba(0,255,255,0.35);
+    .brand .name{
+      font-weight:800; letter-spacing:.4px; font-size:22px; opacity:.9
     }
-</style>
-
+    .btn{
+      pointer-events:auto;
+      appearance:none; border:1px solid var(--cyan);
+      background:transparent; color:var(--cyan);
+      padding:12px 18px; border-radius:12px;
+      font-weight:700; font-size:16px; cursor:pointer;
+      transition: box-shadow .2s, transform .08s, background .2s;
+      box-shadow: 0 0 22px rgba(0,230,255,.15), inset 0 0 18px rgba(0,230,255,.08);
+    }
+    .btn:hover{ box-shadow:0 0 26px rgba(0,230,255,.35), inset 0 0 22px rgba(0,230,255,.15) }
+    .btn:active{ transform:translateY(1px) }
+    .btn.connected{
+      color:#0b1720; background:var(--cyan); border-color:var(--cyan);
+      box-shadow:0 0 26px rgba(0,230,255,.45);
+    }
+    /* tartalom csak helykitöltő, hogy legyen háttér */
+    .wrap{
+      min-height:100%; display:grid; place-items:center; padding-top:74px;
+      background:
+        radial-gradient(1200px 600px at 25% -10%, rgba(0,230,255,.06), transparent 60%),
+        radial-gradient(900px 500px at 90% -20%, rgba(0,230,255,.05), transparent 60%),
+        linear-gradient(to bottom, rgba(255,255,255,.03), transparent 200px);
+    }
+    .msg{
+      opacity:.7; text-align:center; line-height:1.5; max-width:720px; padding:24px
+    }
+    /* mobil igazítás */
+    @media (max-width:520px){
+      .brand .name{display:none}
+      .btn{padding:10px 14px; font-size:15px}
+      .brand img{height:42px}
+    }
+  </style>
 </head>
 <body>
+  <!-- Felső fix sáv -->
+  <div class="topbar">
+    <a class="brand" href="#">
+      <!-- IDE TEDD A KÉPET: nevezd el catkitsune-logo.png-re, vagy írd át az src-t a saját URL-edre -->
+      <img src="./catkitsune-logo.png" alt="CatKitSune Logo" />
+      <span class="name">CatKitSune</span>
+    </a>
 
-<div class="bg"></div>
+    <button id="connectBtn" class="btn" type="button">Connect Wallet</button>
+  </div>
 
-<img src="catkitsune-logo.png" class="logo" />
+  <!-- Tartalom (opcionális) -->
+  <main class="wrap">
+    <div class="msg">
+      <h1 style="margin:0 0 6px 0; font-size:34px; letter-spacing:.3px;">Website under construction. Coming soon…</h1>
+      <p style="margin:8px 0 0 0;">The neon CatKitSune logo sits top-left. Wallet connect is top-right. Drop this single file to your repo as <code>index.html</code>, and place your image next to it as <code>catkitsune-logo.png</code>.</p>
+      <p id="status" style="margin-top:12px; font-size:14px; opacity:.65;"></p>
+    </div>
+  </main>
 
-<button class="wallet-btn">
-    Connect Wallet
-</button>
+  <script>
+    // PHANTOM (Solana) csatlakozás – egyszerű példa
+    const btn = document.getElementById('connectBtn');
+    const statusEl = document.getElementById('status');
 
+    function setStatus(text){ statusEl.textContent = text || ""; }
+
+    async function connectPhantom(){
+      const provider = window?.solana ?? window?.phantom?.solana;
+      if(!provider){
+        setStatus("Phantom wallet not found. Install from phantom.app and reload.");
+        alert("Phantom wallet not found.\nInstall from https://phantom.app and reopen the page.");
+        return;
+      }
+      try{
+        const resp = await provider.connect({ onlyIfTrusted:false });
+        const pubkey = resp?.publicKey?.toString?.() || "Connected";
+        btn.classList.add('connected');
+        btn.textContent = "Connected";
+        setStatus("Connected: " + pubkey);
+      }catch(err){
+        console.error(err);
+        setStatus("Connection cancelled.");
+      }
+    }
+
+    btn.addEventListener('click', connectPhantom);
+  </script>
 </body>
 </html>
