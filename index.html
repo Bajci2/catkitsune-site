@@ -1,56 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CatKitSune</title>
 
 <style>
   body {
     margin: 0;
-    padding: 0;
     background: #000;
     font-family: Arial, sans-serif;
     color: white;
   }
 
-  /* Neon background wave */
+  /* Background Image - now CLICK-THROUGH */
   .bg {
     position: fixed;
     inset: 0;
     background: url("catkitsune-logo.png") center/cover no-repeat;
-    opacity: 0.22;
-    filter: blur(6px) brightness(1.2);
-    pointer-events: none;
+    opacity: 0.25;
+    pointer-events: none; /* <-- THIS FIXES THE PROBLEM */
+    filter: blur(4px) brightness(1.2);
   }
 
-  /* Logo in top-left */
+  /* Logo */
   .logo {
     position: fixed;
     top: 18px;
     left: 18px;
     height: 60px;
+    z-index: 999;
     filter: drop-shadow(0 0 12px cyan);
-    pointer-events: auto;
   }
 
-  /* Connect button top-right */
+  /* Wallet Button */
   #walletBtn {
     position: fixed;
     top: 22px;
     right: 22px;
-    padding: 11px 18px;
-    border: 1px solid cyan;
-    background: rgba(0,255,255,.12);
+    padding: 12px 20px;
+    font-size: 16px;
     border-radius: 10px;
+    border: 1px solid cyan;
+    background: rgba(0, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
     color: cyan;
     cursor: pointer;
-    backdrop-filter: blur(6px);
-    transition: .25s;
-    z-index: 10;
+    transition: 0.25s;
+    z-index: 999; /* <-- ensures button is clickable */
   }
+
   #walletBtn:hover {
-    background: rgba(0,255,255,.4);
+    background: rgba(0, 255, 255, 0.45);
   }
 </style>
 </head>
@@ -58,7 +59,7 @@
 <body>
 
 <div class="bg"></div>
-<img src="catkitsune-logo.png" class="logo" />
+<img src="catkitsune-logo.png" class="logo">
 
 <button id="walletBtn">Connect Wallet</button>
 
@@ -66,7 +67,7 @@
   let account = null;
 
   async function connectWallet() {
-    if (typeof window.ethereum === "undefined") {
+    if (!window.ethereum) {
       alert("MetaMask not detected. Install from https://metamask.io");
       return;
     }
@@ -74,23 +75,22 @@
     try {
       const accounts = await ethereum.request({ method: "eth_requestAccounts" });
       account = accounts[0];
-      updateUI();
+      updateBtn();
     } catch (err) {
-      console.log("User rejected.");
+      console.log(err);
     }
   }
 
   function disconnectWallet() {
     account = null;
-    updateUI();
+    updateBtn();
   }
 
-  function updateUI() {
+  function updateBtn() {
     const btn = document.getElementById("walletBtn");
 
     if (account) {
-      const short = account.slice(0,6) + "..." + account.slice(-4);
-      btn.textContent = short + "  ✕";
+      btn.textContent = account.slice(0,6) + "..." + account.slice(-4) + " ✕";
       btn.onclick = disconnectWallet;
     } else {
       btn.textContent = "Connect Wallet";
@@ -98,13 +98,11 @@
     }
   }
 
-  // Auto restore session
+  // Auto reconnect:
   if (window.ethereum) {
-    ethereum.request({ method: 'eth_accounts' }).then(accts => {
-      if (accts.length > 0) {
-        account = accts[0];
-      }
-      updateUI();
+    ethereum.request({ method: "eth_accounts" }).then(accts => {
+      if (accts.length > 0) account = accts[0];
+      updateBtn();
     });
   }
 </script>
