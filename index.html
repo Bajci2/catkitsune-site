@@ -1,63 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CatKitSune</title>
 
 <style>
     body {
         margin: 0;
         padding: 0;
-        background: #000;
-        overflow: hidden;
         font-family: Arial, sans-serif;
+        overflow: hidden;
         color: white;
     }
 
-    /* Background fluid effect */
+    /* Background */
     .bg {
         position: fixed;
         top: 0; left: 0;
         width: 100vw;
         height: 100vh;
-        background: url("catkitsune-logo.png") center center/cover no-repeat;
-        filter: brightness(0.4);
-        animation: move 10s ease-in-out infinite alternate;
+        background: url("background.png") center center / cover no-repeat;
+        animation: flow 8s ease-in-out infinite alternate;
+        filter: brightness(1.1) contrast(1.2);
     }
 
-    @keyframes move {
-        0% { transform: scale(1.05); }
-        100% { transform: scale(1.2); }
+    @keyframes flow {
+        0% { transform: scale(1.03); }
+        100% { transform: scale(1.12); }
     }
 
-    /* Logo top left */
+    /* Logo top-left */
     .logo {
         position: fixed;
         top: 20px;
         left: 20px;
-        width: 160px;
-        image-rendering: high-quality;
+        width: 200px;
     }
 
-    /* Wallet Button top right */
+    /* Wallet button top-right */
     .wallet-btn {
         position: fixed;
         top: 25px;
         right: 30px;
-        padding: 12px 20px;
-        background: rgba(0,255,255,0.12);
+        padding: 12px 22px;
+        border-radius: 10px;
         border: 1px solid cyan;
-        border-radius: 8px;
+        background: rgba(0,255,255,0.15);
         color: cyan;
-        font-size: 16px;
-        cursor: pointer;
         backdrop-filter: blur(6px);
+        cursor: pointer;
+        font-size: 16px;
         transition: 0.3s;
     }
 
     .wallet-btn:hover {
-        background: rgba(0,255,255,0.38);
+        background: rgba(0,255,255,0.35);
     }
 </style>
 
@@ -66,11 +64,9 @@
 
 <div class="bg"></div>
 
-<!-- LOGO -->
-<img src="catkitsune-logo.png" class="logo">
+<img src="catkitsune-logo.png" class="logo" />
 
-<!-- WALLET BUTTON -->
-<button class="wallet-btn" onclick="alert('Wallet connect activation coming soon')">
+<button class="wallet-btn">
     Connect Wallet
 </button>
 
