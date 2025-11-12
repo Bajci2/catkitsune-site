@@ -6,7 +6,7 @@
   <title>CatKitSune Portal</title>
 
   <style>
-    /* --- Alap beállítások --- */
+    /* --- Alap háttér és elrendezés --- */
     body {
       margin: 0;
       background-color: #000;
@@ -24,42 +24,42 @@
     }
 
     .wallet-icon {
-      width: 80px;
-      height: 80px;
+      width: 85px;
+      height: 85px;
       cursor: pointer;
       animation: pulse 3s ease-in-out infinite;
-      filter: drop-shadow(0 0 10px #00ffff);
+      filter: drop-shadow(0 0 12px #00ffff);
       transition: transform 0.3s ease;
     }
 
     .wallet-icon:hover {
       transform: scale(1.08);
-      filter: drop-shadow(0 0 20px #00ffff);
+      filter: drop-shadow(0 0 22px #00ffff);
     }
 
     /* --- Pulzáló fényhatás --- */
     @keyframes pulse {
       0% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
-      50% { filter: drop-shadow(0 0 20px #00ffff); transform: scale(1.04); }
+      50% { filter: drop-shadow(0 0 22px #00ffff); transform: scale(1.05); }
       100% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
     }
 
-    /* --- Mobil nézet --- */
+    /* --- Mobil nézethez kisebb ikon --- */
     @media (max-width: 768px) {
       .wallet-icon {
-        width: 65px;
-        height: 65px;
+        width: 70px;
+        height: 70px;
       }
     }
 
-    /* --- Későbbi CatKitSune stílushoz előkészítés --- */
+    /* --- Központi szöveg (opcionális) --- */
     .content {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       color: #00ffff;
-      font-size: 24px;
+      font-size: 26px;
       letter-spacing: 2px;
       text-shadow: 0 0 10px #00ffff;
     }
@@ -67,24 +67,30 @@
 </head>
 
 <body>
+
   <!-- Wallet ikon -->
   <div class="wallet-container">
     <img 
-      src="/images/wallet.png" 
+      src="https://i.ibb.co/REPLACE_THIS_WITH_YOUR_DIRECT_IMAGE_LINK.png" 
       alt="Wallet Icon" 
       class="wallet-icon" 
       id="walletIcon" />
   </div>
 
-  <!-- Oldal tartalom (opcionális középen) -->
+  <!-- Opcionális középső szöveg -->
   <div class="content">
-    <span>Welcome to CatKitSune Portal 🐾</span>
+    <span>Welcome to <strong>CatKitSune</strong> Portal 🐾</span>
   </div>
 
   <script>
-    // Wallet login funkció – ide kerül majd a connect/disconnect logika
+    // Wallet belépéshez hely (ide kerül majd a valódi login)
     const walletIcon = document.getElementById("walletIcon");
 
     walletIcon.addEventListener("click", () => {
       alert("Wallet login funkció hamarosan elérhető 💫");
-      //
+      // Később ide jön: connectWallet() / disconnectWallet()
+    });
+  </script>
+
+</body>
+</html>
