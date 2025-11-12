@@ -20,31 +20,18 @@
     z-index: 999;
   }
 
-  /* Wallet ikon */
+  /* Wallet ikon – pulzálás nélkül */
   .wallet-icon {
     width: 90px;
     height: 90px;
     border-radius: 50%;
     cursor: pointer;
-    animation: glowPulse 3s ease-in-out infinite;
     transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 15px #00eaff);  /* Fix neon fény */
   }
 
   .wallet-icon:hover {
     transform: scale(1.08);
-  }
-
-  /* Pulzáló fény körülötte */
-  @keyframes glowPulse {
-    0% {
-      filter: drop-shadow(0 0 5px #00eaff) drop-shadow(0 0 10px #00eaff);
-    }
-    50% {
-      filter: drop-shadow(0 0 25px #00eaff) drop-shadow(0 0 45px #00eaff);
-    }
-    100% {
-      filter: drop-shadow(0 0 5px #00eaff) drop-shadow(0 0 10px #00eaff);
-    }
   }
 
   /* Középre igazított fő szöveg */
