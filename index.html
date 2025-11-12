@@ -12,41 +12,60 @@
       overflow: hidden;
     }
 
-    /* Wallet ikon – jobb felső sarokban */
-    .wallet {
+    /* Wallet aura és ikon */
+    .wallet-container {
       position: fixed;
       top: 20px;
-      right: 10px;
-      width: 40px;
+      right: 20px;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wallet-glow {
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,255,0.35) 0%, rgba(0,255,255,0.05) 70%, transparent 100%);
+      animation: pulseGlow 3s ease-in-out infinite;
+      filter: blur(20px);
+    }
+
+    .wallet-icon {
+      position: relative;
+      width: 90px;
       height: auto;
-      animation: pulse 3s ease-in-out infinite;
-      filter: drop-shadow(0 0 15px #00ffff);
       cursor: pointer;
-      transition: transform 0.3s ease, filter 0.3s ease;
+      transition: transform 0.3s ease;
     }
 
-    .wallet:hover {
-      transform: scale(1.08);
-      filter: drop-shadow(0 0 30px #00ffff);
+    .wallet-icon:hover {
+      transform: scale(1.05);
     }
 
-    /* Pulzáló fény animáció */
-    @keyframes pulse {
-      0% { filter: drop-shadow(0 0 10px #00ffff); }
-      50% { filter: drop-shadow(0 0 35px #00ffff); }
-      100% { filter: drop-shadow(0 0 10px #00ffff); }
+    /* Pulzáló fény körülötte */
+    @keyframes pulseGlow {
+      0% { transform: scale(0.95); opacity: 0.6; }
+      50% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.6; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Wallet ikon -->
-  <img 
-    src="https://i.ibb.co/hxVYHqc/wallet-neon.png" 
-    alt="Wallet Icon" 
-    class="wallet" 
-    id="walletIcon" 
-  />
+  <!-- Wallet + fény aura -->
+  <div class="wallet-container">
+    <div class="wallet-glow"></div>
+    <img 
+      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA..." 
+      alt="Wallet Icon" 
+      class="wallet-icon" 
+      id="walletIcon"
+    />
+  </div>
 
   <script>
     const walletIcon = document.getElementById("walletIcon");
