@@ -20,8 +20,8 @@
     }
 
     .wallet-icon {
-      width: 64px;
-      height: 64px;
+      width: 72px;
+      height: 72px;
       cursor: pointer;
       animation: pulse 3s ease-in-out infinite;
       filter: drop-shadow(0 0 10px #00ffff);
@@ -38,24 +38,31 @@
       50% { filter: drop-shadow(0 0 16px #00ffff); transform: scale(1.04); }
       100% { filter: drop-shadow(0 0 6px #00ffff); transform: scale(1); }
     }
+
+    @media (max-width: 768px) {
+      .wallet-icon {
+        width: 60px;
+        height: 60px;
+      }
+    }
   </style>
 </head>
 <body>
 
   <div class="wallet-container">
     <img 
-      src="https://i.ibb.co/hB3t5HQ/neon-wallet-icon.png" 
+      src="https://png.pngtree.com/png-vector/20250409/ourlarge/pngtree-futuristic-wallet-icon-with-neon-blue-lighting-png-image_15938082.png"
       alt="Wallet Icon" 
       class="wallet-icon" 
       id="walletIcon" />
   </div>
 
   <script>
-    // későbbi belépéshez / wallet connecthez itt lesz a funkció
+    // ide jön majd a belépési funkció (pl. wallet connect)
     const walletIcon = document.getElementById('walletIcon');
     walletIcon.addEventListener('click', () => {
-      alert("Belépés funkció hamarosan elérhető 💫");
-      // ide fog kerülni majd a login / wallet connect script
+      alert("Belépés hamarosan elérhető 💫");
+      // később ide jön: wallet connect / login redirect
     });
   </script>
 
