@@ -4,16 +4,15 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CatKitSune Portal</title>
-
 <style>
   body {
     margin: 0;
-    background: #000;
+    background-color: #000;
     height: 100vh;
     overflow: hidden;
   }
 
-  /* Wallet ikon helye */
+  /* Wallet ikon konténer */
   .wallet-container {
     position: fixed;
     top: 20px;
@@ -21,22 +20,21 @@
     z-index: 999;
   }
 
-  /* Wallet ikon + stabil glow */
+  /* Wallet ikon – GLOW NÉLKÜL */
   .wallet-icon {
     width: 90px;
     height: 90px;
+    border-radius: 50%;
     cursor: pointer;
-    filter: 
-      drop-shadow(0 0 12px #00eaff)
-      drop-shadow(0 0 25px #00eaff);
     transition: transform 0.3s ease;
+    filter: none; /* <<< világító kör teljesen kikapcsolva */
   }
 
   .wallet-icon:hover {
     transform: scale(1.08);
   }
 
-  /* Középső szöveg */
+  /* Középre igazított fő szöveg */
   .center-text {
     position: absolute;
     top: 50%;
@@ -44,30 +42,32 @@
     transform: translate(-50%, -50%);
     color: #00eaff;
     font-family: 'Poppins', sans-serif;
-    font-size: 2.6rem;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
     text-shadow: 0 0 15px #00eaff;
   }
 </style>
-
 </head>
 <body>
 
+  <!-- Wallet ikon -->
   <div class="wallet-container">
     <img 
-      src="https://farmgazdak.hu/kepfeltoltes/images/2025/11/12/yXbL.png"
+      src="https://farmgazdak.hu/kepfeltoltes/images/2025/11/12/yXbL.png" 
+      alt="Wallet Icon" 
       class="wallet-icon"
-      alt="Wallet"
       onclick="walletLogin()"
     />
   </div>
 
+  <!-- Középső szöveg -->
   <div class="center-text">Welcome to CatKitSune Portal</div>
 
-<script>
-function walletLogin() {
-  alert("Wallet connect coming soon...");
-}
-</script>
+  <script>
+    function walletLogin() {
+      alert('Wallet connect feature coming soon...');
+    }
+  </script>
 
 </body>
 </html>
