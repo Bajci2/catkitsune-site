@@ -1,111 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CatKitSune</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CatKitSune Wallet Connect</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #0ff;
+      font-family: 'Poppins', sans-serif;
+    }
 
-<style>
-  body {
-    margin: 0;
-    background: #000;
-    font-family: Arial, sans-serif;
-    color: white;
-  }
+    .wallet-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
 
-  /* Background Image - now CLICK-THROUGH */
-  .bg {
-    position: fixed;
-    inset: 0;
-    background: url("catkitsune-logo.png") center/cover no-repeat;
-    opacity: 0.25;
-    pointer-events: none; /* <-- THIS FIXES THE PROBLEM */
-    filter: blur(4px) brightness(1.2);
-  }
+    .connect-btn {
+      background-color: transparent;
+      border: 1px solid #0ff;
+      color: #0ff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease-in-out;
+    }
 
-  /* Logo */
-  .logo {
-    position: fixed;
-    top: 18px;
-    left: 18px;
-    height: 60px;
-    z-index: 999;
-    filter: drop-shadow(0 0 12px cyan);
-  }
+    .connect-btn:hover {
+      background-color: #0ff;
+      color: #000;
+    }
 
-  /* Wallet Button */
-  #walletBtn {
-    position: fixed;
-    top: 22px;
-    right: 22px;
-    padding: 12px 20px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: 1px solid cyan;
-    background: rgba(0, 255, 255, 0.15);
-    backdrop-filter: blur(6px);
-    color: cyan;
-    cursor: pointer;
-    transition: 0.25s;
-    z-index: 999; /* <-- ensures button is clickable */
-  }
+    .wallet-icon {
+      width: 30px;
+      height: 30px;
+      opacity: 0.8;
+      cursor: default;
+    }
 
-  #walletBtn:hover {
-    background: rgba(0, 255, 255, 0.45);
-  }
-</style>
+    @media (max-width: 768px) {
+      .connect-btn {
+        display: none;
+      }
+      .wallet-icon {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .wallet-icon {
+        display: none;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="bg"></div>
-<img src="catkitsune-logo.png" class="logo">
+  <div class="wallet-container">
+    <button class="connect-btn" id="connectWallet">Connect Wallet</button>
+    <img src="https://cdn-icons-png.flaticon.com/512/10476/10476919.png" alt="Wallet" class="wallet-icon" />
+  </div>
 
-<button id="walletBtn">Connect Wallet</button>
+  <script>
+    const connectWalletBtn = document.getElementById('connectWallet');
 
-<script>
-  let account = null;
-
-  async function connectWallet() {
-    if (!window.ethereum) {
-      alert("MetaMask not detected. Install from https://metamask.io");
-      return;
-    }
-
-    try {
-      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
-      account = accounts[0];
-      updateBtn();
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  function disconnectWallet() {
-    account = null;
-    updateBtn();
-  }
-
-  function updateBtn() {
-    const btn = document.getElementById("walletBtn");
-
-    if (account) {
-      btn.textContent = account.slice(0,6) + "..." + account.slice(-4) + " ✕";
-      btn.onclick = disconnectWallet;
-    } else {
-      btn.textContent = "Connect Wallet";
-      btn.onclick = connectWallet;
-    }
-  }
-
-  // Auto reconnect:
-  if (window.ethereum) {
-    ethereum.request({ method: "eth_accounts" }).then(accts => {
-      if (accts.length > 0) account = accts[0];
-      updateBtn();
+    connectWalletBtn.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        alert('Wallet connection is only available on desktop.');
+        return;
+      }
+      // ide jön majd a wallet connect funkció (Phantom / MetaMask stb.)
+      alert('Connecting wallet...');
     });
-  }
-</script>
+  </script>
 
 </body>
 </html>
