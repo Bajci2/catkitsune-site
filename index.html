@@ -4,14 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CatKitSune Portal</title>
+
   <style>
+    /* --- Alap beállítások --- */
     body {
       margin: 0;
       background-color: #000;
       height: 100vh;
       overflow: hidden;
+      font-family: "Poppins", sans-serif;
     }
 
+    /* --- Wallet ikon pozíció és stílus --- */
     .wallet-container {
       position: fixed;
       top: 20px;
@@ -33,32 +37,54 @@
       filter: drop-shadow(0 0 20px #00ffff);
     }
 
+    /* --- Pulzáló fényhatás --- */
     @keyframes pulse {
       0% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
       50% { filter: drop-shadow(0 0 20px #00ffff); transform: scale(1.04); }
       100% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
     }
 
+    /* --- Mobil nézet --- */
     @media (max-width: 768px) {
       .wallet-icon {
         width: 65px;
         height: 65px;
       }
     }
+
+    /* --- Későbbi CatKitSune stílushoz előkészítés --- */
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #00ffff;
+      font-size: 24px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #00ffff;
+    }
   </style>
 </head>
-<body>
 
+<body>
+  <!-- Wallet ikon -->
   <div class="wallet-container">
-    <img src="/images/wallet.png" alt="Wallet Icon" class="wallet-icon" id="walletIcon" />
+    <img 
+      src="/images/wallet.png" 
+      alt="Wallet Icon" 
+      class="wallet-icon" 
+      id="walletIcon" />
+  </div>
+
+  <!-- Oldal tartalom (opcionális középen) -->
+  <div class="content">
+    <span>Welcome to CatKitSune Portal 🐾</span>
   </div>
 
   <script>
-    const walletIcon = document.getElementById('walletIcon');
-    walletIcon.addEventListener('click', () => {
-      alert("Wallet login funkció hamarosan elérhető 💫");
-    });
-  </script>
+    // Wallet login funkció – ide kerül majd a connect/disconnect logika
+    const walletIcon = document.getElementById("walletIcon");
 
-</body>
-</html>
+    walletIcon.addEventListener("click", () => {
+      alert("Wallet login funkció hamarosan elérhető 💫");
+      //
