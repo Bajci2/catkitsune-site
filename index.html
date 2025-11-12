@@ -5,10 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CatKitSune Portal</title>
 
-<!-- Graffiti-style FONT (Bangers) -->
+<!-- Graffiti-style FONT (Bangers – hasonló a képedhez) -->
 <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
 
 <style>
+  /* ====== ALAPÉRTELMEZETT GRAFFITI FONT ====== */
+  * {
+    font-family: 'Bangers', cursive !important;
+  }
+
   body {
     margin: 0;
     background-color: #000;
@@ -16,7 +21,6 @@
     overflow: hidden;
   }
 
-  /* Wallet ikon konténer */
   .wallet-container {
     position: fixed;
     top: 20px;
@@ -24,28 +28,25 @@
     z-index: 999;
   }
 
-  /* Wallet ikon – GLOW NÉLKÜL */
   .wallet-icon {
     width: 65px;
     height: 65px;
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.3s ease;
-    filter: none; /* <<< világító kör teljesen kikapcsolva */
+    filter: none;
   }
 
   .wallet-icon:hover {
     transform: scale(1.08);
   }
 
-  /* Középre igazított graffiti szöveg */
   .center-text {
     position: absolute;
     top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #00eaff;
-    font-family: 'Bangers', cursive;
     font-size: 2.3rem;
     letter-spacing: 2px;
     text-shadow: 0 0 15px #00eaff;
@@ -64,8 +65,8 @@
     />
   </div>
 
-  <!-- Középső graffiti szöveg -->
-  <div class="center-text">Quests  -  Points  -  Leaderboard</div>
+  <!-- Középen graffiti szöveg -->
+  <div class="center-text">Quests - Points - Leaderboard</div>
 
   <script>
     function walletLogin() {
