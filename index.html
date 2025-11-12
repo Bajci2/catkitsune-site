@@ -20,8 +20,8 @@
     }
 
     .wallet-icon {
-      width: 72px;
-      height: 72px;
+      width: 80px;
+      height: 80px;
       cursor: pointer;
       animation: pulse 3s ease-in-out infinite;
       filter: drop-shadow(0 0 10px #00ffff);
@@ -30,19 +30,19 @@
 
     .wallet-icon:hover {
       transform: scale(1.08);
-      filter: drop-shadow(0 0 18px #00ffff);
+      filter: drop-shadow(0 0 20px #00ffff);
     }
 
     @keyframes pulse {
-      0% { filter: drop-shadow(0 0 6px #00ffff); transform: scale(1); }
-      50% { filter: drop-shadow(0 0 16px #00ffff); transform: scale(1.04); }
-      100% { filter: drop-shadow(0 0 6px #00ffff); transform: scale(1); }
+      0% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 20px #00ffff); transform: scale(1.04); }
+      100% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
     }
 
     @media (max-width: 768px) {
       .wallet-icon {
-        width: 60px;
-        height: 60px;
+        width: 65px;
+        height: 65px;
       }
     }
   </style>
@@ -51,16 +51,19 @@
 
   <div class="wallet-container">
     <img 
-      src="https://i.ibb.co/TT3bH6h/neon-wallet.png" 
+      src="https://files.catkitcdn.xyz/wallet-neon.png" 
       alt="Wallet Icon" 
       class="wallet-icon" 
       id="walletIcon" />
   </div>
 
   <script>
+    // 👉 Itt lesz a CatKitSune wallet-login logika
     const walletIcon = document.getElementById('walletIcon');
+
     walletIcon.addEventListener('click', () => {
-      alert("Belépés hamarosan elérhető 💫");
+      alert("Wallet login funkció hamarosan elérhető 💫");
+      // később ide jön: login/logout script (pl. connectWallet(), disconnectWallet())
     });
   </script>
 
