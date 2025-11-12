@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CatKitSune Wallet Connect</title>
+  <title>CatKitSune Wallet Icon</title>
   <style>
     body {
       margin: 0;
       background-color: #000;
-      color: #0ff;
-      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      overflow: hidden;
     }
 
     .wallet-container {
@@ -19,64 +19,28 @@
       z-index: 999;
     }
 
-    .connect-btn {
-      background-color: transparent;
-      border: 1px solid #0ff;
-      color: #0ff;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .connect-btn:hover {
-      background-color: #0ff;
-      color: #000;
-    }
-
     .wallet-icon {
-      width: 30px;
-      height: 30px;
-      opacity: 0.8;
-      cursor: default;
+      width: 36px;
+      height: 36px;
+      opacity: 0.9;
+      cursor: pointer;
+      transition: all 0.25s ease-in-out;
+      filter: drop-shadow(0 0 6px #0ff);
     }
 
-    @media (max-width: 768px) {
-      .connect-btn {
-        display: none;
-      }
-      .wallet-icon {
-        display: block;
-      }
-    }
-
-    @media (min-width: 769px) {
-      .wallet-icon {
-        display: none;
-      }
+    .wallet-icon:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 10px #00ffff);
     }
   </style>
 </head>
 <body>
 
   <div class="wallet-container">
-    <button class="connect-btn" id="connectWallet">Connect Wallet</button>
-    <img src="https://cdn-icons-png.flaticon.com/512/10476/10476919.png" alt="Wallet" class="wallet-icon" />
+    <img src="https://cdn-icons-png.flaticon.com/512/10476/10476919.png" 
+         alt="Wallet" 
+         class="wallet-icon" />
   </div>
-
-  <script>
-    const connectWalletBtn = document.getElementById('connectWallet');
-
-    connectWalletBtn.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        alert('Wallet connection is only available on desktop.');
-        return;
-      }
-      // ide jön majd a wallet connect funkció (Phantom / MetaMask stb.)
-      alert('Connecting wallet...');
-    });
-  </script>
 
 </body>
 </html>
