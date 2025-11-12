@@ -9,19 +9,51 @@
       margin: 0;
       background-color: #000;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow: hidden;
     }
 
-    img {
-      width: 350px;
+    /* Wallet ikon – jobb felső sarokban */
+    .wallet {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 90px;
       height: auto;
-      display: block;
+      animation: pulse 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px #00ffff);
+      cursor: pointer;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .wallet:hover {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 30px #00ffff);
+    }
+
+    /* Pulzáló fény animáció */
+    @keyframes pulse {
+      0% { filter: drop-shadow(0 0 10px #00ffff); }
+      50% { filter: drop-shadow(0 0 35px #00ffff); }
+      100% { filter: drop-shadow(0 0 10px #00ffff); }
     }
   </style>
 </head>
 <body>
-  <img src="BgSub_Screenshot 2025-11-12 182338.png" alt="Wallet Icon" />
+
+  <!-- Wallet ikon -->
+  <img 
+    src="https://i.ibb.co/hxVYHqc/wallet-neon.png" 
+    alt="Wallet Icon" 
+    class="wallet" 
+    id="walletIcon" 
+  />
+
+  <script>
+    const walletIcon = document.getElementById("walletIcon");
+    walletIcon.addEventListener("click", () => {
+      alert("🔐 Wallet login funkció hamarosan elérhető!");
+    });
+  </script>
+
 </body>
 </html>
