@@ -2,24 +2,18 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CatKitSune Portal</title>
   <style>
-    :root {
-      --ckslila: #9b5cf6;
-      --cksturkiz: #22d3ee;
-      --bg: #000;
-    }
-
     body {
       margin: 0;
-      background-color: var(--bg);
+      background-color: #000;
       height: 100vh;
       overflow: hidden;
       font-family: "Poppins", sans-serif;
     }
 
-    /* Wallet ikon pozíció */
+    /* Wallet ikon pozíció és stílus */
     .wallet-container {
       position: fixed;
       top: 20px;
@@ -27,38 +21,29 @@
       z-index: 1000;
     }
 
-    /* Wallet ikon stílus */
     .wallet-icon {
       width: 90px;
       height: 90px;
       cursor: pointer;
-      filter: drop-shadow(0 0 12px var(--cksturkiz));
-      animation: pulse 3.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px #00ffff);
+      animation: pulse 3s ease-in-out infinite;
       transition: transform 0.3s ease;
+      border-radius: 20px;
     }
 
     .wallet-icon:hover {
       transform: scale(1.08);
-      filter: drop-shadow(0 0 25px var(--ckslila));
+      filter: drop-shadow(0 0 25px #00ffff);
     }
 
-    /* Pulzáló hatás */
+    /* Pulzáló fényhatás */
     @keyframes pulse {
-      0% {
-        filter: drop-shadow(0 0 10px var(--cksturkiz));
-        transform: scale(1);
-      }
-      50% {
-        filter: drop-shadow(0 0 25px var(--ckslila));
-        transform: scale(1.05);
-      }
-      100% {
-        filter: drop-shadow(0 0 10px var(--cksturkiz));
-        transform: scale(1);
-      }
+      0% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 25px #00ffff); transform: scale(1.05); }
+      100% { filter: drop-shadow(0 0 8px #00ffff); transform: scale(1); }
     }
 
-    /* Mobil */
+    /* Mobil méret */
     @media (max-width: 768px) {
       .wallet-icon {
         width: 70px;
@@ -66,28 +51,30 @@
       }
     }
 
-    /* Középső szöveg */
+    /* Középső szöveg (opcionális) */
     .content {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      color: var(--cksturkiz);
+      color: #00ffff;
       font-size: 28px;
-      text-shadow: 0 0 10px var(--cksturkiz);
+      text-shadow: 0 0 10px #00ffff;
       letter-spacing: 2px;
     }
   </style>
 </head>
+
 <body>
 
   <!-- Wallet ikon -->
   <div class="wallet-container">
     <img 
-      src="https://i.ibb.co/0jksKnv/catkitsune-wallet.png" 
-      alt="CatKitSune Wallet Icon"
+      src="https://farmgazdak.hu/kepfeltoltes/images/2025/11/12/yXbL.png"
+      alt="Wallet Icon"
       class="wallet-icon"
-      id="walletIcon" />
+      id="walletIcon"
+    />
   </div>
 
   <div class="content">
@@ -96,12 +83,10 @@
 
   <script>
     const walletIcon = document.getElementById("walletIcon");
-
     walletIcon.addEventListener("click", () => {
       alert("🔐 Wallet login funkció hamarosan elérhető!");
-      // Később: connectWallet() / disconnectWallet()
+      // később: connectWallet() / disconnectWallet()
     });
   </script>
-
 </body>
 </html>
