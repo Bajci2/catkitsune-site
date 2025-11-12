@@ -3,89 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to CatKitSune</title>
+  <title>CatKitSune Wallet</title>
   <style>
     body {
       margin: 0;
       background-color: #000;
       height: 100vh;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #00ffff;
-      font-family: "Poppins", sans-serif;
     }
 
-    /* --- Középső szöveg --- */
-    h1 {
-      font-size: 42px;
-      text-align: center;
-      text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff;
-      letter-spacing: 2px;
-      animation: glow 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow {
-      0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
-      100% { text-shadow: 0 0 25px #00ffff, 0 0 45px #00ffff; }
-    }
-
-    /* --- Wallet ikon --- */
-    .wallet-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
-      animation: pulse 4s ease-in-out infinite;
-    }
-
-    .wallet-icon {
-      width: 95px;
-      height: 95px;
-      cursor: pointer;
-      border-radius: 15px;
-      transition: transform 0.3s ease;
-      box-shadow: 0 0 25px #00ffff;
-    }
-
-    .wallet-icon:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 40px #00ffff;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 10px #00ffff; }
-      50% { box-shadow: 0 0 40px #00ffff; }
-      100% { box-shadow: 0 0 10px #00ffff; }
-    }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 30px; }
-      .wallet-icon { width: 70px; height: 70px; }
+    img {
+      width: 350px;
+      height: auto;
+      display: block;
     }
   </style>
 </head>
-
 <body>
-  <!-- Középső szöveg -->
-  <h1>Welcome to<br>CatKitSune</h1>
-
-  <!-- Wallet ikon -->
-  <div class="wallet-container">
-    <img 
-      src="https://farmgazdak.hu/kepfeltoltes/images/2025/11/12/yXbL.png"
-      alt="Wallet Icon"
-      class="wallet-icon"
-      id="walletIcon"
-    />
-  </div>
-
-  <script>
-    const walletIcon = document.getElementById("walletIcon");
-    walletIcon.addEventListener("click", () => {
-      alert("🔐 Wallet login funkció hamarosan elérhető!");
-    });
-  </script>
+  <img src="BgSub_Screenshot 2025-11-12 182338.png" alt="Wallet Icon" />
 </body>
 </html>
