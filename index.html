@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CatKitSune Wallet Icon</title>
+  <title>CatKitSune Portal</title>
   <style>
     body {
       margin: 0;
@@ -20,27 +20,44 @@
     }
 
     .wallet-icon {
-      width: 36px;
-      height: 36px;
-      opacity: 0.9;
+      width: 64px;
+      height: 64px;
       cursor: pointer;
-      transition: all 0.25s ease-in-out;
-      filter: drop-shadow(0 0 6px #0ff);
+      animation: pulse 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px #00ffff);
+      transition: transform 0.3s ease;
     }
 
     .wallet-icon:hover {
-      transform: scale(1.1);
-      filter: drop-shadow(0 0 10px #00ffff);
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 18px #00ffff);
+    }
+
+    @keyframes pulse {
+      0% { filter: drop-shadow(0 0 6px #00ffff); transform: scale(1); }
+      50% { filter: drop-shadow(0 0 16px #00ffff); transform: scale(1.04); }
+      100% { filter: drop-shadow(0 0 6px #00ffff); transform: scale(1); }
     }
   </style>
 </head>
 <body>
 
   <div class="wallet-container">
-    <img src="https://cdn-icons-png.flaticon.com/512/10476/10476919.png" 
-         alt="Wallet" 
-         class="wallet-icon" />
+    <img 
+      src="https://i.ibb.co/hB3t5HQ/neon-wallet-icon.png" 
+      alt="Wallet Icon" 
+      class="wallet-icon" 
+      id="walletIcon" />
   </div>
+
+  <script>
+    // későbbi belépéshez / wallet connecthez itt lesz a funkció
+    const walletIcon = document.getElementById('walletIcon');
+    walletIcon.addEventListener('click', () => {
+      alert("Belépés funkció hamarosan elérhető 💫");
+      // ide fog kerülni majd a login / wallet connect script
+    });
+  </script>
 
 </body>
 </html>
