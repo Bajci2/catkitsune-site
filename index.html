@@ -20,14 +20,16 @@
     z-index: 999;
   }
 
-  /* Wallet ikon – GLOW NÉLKÜL */
+  /* Wallet ikon – stabil glow visszarakva */
   .wallet-icon {
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     cursor: pointer;
-    transition: transform 0.3s ease;
-    filter: none; /* <<< világító kör teljesen kikapcsolva */
+    transition: transform 0.3s ease, filter 0.3s ease;
+
+    /* <<< EZ A STABIL NEON GLOW >>> */
+    filter: drop-shadow(0 0 18px #00eaff) drop-shadow(0 0 35px #00eaff);
   }
 
   .wallet-icon:hover {
@@ -51,23 +53,4 @@
 <body>
 
   <!-- Wallet ikon -->
-  <div class="wallet-container">
-    <img 
-      src="https://farmgazdak.hu/kepfeltoltes/images/2025/11/12/yXbL.png" 
-      alt="Wallet Icon" 
-      class="wallet-icon"
-      onclick="walletLogin()"
-    />
-  </div>
-
-  <!-- Középső szöveg -->
-  <div class="center-text">Welcome to CatKitSune Portal</div>
-
-  <script>
-    function walletLogin() {
-      alert('Wallet connect feature coming soon...');
-    }
-  </script>
-
-</body>
-</html>
+  <
