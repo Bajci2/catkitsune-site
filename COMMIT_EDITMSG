@@ -1,9 +1,0 @@
-Add navigation for swap page and update leaderboard display
-
-Adds a new bottom navigation bar with Home and Swap icons. Updates the leaderboard to display only points instead of names and avatars. Introduces an NFT gallery with placeholder slots and modifies the QuestCard component to show status icons and reset times. A new Swap page is also included.
-
-Replit-Commit-Author: Agent
-Replit-Commit-Session-Id: 4685e813-ee92-4a2b-996a-cd8c66087d02
-Replit-Commit-Checkpoint-Type: full_checkpoint
-Replit-Commit-Event-Id: 4919e81b-2cfb-426d-a9ab-49873cde4802
-Replit-Commit-Screenshot-Url: https://storage.googleapis.com/screenshot-production-us-central1/da2d8d93-71c3-4173-a2fc-db5c328f0d35/4685e813-ee92-4a2b-996a-cd8c66087d02/qh99mQZ
