@@ -6,11 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg-main: #f6ecff;
       --bg-card: #ffffff;
@@ -25,116 +21,58 @@
       --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.12);
     }
     body {
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: "Inter", sans-serif;
       background: var(--bg-main);
       color: var(--text-main);
       min-height: 100vh;
     }
-    .app {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    .app { min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* HEADER */
     header {
       padding: 10px 16px;
       background: #ffffff;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .logo {
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: 0.03em;
-    }
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .logo { font-size: 14px; font-weight: 800; }
+    .top-actions { display: flex; align-items: center; gap: 8px; }
     .login-btn {
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f9fafb;
-      cursor: pointer;
+      font-size: 12px; padding: 6px 12px; border-radius: 999px;
+      border: 1px solid var(--border); background: #f9fafb; cursor: pointer;
     }
     .avatar {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
+      width: 26px; height: 26px; border-radius: 50%;
       background: linear-gradient(135deg, #6a3df5, #22c55e);
     }
 
-    main {
-      flex: 1;
-      padding: 24px 12px 80px;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
+    main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-    /* HERO */
     .hero-card {
       background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
-      border-radius: 24px;
-      padding: 32px 20px 20px;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 20px;
-      text-align: center;
+      border-radius: 24px; padding: 32px 20px 20px;
+      box-shadow: var(--shadow-card); margin-bottom: 20px; text-align: center;
     }
-    .hero-title {
-      font-size: 22px;
-      font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 4px;
-    }
-    .hero-sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 20px;
-    }
+    .hero-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .hero-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+
     .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 18px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 10px; margin-bottom: 18px;
     }
     .stat-card {
-      background: #fff;
-      border-radius: 18px;
-      padding: 10px 8px;
+      background: #fff; border-radius: 18px; padding: 10px 8px;
       border: 1px solid var(--primary-soft);
     }
-    .stat-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-    .stat-value {
-      font-size: 18px;
-      font-weight: 700;
-    }
+    .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+    .stat-value { font-size: 18px; font-weight: 700; }
+
     .hero-btn {
-      display: inline-block;
-      padding: 10px 22px;
-      border-radius: 999px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 13px;
-      border: none;
-      cursor: pointer;
+      padding: 10px 22px; background: var(--primary);
+      color: #fff; border-radius: 999px; font-size: 13px; cursor: pointer;
     }
 
-    /* GRID LAYOUT */
     .content-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
+      display: grid; grid-template-columns: 2fr 1fr; gap: 20px;
     }
 
     .card {
@@ -145,110 +83,50 @@
       padding: 18px 16px;
     }
     .card-title {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 14px; font-weight: 700; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
     }
     .card-title span.dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: var(--primary);
+      width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
     }
 
-    /* KÜLDETÉSEK LISTA */
-    .mission-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .mission-list { display: flex; flex-direction: column; gap: 8px; }
     .mission-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 9px 10px;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      background: #f9fafb;
-      font-size: 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 10px; border-radius: 12px;
+      border: 1px solid #e5e7eb; background: #f9fafb; font-size: 12px;
     }
-    .mission-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .mission-left { display: flex; align-items: center; gap: 10px; }
     .mission-check {
-      width: 16px;
-      height: 16px;
-      border-radius: 999px;
-      border: 2px solid #d1d5db;
-      background: #fff;
+      width: 16px; height: 16px; border-radius: 999px;
+      border: 2px solid #d1d5db; background: #fff;
     }
-    .mission-text-title {
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-    .mission-text-sub {
-      color: var(--text-muted);
-      font-size: 11px;
-    }
-    .mission-points {
-      color: #16a34a;
-      font-weight: 600;
-      font-size: 12px;
-    }
+    .mission-text-title { font-weight: 600; margin-bottom: 2px; }
+    .mission-text-sub { color: var(--text-muted); font-size: 11px; }
+    .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
 
-    /* RANGLISTA */
-    .leader-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 6px;
-    }
+    .leader-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
     .leader-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 6px 9px;
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 9px; border-radius: 10px; border: 1px solid #e5e7eb;
       font-size: 11px;
     }
     .leader-item.active {
       border-color: var(--primary);
       background: #f2ecff;
     }
-    .leader-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .leader-left { display: flex; align-items: center; gap: 6px; }
     .leader-rank {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 600;
+      width: 18px; height: 18px; border-radius: 999px;
+      background: #f3f4f6; display: flex; align-items: center;
+      justify-content: center; font-size: 10px; font-weight: 600;
     }
-    .leader-name {
-      font-weight: 500;
-    }
-    .leader-points {
-      font-weight: 600;
-      font-size: 11px;
-    }
+    .leader-name { font-weight: 500; }
+    .leader-points { font-weight: 600; font-size: 11px; }
 
-    /* NFT GALÉRIA */
     .nft-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       margin-top: 8px;
     }
@@ -268,212 +146,103 @@
       margin-bottom: 2px;
     }
 
-    /* SWAP PAGE */
-    .swap-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-      margin-top: 10px;
-    }
+    .swap-wrapper { display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 10px; }
     .swap-card {
-      max-width: 420px;
-      width: 100%;
-      background: #fff;
-      border-radius: 22px;
+      max-width: 420px; width: 100%;
+      background: #fff; border-radius: 22px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-card);
       padding: 18px 16px 16px;
     }
     .swap-header {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px; position: relative;
     }
-    .swap-header h2 {
-      font-size: 18px;
-      font-weight: 700;
-    }
+    .swap-header h2 { font-size: 18px; font-weight: 700; }
     .swap-settings {
-      position: absolute;
-      right: 0;
-      top: 50%;
+      position: absolute; right: 0; top: 50%;
       transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      cursor: pointer;
-      background: #f9fafb;
+      width: 24px; height: 24px; border-radius: 999px;
+      border: 1px solid #e5e7eb; display: flex; align-items: center;
+      justify-content: center; font-size: 13px; cursor: pointer; background: #f9fafb;
     }
 
     .swap-field {
-      background: #f9fafb;
-      border-radius: 14px;
-      border: 1px solid #e5e7eb;
-      padding: 10px 10px 8px;
-      margin-bottom: 10px;
-      font-size: 12px;
+      background: #f9fafb; border-radius: 14px;
+      border: 1px solid #e5e7eb; padding: 10px;
+      margin-bottom: 10px; font-size: 12px;
     }
     .swap-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 4px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; margin-bottom: 4px;
     }
-    .swap-token-select {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+    .swap-token-select { display: flex; align-items: center; gap: 4px; }
     select.token-select {
-      border-radius: 999px;
-      border: 1px solid #d1d5db;
-      background: #fff;
-      padding: 4px 8px;
-      font-size: 11px;
+      border-radius: 999px; border: 1px solid #d1d5db;
+      background: #fff; padding: 4px 8px; font-size: 11px;
     }
     input.amount-input {
-      width: 100%;
-      border: none;
-      background: transparent;
-      font-size: 14px;
-      font-weight: 600;
-      outline: none;
-      text-align: right;
+      width: 100%; border: none; background: transparent;
+      font-size: 14px; font-weight: 600; outline: none; text-align: right;
     }
-    .swap-balance {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
+
     .swap-center-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      margin: 4px auto 8px;
+      width: 28px; height: 28px;
+      border-radius: 999px; border: 1px solid #e5e7eb;
+      background: #fff; display: flex; align-items: center;
+      justify-content: center; font-size: 12px; margin: 4px auto 8px;
       cursor: pointer;
     }
     .swap-extra {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-muted);
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--text-muted);
       margin-bottom: 10px;
     }
     .swap-btn {
-      width: 100%;
-      border: none;
-      border-radius: 999px;
-      padding: 9px 0;
-      background: var(--primary);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-bottom: 4px;
+      width: 100%; border: none; border-radius: 999px;
+      padding: 9px 0; background: var(--primary);
+      color: #fff; font-size: 13px; font-weight: 600;
+      cursor: pointer; margin-bottom: 4px;
     }
 
     .swap-history {
-      max-width: 420px;
-      width: 100%;
-      background: #fff;
-      border-radius: 18px;
+      max-width: 420px; width: 100%;
+      background: #fff; border-radius: 18px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-card);
-      padding: 14px 14px 10px;
+      padding: 14px;
       font-size: 11px;
     }
-    .swap-history-title {
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .swap-history-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+    .swap-history-title { font-weight: 600; margin-bottom: 8px; }
     .swap-history-item {
-      display: flex;
-      justify-content: space-between;
+      display: flex; justify-content: space-between;
       color: var(--text-muted);
     }
     .swap-history-item span.amount {
-      font-weight: 500;
-      color: var(--text-main);
+      font-weight: 500; color: var(--text-main);
     }
-    .swap-history-item span.time {
-      font-size: 10px;
-    }
+    .swap-history-item span.time { font-size: 10px; }
 
-    /* TOGGLE (BOTTOM) */
     .bottom-toggle {
-      position: fixed;
-      bottom: 18px;
-      left: 50%;
+      position: fixed; bottom: 18px; left: 50%;
       transform: translateX(-50%);
-      background: #fff;
-      border-radius: 999px;
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.20);
-      display: flex;
-      padding: 4px;
-      gap: 4px;
-      z-index: 50;
+      background: #fff; border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(15,23,42,0.2);
+      display: flex; padding: 4px; gap: 4px; z-index: 50;
     }
     .toggle-btn {
-      border-radius: 999px;
-      border: none;
-      padding: 6px 12px;
-      font-size: 11px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: transparent;
-      cursor: pointer;
+      border-radius: 999px; border: none; padding: 6px 12px;
+      font-size: 11px; display: flex; align-items: center;
+      gap: 6px; background: transparent; cursor: pointer;
       color: var(--text-muted);
     }
-    .toggle-btn span.icon {
-      font-size: 13px;
-    }
     .toggle-btn.active {
-      background: #eef2ff;
-      color: var(--primary);
+      background: #eef2ff; color: var(--primary);
       font-weight: 600;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      main {
-        padding-inline: 10px;
-      }
-      .content-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    @media (max-width: 640px) {
-      .hero-card {
-        padding-inline: 16px;
-      }
-      .stats-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
   </style>
 </head>
 <body>
@@ -487,45 +256,28 @@
   </header>
 
   <main>
-    <!-- QUESTS VIEW -->
     <section id="quests-view">
       <div class="hero-card">
-        <div class="hero-title">
-          Teljesíts Küldetéseket. Gyűjts Pontokat. Mássz a Ranglétán.
-        </div>
-        <div class="hero-sub">
-          Csatlakozz a közösséghez és érd el a legmagasabb szintet minden egyes küldetéssel!
-        </div>
+        <div class="hero-title">Teljesíts Küldetéseket. Gyűjts Pontokat. Mássz a Ranglétán.</div>
+        <div class="hero-sub">Csatlakozz a közösséghez és érd el a legmagasabb szintet!</div>
 
         <div class="stats-row">
-          <div class="stat-card">
-            <div class="stat-label">Összpontszám</div>
-            <div class="stat-value">1,250</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Küldetések</div>
-            <div class="stat-value">8</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Megoldott</div>
-            <div class="stat-value">4</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Helyezés</div>
-            <div class="stat-value">#42</div>
-          </div>
+          <div class="stat-card"><div class="stat-label">Összpontszám</div><div class="stat-value">1,250</div></div>
+          <div class="stat-card"><div class="stat-label">Küldetések</div><div class="stat-value">8</div></div>
+          <div class="stat-card"><div class="stat-label">Megoldott</div><div class="stat-value">4</div></div>
+          <div class="stat-card"><div class="stat-label">Helyezés</div><div class="stat-value">#42</div></div>
         </div>
 
         <button class="hero-btn">Aktív Küldetések Megtekintése</button>
       </div>
 
       <div class="content-grid">
-        <!-- Küldetések -->
         <div class="card">
-          <div class="card-title">
-            <span class="dot"></span> Küldetések
-          </div>
+          <div class="card-title"><span class="dot"></span> Küldetések</div>
+
           <div class="mission-list">
+            
+            <!-- Task 1 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -537,17 +289,19 @@
               <div class="mission-points">+250 EP</div>
             </div>
 
+            <!-- Task 2 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
                 <div>
                   <div class="mission-text-title">Bridge to HYPE</div>
-                  <div class="mission-text-sub">Bridge at least $10 from any network → HYPE..</div>
+                  <div class="mission-text-sub">Bridge at least $10 from any network → HYPE.</div>
                 </div>
               </div>
               <div class="mission-points">+500 EP</div>
             </div>
 
+            <!-- Task 3 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -559,6 +313,7 @@
               <div class="mission-points">+300 EP</div>
             </div>
 
+            <!-- Task 4 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -570,6 +325,7 @@
               <div class="mission-points">+150 EP</div>
             </div>
 
+            <!-- Task 5 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -581,14 +337,14 @@
               <div class="mission-points">+200 EP</div>
             </div>
 
-            <!-- 🔥 ÚJ KÜLDETÉS: FOLLOW ON X -->
+            <!-- Task 6: Follow on X -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
                 <div>
                   <div class="mission-text-title">Follow on X</div>
                   <div class="mission-text-sub">
-                    Kövesd be 
+                    Kövesd be
                     <a href="https://x.com/GborSzakl1" target="_blank" style="color:#6366f1; text-decoration:underline;">
                       @GborSzakl1
                     </a>
@@ -598,80 +354,57 @@
               </div>
               <div class="mission-points">+150 EP</div>
             </div>
-            <!-- 🔥 ÚJ KÜLDETÉS VÉGE -->
+
+            <!-- Task 7: Mint CatKitSune NFT -->
+            <div class="mission-item">
+              <div class="mission-left">
+                <div class="mission-check"></div>
+                <div>
+                  <div class="mission-text-title">Mintelje a CatKitSune NFT-t</div>
+                  <div class="mission-text-sub">Airdrop bónusz jutalom.</div>
+                </div>
+              </div>
+              <div class="mission-points">+300 EP</div>
+            </div>
 
           </div>
         </div>
 
-        <!-- Ranglista + NFT -->
+        <!-- Ranglista -->
         <div class="right-column">
           <div class="card" style="margin-bottom: 14px;">
-            <div class="card-title">
-              <span class="dot"></span> Ranglétra
-            </div>
+            <div class="card-title"><span class="dot"></span> Ranglétra</div>
+
             <div class="leader-list">
-              <div class="leader-item">
-                <div class="leader-left">
-                  <div class="leader-rank">#1</div>
-                  <div class="leader-name">S1</div>
-                </div>
-                <div class="leader-points">......</div>
-              </div>
-              <div class="leader-item">
-                <div class="leader-left">
-                  <div class="leader-rank">#2</div>
-                  <div class="leader-name">S2</div>
-                </div>
-                <div class="leader-points">......</div>
-              </div>
-              <div class="leader-item">
-                <div class="leader-left">
-                  <div class="leader-rank">#3</div>
-                  <div class="leader-name">S3</div>
-                </div>
-                <div class="leader-points">......</div>
-              </div>
-              <div class="leader-item active">
-                <div class="leader-left">
-                  <div class="leader-rank">#5</div>
-                  <div class="leader-name">Te</div>
-                </div>
-                <div class="leader-points">......</div>
-              </div>
-              <div class="leader-item">
-                <div class="leader-left">
-                  <div class="leader-rank">#6</div>
-                  <div class="leader-name">S6</div>
-                </div>
-                <div class="leader-points">......</div>
-              </div>
-              <div class="leader-item">
-                <div class="leader-left">
-                  <div class="leader-rank">#7</div>
-                  <div class="leader-name">S7</div>
-                </div>
-                <div class="leader-points">......</div>
-              </div>
+              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#1</div><div class="leader-name">S1</div></div><div class="leader-points">......</div></div>
+              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#2</div><div class="leader-name">S2</div></div><div class="leader-points">......</div></div>
+              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#3</div><div class="leader-name">S3</div></div><div class="leader-points">......</div></div>
+              <div class="leader-item active"><div class="leader-left"><div class="leader-rank">#5</div><div class="leader-name">Te</div></div><div class="leader-points">......</div></div>
+              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#6</div><div class="leader-name">S6</div></div><div class="leader-points">......</div></div>
+              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#7</div><div class="leader-name">S7</div></div><div class="leader-points">......</div></div>
             </div>
           </div>
 
+          <!-- NFT Galéria -->
           <div class="card">
-            <div class="card-title">
-              <span class="dot"></span> NFT Galéria
-            </div>
+            <div class="card-title"><span class="dot"></span> NFT Galéria</div>
+
             <div class="nft-grid">
-              <div class="nft-card"><strong>#1</strong> NFT slot</div>
-              <div class="nft-card"><strong>#2</strong> NFT </div>
-              <div class="nft-card"><strong>#3</strong> NFT slot</div>
-              <div class="nft-card"><strong>#4</strong> NFT slot</div>
-              <div class="nft-card"><strong>#5</strong> NFT slot</div>
-              <div class="nft-card"><strong>#6</strong> NFT slot</div>
-              <div class="nft-card"><strong>#7</strong> NFT slot</div>
-              <div class="nft-card"><strong>#8</strong> NFT slot</div>
-              <div class="nft-card"><strong>#9</strong> NFT slot</div>
-              <div class="nft-card"><strong>#10</strong> NFT slot</div>
-              <div class="nft-card"><strong>#11</strong> NFT slot</div>
-              <div class="nft-card"><strong>#12</strong> NFT slot</div>
+              <div class="nft-card"><strong>#1</strong>NFT slot</div>
+              <div class="nft-card"><strong>#2</strong>NFT slot</div>
+              <div class="nft-card"><strong>#3</strong>NFT slot</div>
+
+              <div class="nft-card"><strong>#4</strong>NFT slot</div>
+              <div class="nft-card"><strong>#5</strong>NFT slot</div>
+              <div class="nft-card"><strong>#6</strong>NFT slot</div>
+
+              <div class="nft-card"><strong>#7</strong>NFT slot</div>
+              <div class="nft-card"><strong>#8</strong>NFT slot</div>
+              <div class="nft-card"><strong>#9</strong>NFT slot</div>
+
+              <div class="nft-card"><strong>#10</strong>NFT slot</div>
+              <div class="nft-card"><strong>#11</strong>NFT slot</div>
+              <div class="nft-card"><strong>#12</strong>NFT slot</div>
             </div>
           </div>
         </div>
@@ -736,25 +469,15 @@
         <div class="swap-history">
           <div class="swap-history-title">Legutóbbi tranzakciók</div>
           <div class="swap-history-list">
-            <div class="swap-history-item">
-              <span class="amount">0.51 HYPE → 12.95 USDC</span>
-              <span class="time">36mp</span>
-            </div>
-            <div class="swap-history-item">
-              <span class="amount">0.20 HYPE → 4.81 USDC</span>
-              <span class="time">3p</span>
-            </div>
-            <div class="swap-history-item">
-              <span class="amount">1.11 KITTEN → 23.6 USDC</span>
-              <span class="time">7p</span>
-            </div>
+            <div class="swap-history-item"><span class="amount">0.51 HYPE → 12.95 USDC</span><span class="time">36mp</span></div>
+            <div class="swap-history-item"><span class="amount">0.20 HYPE → 4.81 USDC</span><span class="time">3p</span></div>
+            <div class="swap-history-item"><span class="amount">1.11 KITTEN → 23.6 USDC</span><span class="time">7p</span></div>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Alsó váltó -->
   <div class="bottom-toggle">
     <button id="btn-quests" class="toggle-btn active">
       <span class="icon">📋</span>
@@ -790,5 +513,6 @@
   btnQuests.addEventListener("click", showQuests);
   btnSwap.addEventListener("click", showSwap);
 </script>
+
 </body>
 </html>
