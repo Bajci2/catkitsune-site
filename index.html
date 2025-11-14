@@ -20,14 +20,12 @@
       --radius-xl: 20px;
       --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.12);
     }
-
     body {
       font-family: "Inter", sans-serif;
       background: var(--bg-main);
       color: var(--text-main);
       min-height: 100vh;
     }
-
     .app { min-height: 100vh; display: flex; flex-direction: column; }
 
     header {
@@ -36,24 +34,25 @@
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
     }
-
     .logo { font-size: 14px; font-weight: 800; }
     .top-actions { display: flex; align-items: center; gap: 8px; }
     .login-btn {
-      font-size: 12px; padding: 6px 12px;
-      border-radius: 999px; border: 1px solid var(--border);
-      background: #f9fafb; cursor: pointer;
+      font-size: 12px; padding: 6px 12px; border-radius: 999px;
+      border: 1px solid var(--border); background: #f9fafb; cursor: pointer;
+    }
+    .avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, #6a3df5, #22c55e);
     }
 
-    .dev-banner {
+    .notice {
       width: 100%;
+      background: #ffe9b8;
       padding: 6px 0;
-      background: #ffefc4;
       text-align: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: #6a3df5;
-      border-bottom: 1px solid #f2d98a;
+      color: #8a5300;
+      font-size: 13px;
+      border-bottom: 1px solid #ffd178;
     }
 
     main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -63,7 +62,6 @@
       border-radius: 24px; padding: 32px 20px 20px;
       box-shadow: var(--shadow-card); margin-bottom: 20px; text-align: center;
     }
-
     .hero-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
     .hero-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
 
@@ -71,12 +69,10 @@
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 10px; margin-bottom: 18px;
     }
-
     .stat-card {
       background: #fff; border-radius: 18px; padding: 10px 8px;
       border: 1px solid var(--primary-soft);
     }
-
     .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
     .stat-value { font-size: 18px; font-weight: 700; }
 
@@ -96,12 +92,10 @@
       box-shadow: var(--shadow-card);
       padding: 18px 16px;
     }
-
     .card-title {
       font-size: 14px; font-weight: 700; margin-bottom: 12px;
       display: flex; align-items: center; gap: 8px;
     }
-
     .card-title span.dot {
       width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
     }
@@ -112,16 +106,52 @@
       padding: 9px 10px; border-radius: 12px;
       border: 1px solid #e5e7eb; background: #f9fafb; font-size: 12px;
     }
-
     .mission-left { display: flex; align-items: center; gap: 10px; }
     .mission-check {
       width: 16px; height: 16px; border-radius: 999px;
       border: 2px solid #d1d5db; background: #fff;
     }
-
     .mission-text-title { font-weight: 600; margin-bottom: 2px; }
     .mission-text-sub { color: var(--text-muted); font-size: 11px; }
     .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
+
+    .leader-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+    .leader-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 9px; border-radius: 10px; border: 1px solid #e5e7eb;
+      font-size: 11px;
+    }
+    .leader-item.active {
+      border-color: var(--primary);
+      background: #f2ecff;
+    }
+    .leader-left { display: flex; align-items: center; gap: 6px; }
+    .leader-rank {
+      width: 18px; height: 18px; border-radius: 999px;
+      background: #f3f4f6; display: flex; align-items: center;
+      justify-content: center; font-size: 10px; font-weight: 600;
+    }
+    .leader-name { font-weight: 500; }
+    .leader-points { font-weight: 600; font-size: 11px; }
+
+    .nft-list { font-size: 13px; line-height: 1.6; }
+
+    .swap-wrapper { display: flex; flex-direction: column; align-items: center; gap: 18px; margin-top: 10px; }
+    .swap-card {
+      max-width: 420px; width: 100%;
+      background: #fff; border-radius: 22px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 18px 16px 16px;
+    }
+
+    .airdrop-page {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 600;
+      color: #6a3df5;
+    }
 
     .bottom-toggle {
       position: fixed; bottom: 18px; left: 50%;
@@ -130,46 +160,37 @@
       box-shadow: 0 10px 25px rgba(15,23,42,0.2);
       display: flex; padding: 4px; gap: 4px; z-index: 50;
     }
-
     .toggle-btn {
       border-radius: 999px; border: none; padding: 6px 12px;
       font-size: 11px; display: flex; align-items: center;
       gap: 6px; background: transparent; cursor: pointer;
       color: var(--text-muted);
     }
-
     .toggle-btn.active {
       background: #eef2ff; color: var(--primary);
       font-weight: 600;
     }
 
     .hidden { display: none; }
-
-    .airdrop-box {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 20px;
-      color: #6b5fc7;
-      font-weight: 700;
-    }
   </style>
 </head>
-
 <body>
+
 <div class="app">
 
   <header>
     <div class="logo">CatKitSune</div>
     <div class="top-actions">
       <button class="login-btn">Log in</button>
+      <div class="avatar"></div>
     </div>
   </header>
 
-  <div class="dev-banner">⚠️ This site is under development.</div>
+  <div class="notice">⚠ This site is under development.</div>
 
   <main>
 
-    <!-- QUESTS PAGE -->
+    <!-- QUESTS VIEW -->
     <section id="quests-view">
       <div class="hero-card">
         <div class="hero-title">Complete Quests. Earn Points. Climb the Leaderboard.</div>
@@ -184,12 +205,13 @@
       </div>
 
       <div class="content-grid">
+
+        <!-- QUESTS -->
         <div class="card">
           <div class="card-title"><span class="dot"></span> Quests</div>
 
           <div class="mission-list">
 
-            <!-- 1 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -201,7 +223,6 @@
               <div class="mission-points">+250 EP</div>
             </div>
 
-            <!-- 2 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -213,7 +234,6 @@
               <div class="mission-points">+500 EP</div>
             </div>
 
-            <!-- 3 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -225,7 +245,6 @@
               <div class="mission-points">+300 EP</div>
             </div>
 
-            <!-- 4 -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -237,7 +256,6 @@
               <div class="mission-points">+150 EP</div>
             </div>
 
-            <!-- 5 → link inserted -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -245,8 +263,8 @@
                   <div class="mission-text-title">Share the Link</div>
                   <div class="mission-text-sub">
                     Share this tweet on X:<br>
-                    <a href="https://x.com/GborSzakl1/status/1989118279906942991" target="_blank"
-                       style="color:#4f46e5; text-decoration:underline;">
+                    <a href="https://x.com/GborSzakl1/status/1989118279906942991"
+                       target="_blank" style="color:#6366f1; text-decoration:underline;">
                       https://x.com/GborSzakl1/status/1989118279906942991
                     </a>
                   </div>
@@ -255,7 +273,6 @@
               <div class="mission-points">+200 EP</div>
             </div>
 
-            <!-- 6 follow -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -263,8 +280,7 @@
                   <div class="mission-text-title">Follow on X</div>
                   <div class="mission-text-sub">
                     Follow
-                    <a href="https://x.com/GborSzakl1" target="_blank"
-                       style="color:#4f46e5; text-decoration:underline;">
+                    <a href="https://x.com/GborSzakl1" target="_blank" style="color:#6366f1; text-decoration:underline;">
                       @GborSzakl1
                     </a>
                     on X.
@@ -274,7 +290,6 @@
               <div class="mission-points">+200 EP</div>
             </div>
 
-            <!-- 7 Mint -->
             <div class="mission-item">
               <div class="mission-left">
                 <div class="mission-check"></div>
@@ -289,42 +304,45 @@
           </div>
         </div>
 
-        <!-- RIGHT SIDE -->
-        <div class="right-column">
-          <div class="card">
-            <div class="card-title"><span class="dot"></span> NFT Gallery</div>
+        <!-- NFT GALLERY -->
+        <div class="card">
+          <div class="card-title"><span class="dot"></span> NFT Gallery</div>
 
-            <div class="nft-grid">
-              <div class="nft-card"><strong>#1</strong>CatKitSune</div>
-              <div class="nft-card"><strong>#2</strong>CatKitSune</div>
-              <div class="nft-card"><strong>#3</strong>CatKitSune</div>
-
-              <div class="nft-card"><strong>#4</strong>Wealthy Hypio Babies</div>
-              <div class="nft-card"><strong>#5</strong>Tiny Hyper Cats</div>
-              <div class="nft-card"><strong>#6</strong>Illumeownati</div>
-
-              <div class="nft-card"><strong>#7</strong>PiP & Friends</div>
-              <div class="nft-card"><strong>#8</strong>NFT slot</div>
-              <div class="nft-card"><strong>#9</strong>NFT slot</div>
-
-              <div class="nft-card"><strong>#10</strong>NFT slot</div>
-              <div class="nft-card"><strong>#11</strong>NFT slot</div>
-              <div class="nft-card"><strong>#12</strong>NFT slot</div>
-            </div>
+          <div class="nft-list">
+            #1 CatKitSune <br>
+            #2 CatKitSune <br>
+            #3 CatKitSune <br>
+            #4 Wealthy Hypio Babies <br>
+            #5 Tiny Hyper Cats <br>
+            #6 Illumeownati by Catbal <br>
+            #7 PiP & Friends <br>
+            #8 NFT slot <br>
+            #9 NFT slot <br>
+            #10 NFT slot <br>
+            #11 NFT slot <br>
+            #12 NFT slot
           </div>
+
         </div>
 
       </div>
     </section>
 
-    <!-- SWAP PAGE -->
+    <!-- SWAP VIEW -->
     <section id="swap-view" class="hidden">
-      <div class="airdrop-box">Swap page coming soon…</div>
+      <div class="swap-wrapper">
+        <div class="swap-card">
+          <h2 style="text-align:center; margin-bottom:10px;">Swap</h2>
+          <p style="text-align:center; color:#aaa; margin-bottom:8px;">Swap functionality coming soon…</p>
+        </div>
+      </div>
     </section>
 
-    <!-- AIRDROP PAGE -->
+    <!-- AIRDROP VIEW -->
     <section id="airdrop-view" class="hidden">
-      <div class="airdrop-box">Airdrop information coming soon…</div>
+      <div class="airdrop-page">
+        Airdrop information coming soon…
+      </div>
     </section>
 
   </main>
@@ -356,8 +374,8 @@
   }
 
   function showSwap() {
-    swapView.classList.remove("hidden");
     questsView.classList.add("hidden");
+    swapView.classList.remove("hidden");
     airdropView.classList.add("hidden");
     btnSwap.classList.add("active");
     btnQuests.classList.remove("active");
@@ -365,9 +383,9 @@
   }
 
   function showAirdrop() {
-    airdropView.classList.remove("hidden");
     questsView.classList.add("hidden");
     swapView.classList.add("hidden");
+    airdropView.classList.remove("hidden");
     btnAirdrop.classList.add("active");
     btnQuests.classList.remove("active");
     btnSwap.classList.remove("active");
