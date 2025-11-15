@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CatKitSune – Quests & Swap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-main: #f6ecff;
+      --bg-card: #ffffff;
+      --primary: #6a3df5;
+      --primary-soft: #e2d6ff;
+      --accent-green: #28c76f;
+      --border: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.12);
+    }
+    body { font-family: "Inter", sans-serif; background: var(--bg-main); color: var(--text-main); min-height: 100vh; }
+    .app { min-height: 100vh; display: flex; flex-direction: column; }
+    header { padding: 10px 16px; background: #ffffff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 14px; font-weight: 800; }
+    .top-actions { display: flex; align-items: center; gap: 8px; }
+    .login-btn {
+      font-size: 12px; padding: 6px 12px; border-radius: 999px;
+      border: 1px solid var(--border); background: #f9fafb;
+      cursor: pointer; display:flex; align-items:center; gap:6px;
+    }
+    .avatar { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #6a3df5, #22c55e); }
+    main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .top-nav { margin-top: 10px; display: flex; justify-content: center; gap: 12px; margin-bottom: 10px; }
+    .top-nav-btn {
+      padding: 8px 18px; font-size: 13px; border-radius: 999px;
+      border: 1px solid #d4d4d8; background: #fff; cursor: pointer; transition: 0.2s;
+    }
+    .top-nav-btn.active { background: #6a3df5; color: white; border-color: #6a3df5; }
+    .view { display: none; } .view.active { display: block; }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+<header>
+  <div class="logo">CatKitSune</div>
+  <div class="top-actions">
+    <button class="login-btn" id="walletBtn">
+      <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;">
+      Connect Wallet
+    </button>
+    <div class="avatar"></div>
+  </div>
+</header>
+
+<div class="top-nav">
+  <button class="top-nav-btn active" onclick="showView(event, 'quests')">Quests</button>
+  <button class="top-nav-btn" onclick="showView(event, 'swap')">Swap</button>
+  <button class="top-nav-btn" onclick="showView(event, 'airdrop')">Airdrop</button>
+  <button class="top-nav-btn" onclick="showView(event, 'cks')">CKS Token</button>
+</div>
+
+<main id="view-quests" class="view active">
+  <h1>Quests</h1>
+</main>
+
+<main id="view-swap" class="view"><h1>Swap</h1></main>
+<main id="view-airdrop" class="view"><h1>Airdrop</h1></main>
+<main id="view-cks" class="view"><h1>CKS Token</h1></main>
+
+</div>
+
+<script>
+let currentWallet=null;
+
+async function connectWallet(){
+  if(!window.ethereum){
+    alert("MetaMask not found!");
+    return;
+  }
+  try{
+    await ethereum.request({
+      method:"wallet_requestPermissions",
+      params:[{eth_accounts:{}}]
+    });
+
+    const accounts = await ethereum.request({method:"eth_requestAccounts"});
+    const addr = accounts[0];
+    currentWallet = addr;
+
+    document.getElementById("walletBtn").innerHTML =
+      '<img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"> ' +
+      addr.substring(0,6)+"..."+addr.substring(addr.length-4);
+  }catch(e){
+    console.log("Permission rejected");
+  }
+}
+
+function disconnectWallet(){
+  currentWallet=null;
+  document.getElementById("walletBtn").innerHTML =
+    '<img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"> Connect Wallet';
+}
+
+document.getElementById("walletBtn").addEventListener("click",()=>{
+  if(currentWallet===null) connectWallet();
+  else disconnectWallet();
+});
+
+function showView(ev,v){
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));
+  document.getElementById("view-"+v).classList.add("active");
+  document.querySelectorAll(".top-nav-btn").forEach(b=>b.classList.remove("active"));
+  ev.target.classList.add("active");
+}
+</script>
+
+</body>
+</html>
