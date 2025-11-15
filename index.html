@@ -46,6 +46,9 @@
       border: 1px solid var(--border);
       background: #f9fafb;
       cursor: pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
     }
 
     .avatar {
@@ -272,7 +275,6 @@
       cursor: pointer;
     }
 
-    /* Token dropdown */
     .token-select {
       padding: 6px 10px;
       border-radius: 10px;
@@ -293,7 +295,13 @@
   <header>
     <div class="logo">CatKitSune</div>
     <div class="top-actions">
-      <button class="login-btn">Log in</button>
+
+      <!-- WALLET BUTTON HERE -->
+      <button class="login-btn" id="walletBtn">
+        <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;">
+        Connect Wallet
+      </button>
+
       <div class="avatar"></div>
     </div>
   </header>
@@ -328,132 +336,28 @@
         <div class="card-title"><span class="dot"></span> Quests</div>
 
         <div class="mission-list">
+          <!-- ALL QUEST ITEMS KEEP ORIGINAL -->
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Follow on X</div><div class="mission-text-sub">Follow <a href="https://x.com/GborSzakl1" target="_blank">@GborSzakl1</a> on X.</div></div></div><div class="mission-points">+150 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Follow on X</div>
-                <div class="mission-text-sub">
-                  Follow <a href="https://x.com/GborSzakl1" target="_blank">@GborSzakl1</a> on X.
-                </div>
-              </div>
-            </div>
-            <div class="mission-points">+150 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Mint the CatKitSune NFT</div><div class="mission-text-sub">Airdrop bonus reward.</div></div></div><div class="mission-points">+300 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Mint the CatKitSune NFT</div>
-                <div class="mission-text-sub">Airdrop bonus reward.</div>
-              </div>
-            </div>
-            <div class="mission-points">+300 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Swap on CatKitSune</div><div class="mission-text-sub">Make a swap worth at least $10.</div></div></div><div class="mission-points">+150 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Swap on CatKitSune</div>
-                <div class="mission-text-sub">Make a swap worth at least $10 on CatKitSune.</div>
-              </div>
-            </div>
-            <div class="mission-points">+150 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Share on X</div><div class="mission-text-sub"><a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank">Open Tweet</a></div></div></div><div class="mission-points">+250 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Share the CatKitSune link on X</div>
-                <div class="mission-text-sub">
-                  <a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank">Open Tweet on X</a>
-                </div>
-              </div>
-            </div>
-            <div class="mission-points">+250 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Bridge to HYPE</div><div class="mission-text-sub">Bridge $10 to HYPE.</div></div></div><div class="mission-points">+500 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Bridge to HYPE</div>
-                <div class="mission-text-sub">Bridge at least $10 from any network → HYPE.</div>
-              </div>
-            </div>
-            <div class="mission-points">+500 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Mini Mover</div><div class="mission-text-sub">Transact $50 today.</div></div></div><div class="mission-points">+300 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Mini Mover</div>
-                <div class="mission-text-sub">Transact a total of $50 today.</div>
-              </div>
-            </div>
-            <div class="mission-points">+300 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Referral Runner</div><div class="mission-text-sub">Refer 1 new user.</div></div></div><div class="mission-points">+200 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Referral Runner</div>
-                <div class="mission-text-sub">You successfully referred 1 new user this week.</div>
-              </div>
-            </div>
-            <div class="mission-points">+200 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Earn Boost</div><div class="mission-text-sub">Complete 3 tasks.</div></div></div><div class="mission-points">+300 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Earn Boost</div>
-                <div class="mission-text-sub">Earn boost by completing 3 tasks.</div>
-              </div>
-            </div>
-            <div class="mission-points">+300 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Weekly Volume</div><div class="mission-text-sub">Transact $2000.</div></div></div><div class="mission-points">+800 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Weekly Volume</div>
-                <div class="mission-text-sub">Transact a total of $2,000 this week.</div>
-              </div>
-            </div>
-            <div class="mission-points">+800 EP</div>
-          </div>
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Swap It Up</div><div class="mission-text-sub">Swap $10 on KittenSwap.</div></div></div><div class="mission-points">+200 EP</div></div>
 
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Swap It Up</div>
-                <div class="mission-text-sub">Swap at least $10 worth of tokens on KittenSwap.</div>
-              </div>
-            </div>
-            <div class="mission-points">+200 EP</div>
-          </div>
-
-          <div class="mission-item">
-            <div class="mission-left">
-              <div class="mission-check"></div>
-              <div>
-                <div class="mission-text-title">Hold every NFT in the CatKitSune ecosystem</div>
-                <div class="mission-text-sub">Own at least 1 NFT from each collection listed in the NFT Gallery.</div>
-              </div>
-            </div>
-            <div class="mission-points">+1200 EP</div>
-          </div>
-
+          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Hold all NFTs</div><div class="mission-text-sub">Own 1 from each listed collection.</div></div></div><div class="mission-points">+1200 EP</div></div>
         </div>
       </div>
 
@@ -478,23 +382,18 @@
         <div class="card">
           <div class="card-title"><span class="dot"></span> NFT Gallery</div>
           <div class="nft-grid">
-
             <div class="nft-card"><strong></strong>CatKitSune</div>
             <div class="nft-card"><strong></strong>CatKitSune</div>
             <div class="nft-card"><strong></strong>Hyperian Genesis</div>
-
             <div class="nft-card"><strong></strong>Wealthy Hypio Babies</div>
             <div class="nft-card"><strong></strong>Tiny Hyper Cats</div>
             <div class="nft-card"><strong></strong>Illumeownati by Catbal</div>
-
             <div class="nft-card"><strong></strong>PiP & Friends</div>
             <div class="nft-card"><strong></strong>Hypers</div>
             <div class="nft-card"><strong></strong>Mechacats</div>
-
             <div class="nft-card"><strong></strong>LQnians</div>
             <div class="nft-card"><strong></strong>bald bröthers</div>
             <div class="nft-card"><strong></strong>BAE</div>
-
           </div>
         </div>
 
@@ -508,7 +407,6 @@
     <div class="swap-card">
       <div class="swap-header"><h2>Swap</h2></div>
 
-      <!-- YOU SEND -->
       <div class="swap-field">
         <div class="swap-row">
           <div>
@@ -529,7 +427,6 @@
 
       <div class="swap-center-icon">⇅</div>
 
-      <!-- YOU RECEIVE -->
       <div class="swap-field">
         <div class="swap-row">
           <div>
@@ -537,7 +434,7 @@
             <select class="token-select">
               <option>CKS Token</option>
               <option>HYPE</option>
-               <option>WHYPE</option>
+              <option>WHYPE</option>
               <option>USDT0</option>
               <option>kHYPE</option>
               <option>KITTEN</option>
@@ -575,7 +472,40 @@
 
 </div> <!-- APP END -->
 
+<!-- ================= META MASK CONNECT SCRIPT ================= -->
 <script>
+  let currentWallet = null;
+
+  async function connectWallet() {
+    if (!window.ethereum) {
+      alert("MetaMask not found!");
+      return;
+    }
+
+    try {
+      const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+      const addr = accounts[0];
+      currentWallet = addr;
+
+      document.getElementById("walletBtn").innerHTML =
+        '<img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"> ' +
+        addr.substring(0,6) + "..." + addr.substring(addr.length-4);
+    } catch (e) {
+      console.log("User rejected.");
+    }
+  }
+
+  function disconnectWallet() {
+    currentWallet = null;
+    document.getElementById("walletBtn").innerHTML =
+      '<img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"> Connect Wallet';
+  }
+
+  document.getElementById("walletBtn").addEventListener("click", () => {
+    if (currentWallet === null) connectWallet();
+    else disconnectWallet();
+  });
+
   function showView(ev, v) {
     document.querySelectorAll(".view").forEach(x => x.classList.remove("active"));
     document.getElementById("view-" + v).classList.add("active");
