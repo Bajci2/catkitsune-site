@@ -55,8 +55,6 @@
 
     main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-
-
     /* ===== TOP NAVIGATION BUTTONS ===== */
     .top-nav {
       margin-top: 10px;
@@ -88,7 +86,6 @@
     .view { display: none; }
     .view.active { display: block; }
 
-
     /* HERO */
     .hero-card {
       background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
@@ -118,8 +115,6 @@
     .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
     .stat-value { font-size: 18px; font-weight: 700; }
 
-
-
     /* GRID LAYOUT */
     .content-grid {
       display: grid;
@@ -144,7 +139,6 @@
       width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
     }
 
-
     /* Quests */
     .mission-list { display: flex; flex-direction: column; gap: 8px; }
 
@@ -166,9 +160,6 @@
     .mission-text-sub { color: var(--text-muted); font-size: 11px; }
 
     .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
-
-
-
 
     /* Leaderboard */
     .leader-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
@@ -194,9 +185,6 @@
 
     .leader-points { font-weight: 600; font-size: 11px; }
 
-
-
-
     /* NFT GALLERY */
     .nft-grid {
       display: grid;
@@ -216,9 +204,7 @@
       color: var(--text-main);
     }
 
-
-
-    /* SWAP SECTION (RÉGI VERZIÓ) */
+    /* SWAP SECTION – ÚJ DROPDOWNOS VERZIÓ */
     .swap-card {
       max-width: 420px; width: 100%;
       background: #fff; border-radius: 22px;
@@ -246,6 +232,22 @@
       gap: 10px;
     }
 
+    .swap-label-small {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .swap-amount-input {
+      text-align: right;
+      border: none;
+      background: none;
+      font-size: 16px;
+      font-weight: 700;
+      width: 110px;
+      outline: none;
+    }
+
     .swap-center-icon {
       width: 34px; height: 34px;
       border-radius: 999px;
@@ -270,7 +272,16 @@
       cursor: pointer;
     }
 
-
+    /* Token dropdown */
+    .token-select {
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid #d4d4ff;
+      background: #ffffff;
+      font-size: 13px;
+      min-width: 120px;
+      cursor: pointer;
+    }
 
   </style>
 </head>
@@ -287,15 +298,13 @@
     </div>
   </header>
 
-
   <!-- TOP NAVIGATION -->
   <div class="top-nav">
-    <button class="top-nav-btn active" onclick="showView('quests')">Quests</button>
-    <button class="top-nav-btn" onclick="showView('swap')">Swap</button>
-    <button class="top-nav-btn" onclick="showView('airdrop')">Airdrop</button>
-    <button class="top-nav-btn" onclick="showView('cks')">CKS Token</button>
+    <button class="top-nav-btn active" onclick="showView(event, 'quests')">Quests</button>
+    <button class="top-nav-btn" onclick="showView(event, 'swap')">Swap</button>
+    <button class="top-nav-btn" onclick="showView(event, 'airdrop')">Airdrop</button>
+    <button class="top-nav-btn" onclick="showView(event, 'cks')">CKS Token</button>
   </div>
-
 
   <!-- ======================= QUESTS VIEW ======================= -->
   <main id="view-quests" class="view active">
@@ -312,11 +321,9 @@
       </div>
     </div>
 
-
-
     <div class="content-grid">
 
-      <!-- LEFT COLUMN -->
+      <!-- LEFT COLUMN – QUESTS -->
       <div class="card">
         <div class="card-title"><span class="dot"></span> Quests</div>
 
@@ -335,8 +342,6 @@
             <div class="mission-points">+150 EP</div>
           </div>
 
-
-
           <div class="mission-item">
             <div class="mission-left">
               <div class="mission-check"></div>
@@ -348,8 +353,6 @@
             <div class="mission-points">+300 EP</div>
           </div>
 
-
-
           <div class="mission-item">
             <div class="mission-left">
               <div class="mission-check"></div>
@@ -360,8 +363,6 @@
             </div>
             <div class="mission-points">+150 EP</div>
           </div>
-
-
 
           <div class="mission-item">
             <div class="mission-left">
@@ -376,8 +377,6 @@
             <div class="mission-points">+250 EP</div>
           </div>
 
-
-
           <div class="mission-item">
             <div class="mission-left">
               <div class="mission-check"></div>
@@ -388,8 +387,6 @@
             </div>
             <div class="mission-points">+500 EP</div>
           </div>
-
-
 
           <div class="mission-item">
             <div class="mission-left">
@@ -402,8 +399,6 @@
             <div class="mission-points">+300 EP</div>
           </div>
 
-
-
           <div class="mission-item">
             <div class="mission-left">
               <div class="mission-check"></div>
@@ -414,8 +409,6 @@
             </div>
             <div class="mission-points">+200 EP</div>
           </div>
-
-
 
           <div class="mission-item">
             <div class="mission-left">
@@ -428,8 +421,6 @@
             <div class="mission-points">+300 EP</div>
           </div>
 
-
-
           <div class="mission-item">
             <div class="mission-left">
               <div class="mission-check"></div>
@@ -440,8 +431,6 @@
             </div>
             <div class="mission-points">+800 EP</div>
           </div>
-
-
 
           <div class="mission-item">
             <div class="mission-left">
@@ -454,8 +443,6 @@
             <div class="mission-points">+200 EP</div>
           </div>
 
-
-
           <div class="mission-item">
             <div class="mission-left">
               <div class="mission-check"></div>
@@ -467,13 +454,8 @@
             <div class="mission-points">+1200 EP</div>
           </div>
 
-
-
         </div>
       </div>
-
-
-
 
       <!-- RIGHT COLUMN -->
       <div class="right-column">
@@ -481,7 +463,6 @@
         <div class="card" style="margin-bottom:14px;">
           <div class="card-title"><span class="dot"></span> Leaderboard</div>
           <div class="leader-list">
-
             <div class="leader-item"><div class="leader-left"><div class="leader-rank">#1</div></div><div class="leader-points">......</div></div>
             <div class="leader-item"><div class="leader-left"><div class="leader-rank">#2</div></div><div class="leader-points">......</div></div>
             <div class="leader-item"><div class="leader-left"><div class="leader-rank">#3</div></div><div class="leader-points">......</div></div>
@@ -491,12 +472,8 @@
             <div class="leader-item"><div class="leader-left"><div class="leader-rank">#7</div></div><div class="leader-points">......</div></div>
             <div class="leader-item"><div class="leader-left"><div class="leader-rank">#8</div></div><div class="leader-points">......</div></div>
             <div class="leader-item"><div class="leader-left"><div class="leader-rank">#9</div></div><div class="leader-points">......</div></div>
-
           </div>
         </div>
-
-
-
 
         <div class="card">
           <div class="card-title"><span class="dot"></span> NFT Gallery</div>
@@ -525,30 +502,43 @@
     </div>
   </main>
 
-
-
-
-
-
   <!-- ======================= SWAP VIEW ======================= -->
   <main id="view-swap" class="view">
 
     <div class="swap-card">
       <div class="swap-header"><h2>Swap</h2></div>
 
+      <!-- YOU SEND -->
       <div class="swap-field">
         <div class="swap-row">
-          <span>You Send</span>
-          <input class="amount-input" value="1.20" style="text-align:right; border:none; background:none; font-size:16px; font-weight:700;">
+          <div>
+            <div class="swap-label-small">You Send</div>
+            <select class="token-select">
+              <option>HYPE</option>
+              <option>KITTEN</option>
+              <option>CKS Token</option>
+              <option>USDC</option>
+            </select>
+          </div>
+          <input class="swap-amount-input" type="number" value="1.20">
         </div>
       </div>
 
       <div class="swap-center-icon">⇅</div>
 
+      <!-- YOU RECEIVE -->
       <div class="swap-field">
         <div class="swap-row">
-          <span>You Receive</span>
-          <input class="amount-input" value="12.89" style="text-align:right; border:none; background:none; font-size:16px; font-weight:700;">
+          <div>
+            <div class="swap-label-small">You Receive</div>
+            <select class="token-select">
+              <option>CKS Token</option>
+              <option>HYPE</option>
+              <option>KITTEN</option>
+              <option>USDC</option>
+            </select>
+          </div>
+          <input class="swap-amount-input" type="number" value="12.89">
         </div>
       </div>
 
@@ -557,52 +547,37 @@
 
   </main>
 
-
-
-
   <!-- ======================= AIRDROP VIEW ======================= -->
   <main id="view-airdrop" class="view">
     <div style="text-align:center; padding:40px;">
       <h1>Airdrop Page</h1>
-      
       <p>The airdrop details are coming soon.
-We’re finalizing the rewards, rules, and participation steps.
-Stay tuned — updates dropping very soon! 🚀</p>
+      We’re finalizing the rewards, rules, and participation steps.
+      Stay tuned — updates dropping very soon! 🚀</p>
     </div>
   </main>
-
-
-
 
   <!-- ======================= CKS TOKEN VIEW ======================= -->
   <main id="view-cks" class="view">
     <div style="text-align:center; padding:40px;">
       <h1>CKS Token Info</h1>
-      
       <p>Official token information is coming soon.
-Tokenomics, utilities, and the full documentation are currently being prepared.
-Launch incoming… 🔥</p>
+      Tokenomics, utilities, and the full documentation are currently being prepared.
+      Launch incoming… 🔥</p>
     </div>
   </main>
 
-
-
-
 </div> <!-- APP END -->
 
-
-
-
 <script>
-  function showView(v) {
+  function showView(ev, v) {
     document.querySelectorAll(".view").forEach(x => x.classList.remove("active"));
     document.getElementById("view-" + v).classList.add("active");
 
     document.querySelectorAll(".top-nav-btn").forEach(btn => btn.classList.remove("active"));
-    event.target.classList.add("active");
+    ev.target.classList.add("active");
   }
 </script>
-
 
 </body>
 </html>
