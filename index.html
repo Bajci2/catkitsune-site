@@ -12,185 +12,171 @@
       --bg-main: #f6ecff;
       --bg-card: #ffffff;
       --primary: #6a3df5;
-      --primary-soft: #e2d6ff;
       --accent-green: #28c76f;
       --border: #e5e7eb;
       --text-main: #111827;
       --text-muted: #6b7280;
-      --radius-lg: 16px;
-      --radius-xl: 20px;
       --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.12);
+      --radius-lg: 16px;
     }
-
     body {
       font-family: "Inter", sans-serif;
       background: var(--bg-main);
-      color: var(--text-main);
       min-height: 100vh;
+      color: var(--text-main);
     }
 
-    .app { min-height: 100vh; display: flex; flex-direction: column; }
+    .app { display: flex; flex-direction: column; min-height: 100vh; }
 
+    /* HEADER */
     header {
-      padding: 10px 16px;
-      background: #ffffff;
+      padding: 12px 16px;
+      background: #fff;
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; justify-content: space-between; align-items: center;
     }
+    .logo { font-weight: 800; font-size: 16px; }
 
-    .logo { font-size: 14px; font-weight: 800; }
-
-    .top-actions { display: flex; align-items: center; gap: 8px; }
-
-    .login-btn {
-      font-size: 12px; padding: 6px 12px; border-radius: 999px;
-      border: 1px solid var(--border); background: #f9fafb; cursor: pointer;
-    }
-
-    .avatar {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: linear-gradient(135deg, #6a3df5, #22c55e);
-    }
-
-    main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    /* MAIN CONTENT */
+    main { flex: 1; padding: 20px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
     .hero-card {
       background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
-      border-radius: 24px; padding: 32px 20px 20px;
-      box-shadow: var(--shadow-card); margin-bottom: 20px; text-align: center;
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-card);
+      text-align: center;
+      margin-bottom: 20px;
     }
+    .hero-title { font-size: 22px; font-weight: 800; }
+    .hero-sub { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
 
-    .hero-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-    .hero-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-
+    /* Stats Row */
     .stats-row {
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 10px; margin-bottom: 18px;
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
     }
-
     .stat-card {
-      background: #fff; border-radius: 18px; padding: 10px 8px;
-      border: 1px solid var(--primary-soft);
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
     }
 
-    .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-    .stat-value { font-size: 18px; font-weight: 700; }
-
-    .hero-btn {
-      padding: 10px 22px; background: var(--primary);
-      color: #fff; border-radius: 999px; font-size: 13px; cursor: pointer;
+    /* NEW TOP MENU (4 ICONS) */
+    .top-menu {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 18px 0;
+    }
+    .top-menu-btn {
+      padding: 8px 20px;
+      background: white;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      text-decoration: none;
+      color: #6b7280;
+      transition: 0.2s;
+    }
+    .top-menu-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      font-weight: 600;
     }
 
-    /* GRID LAYOUT */
+    /* CONTENT GRID */
     .content-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 20px;
     }
-
     .card {
-      background: var(--bg-card);
-      border-radius: var(--radius-xl);
+      background: white;
+      padding: 16px;
+      border-radius: 18px;
       border: 1px solid var(--border);
       box-shadow: var(--shadow-card);
-      padding: 18px 16px;
     }
-
     .card-title {
-      font-size: 14px; font-weight: 700; margin-bottom: 12px;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      background: var(--primary);
+      border-radius: 50%;
     }
 
-    .card-title span.dot {
-      width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
-    }
-
-    /* Quests */
-    .mission-list { display: flex; flex-direction: column; gap: 8px; }
-
+    .mission-list { display: flex; flex-direction: column; gap: 10px; }
     .mission-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 9px 10px; border-radius: 12px;
-      border: 1px solid #e5e7eb; background: #f9fafb;
+      display: flex; justify-content: space-between;
+      padding: 10px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
       font-size: 12px;
     }
-
-    .mission-left { display: flex; align-items: center; gap: 10px; }
-
-    .mission-check {
-      width: 16px; height: 16px; border-radius: 999px;
-      border: 2px solid #d1d5db; background: #fff;
-    }
-
-    .mission-text-title { font-weight: 600; margin-bottom: 2px; }
+    .mission-left { display: flex; gap: 10px; }
+    .mission-text-title { font-weight: 600; }
     .mission-text-sub { color: var(--text-muted); font-size: 11px; }
+    .mission-points { color: var(--accent-green); font-weight: 700; }
 
-    .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
-
-
-    /* Leaderboard */
-    .leader-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
-
-    .leader-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 6px 9px; border-radius: 10px;
-      border: 1px solid #e5e7eb; font-size: 11px;
-    }
-
-    .leader-item.active {
-      border-color: var(--primary);
-      background: #f2ecff;
-    }
-
-    .leader-left { display: flex; align-items: center; gap: 6px; }
-
-    .leader-rank {
-      width: 18px; height: 18px; border-radius: 999px;
-      background: #f3f4f6; display: flex; align-items: center;
-      justify-content: center; font-size: 10px; font-weight: 600;
-    }
-
-    .leader-points { font-weight: 600; font-size: 11px; }
-
-    /* NFT GALLERY */
+    /* NFT GRID */
     .nft-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 8px;
+      gap: 10px;
     }
-
     .nft-card {
-      border-radius: 12px; border: 1px dashed #d4d4d8;
-      background: #f9fafb; padding: 12px 6px; text-align: center;
-      font-size: 10px; color: var(--text-muted);
+      text-align: center;
+      background: #f9fafb;
+      padding: 12px 6px;
+      border-radius: 12px;
+      border: 1px dashed #d4d4d8;
+      font-size: 10px;
     }
+    .nft-card strong { font-size: 11px; }
 
-    .nft-card strong {
-      display: block; font-size: 11px; margin-bottom: 2px;
-      color: var(--text-main);
-    }
-
-    /* BOTTOM SWITCH */
-    .bottom-toggle {
-      position: fixed; bottom: 18px; left: 50%;
-      transform: translateX(-50%);
-      background: #fff; border-radius: 999px;
-      box-shadow: 0 10px 25px rgba(15,23,42,0.2);
-      display: flex; padding: 4px; gap: 4px; z-index: 50;
-    }
-
-    .toggle-btn {
-      border-radius: 999px; border: none; padding: 6px 12px;
-      font-size: 11px; display: flex; align-items: center; gap: 6px;
-      background: transparent; cursor: pointer; color: var(--text-muted);
-    }
-
-    .toggle-btn.active {
-      background: #eef2ff; color: var(--primary); font-weight: 600;
-    }
-
+    /* HIDDEN SECTIONS */
     .hidden { display: none; }
+
+    /* BOTTOM SWITCHER */
+    .bottom-toggle {
+      position: fixed;
+      bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex; gap: 6px;
+    }
+    .toggle-btn {
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      font-size: 12px;
+      color: #6b7280;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .toggle-btn.active {
+      background: #eef2ff;
+      color: var(--primary);
+      font-weight: 600;
+    }
   </style>
 </head>
 
@@ -200,59 +186,57 @@
   <!-- HEADER -->
   <header>
     <div class="logo">CatKitSune</div>
-    <div class="top-actions">
-      <button class="login-btn">Log in</button>
-      <div class="avatar"></div>
-    </div>
   </header>
 
-  <!-- MAIN CONTENT -->
   <main>
 
+    <!-- QUESTS VIEW -->
     <section id="quests-view">
+
       <div class="hero-card">
         <div class="hero-title">Complete quests. Earn points. Climb the leaderboard.</div>
         <div class="hero-sub">Join the community and reach the highest level!</div>
 
         <div class="stats-row">
-          <div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value">1</div></div>
-          <div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">2</div></div>
-          <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value">3</div></div>
-          <div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">4</div></div>
+          <div class="stat-card">Total Points<br><b>1</b></div>
+          <div class="stat-card">Quests<br><b>2</b></div>
+          <div class="stat-card">Completed<br><b>3</b></div>
+          <div class="stat-card">Rank<br><b>4</b></div>
         </div>
 
-        <button class="hero-btn">View Active Quests</button>
+        <!-- NEW TOP MENU BUTTONS -->
+        <div class="top-menu">
+          <a href="#" class="top-menu-btn active" id="btn-top-quests">Quests</a>
+          <a href="#" class="top-menu-btn" id="btn-top-swap">Swap</a>
+          <a href="#" class="top-menu-btn" id="btn-top-airdrop">Airdrop</a>
+          <a href="#" class="top-menu-btn" id="btn-top-cks">CKS Token</a>
+        </div>
+
       </div>
 
-      <!-- GRID: QUESTS + LEADERBOARD + NFT -->
       <div class="content-grid">
 
-        <!-- LEFT COLUMN: QUESTS -->
+        <!-- LEFT CARD: QUESTS -->
         <div class="card">
           <div class="card-title"><span class="dot"></span> Quests</div>
-
           <div class="mission-list">
 
-            <!-- 1 -->
+            <!-- FOLLOW -->
             <div class="mission-item">
               <div class="mission-left">
-                <div class="mission-check"></div>
                 <div>
                   <div class="mission-text-title">Follow on X</div>
                   <div class="mission-text-sub">
-                    Follow
-                    <a href="https://x.com/GborSzakl1" target="_blank">@GborSzakl1</a>
-                    on X.
+                    Follow <a href="https://x.com/GborSzakl1" target="_blank">@GborSzakl1</a> on X.
                   </div>
                 </div>
               </div>
               <div class="mission-points">+150 EP</div>
             </div>
 
-            <!-- 2 -->
+            <!-- MINT -->
             <div class="mission-item">
               <div class="mission-left">
-                <div class="mission-check"></div>
                 <div>
                   <div class="mission-text-title">Mint the CatKitSune NFT</div>
                   <div class="mission-text-sub">Airdrop bonus reward.</div>
@@ -261,111 +245,36 @@
               <div class="mission-points">+300 EP</div>
             </div>
 
-            <!-- 3 -->
+            <!-- SWAP -->
             <div class="mission-item">
               <div class="mission-left">
-                <div class="mission-check"></div>
                 <div>
                   <div class="mission-text-title">Swap on CatKitSune</div>
-                  <div class="mission-text-sub">Make a swap worth at least $10 on CatKitSune.</div>
+                  <div class="mission-text-sub">Make a swap worth at least $10.</div>
                 </div>
               </div>
               <div class="mission-points">+150 EP</div>
             </div>
 
-            <!-- 4 -->
+            <!-- SHARE -->
             <div class="mission-item">
               <div class="mission-left">
-                <div class="mission-check"></div>
                 <div>
-                  <div class="mission-text-title">Share the CatKitSune link on X</div>
+                  <div class="mission-text-title">Share CatKitSune link on X</div>
                   <div class="mission-text-sub">
-                    <a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank">Open Tweet on X</a>
+                    <a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank">Open Tweet</a>
                   </div>
                 </div>
               </div>
               <div class="mission-points">+250 EP</div>
             </div>
 
-            <!-- 5 -->
+            <!-- HOLD ALL NFT -->
             <div class="mission-item">
               <div class="mission-left">
-                <div class="mission-check"></div>
                 <div>
-                  <div class="mission-text-title">Bridge to HYPE</div>
-                  <div class="mission-text-sub">Bridge at least $10 from any network → HYPE.</div>
-                </div>
-              </div>
-              <div class="mission-points">+500 EP</div>
-            </div>
-
-            <!-- 6 -->
-            <div class="mission-item">
-              <div class="mission-left">
-                <div class="mission-check"></div>
-                <div>
-                  <div class="mission-text-title">Mini Mover</div>
-                  <div class="mission-text-sub">Transact a total of $50 today.</div>
-                </div>
-              </div>
-              <div class="mission-points">+300 EP</div>
-            </div>
-
-            <!-- 7 -->
-            <div class="mission-item">
-              <div class="mission-left">
-                <div class="mission-check"></div>
-                <div>
-                  <div class="mission-text-title">Referral Runner</div>
-                  <div class="mission-text-sub">You successfully referred 1 new user this week.</div>
-                </div>
-              </div>
-              <div class="mission-points">+200 EP</div>
-            </div>
-
-            <!-- 8 -->
-            <div class="mission-item">
-              <div class="mission-left">
-                <div class="mission-check"></div>
-                <div>
-                  <div class="mission-text-title">Earn Boost</div>
-                  <div class="mission-text-sub">Earn boost by completing 3 tasks.</div>
-                </div>
-              </div>
-              <div class="mission-points">+300 EP</div>
-            </div>
-
-            <!-- 9 -->
-            <div class="mission-item">
-              <div class="mission-left">
-                <div class="mission-check"></div>
-                <div>
-                  <div class="mission-text-title">Weekly Volume</div>
-                  <div class="mission-text-sub">Transact a total of $2,000 this week.</div>
-                </div>
-              </div>
-              <div class="mission-points">+800 EP</div>
-            </div>
-
-            <!-- 10 -->
-            <div class="mission-item">
-              <div class="mission-left">
-                <div class="mission-check"></div>
-                <div>
-                  <div class="mission-text-title">Swap It Up</div>
-                  <div class="mission-text-sub">Swap at least $10 worth of tokens on KittenSwap.</div>
-                </div>
-              </div>
-              <div class="mission-points">+200 EP</div>
-            </div>
-
-            <!-- 11: NEW NFT HOLDING QUEST -->
-            <div class="mission-item">
-              <div class="mission-left">
-                <div class="mission-check"></div>
-                <div>
-                  <div class="mission-text-title">Hold every NFT in the CatKitSune ecosystem</div>
-                  <div class="mission-text-sub">Own at least 1 NFT from each collection listed in the NFT Gallery.</div>
+                  <div class="mission-text-title">Hold every CatKitSune NFT</div>
+                  <div class="mission-text-sub">Own at least 1 of each NFT in the ecosystem.</div>
                 </div>
               </div>
               <div class="mission-points">+1200 EP</div>
@@ -374,22 +283,20 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN: LEADERBOARD + NFT GALLERY -->
+        <!-- RIGHT COLUMN -->
         <div class="right-column">
 
           <!-- LEADERBOARD -->
-          <div class="card" style="margin-bottom: 14px;">
+          <div class="card">
             <div class="card-title"><span class="dot"></span> Leaderboard</div>
             <div class="leader-list">
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#1</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#2</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#3</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item active"><div class="leader-left"><div class="leader-rank">#4</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#5</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#6</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#7</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#8</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
-              <div class="leader-item"><div class="leader-left"><div class="leader-rank">#9</div><div class="leader-name"></div></div><div class="leader-points">......</div></div>
+              <div class="leader-item">#1</div>
+              <div class="leader-item">#2</div>
+              <div class="leader-item">#3</div>
+              <div class="leader-item active">#4</div>
+              <div class="leader-item">#5</div>
+              <div class="leader-item">#6</div>
+              <div class="leader-item">#7</div>
             </div>
           </div>
 
@@ -397,62 +304,99 @@
           <div class="card">
             <div class="card-title"><span class="dot"></span> NFT Gallery</div>
             <div class="nft-grid">
-
-              <div class="nft-card"><strong></strong>CatKitSune</div>
-              <div class="nft-card"><strong></strong>CatKitSune</div>
-              <div class="nft-card"><strong></strong>Hyperian Genesis</div>
-
-              <div class="nft-card"><strong></strong>Wealthy Hypio Babies</div>
-              <div class="nft-card"><strong></strong>Tiny Hyper Cats</div>
-              <div class="nft-card"><strong></strong>Illumeownati by Catbal</div>
-
-              <div class="nft-card"><strong></strong>PiP & Friends</div>
-              <div class="nft-card"><strong></strong>Hypers</div>
-              <div class="nft-card"><strong></strong>Mechacats</div>
-
-              <div class="nft-card"><strong></strong>LQnians</div>
-              <div class="nft-card"><strong></strong>bald bröthers</div>
-              <div class="nft-card"><strong></strong>BAE</div>
-
+              <div class="nft-card"><strong>CatKitSune</strong></div>
+              <div class="nft-card"><strong>CatKitSune</strong></div>
+              <div class="nft-card"><strong>Hyperian Genesis</strong></div>
+              <div class="nft-card"><strong>Wealthy Hypio Babies</strong></div>
+              <div class="nft-card"><strong>Tiny Hyper Cats</strong></div>
+              <div class="nft-card"><strong>Illumeownati</strong></div>
+              <div class="nft-card"><strong>PiP & Friends</strong></div>
+              <div class="nft-card"><strong>Hypers</strong></div>
+              <div class="nft-card"><strong>Mechacats</strong></div>
             </div>
           </div>
 
         </div>
       </div>
+
+    </section>
+
+    <!-- SWAP VIEW (HIDDEN) -->
+    <section id="swap-view" class="hidden">
+      <h2 style="text-align:center;">Swap is coming…</h2>
+    </section>
+
+    <!-- AIRDROP VIEW -->
+    <section id="airdrop-view" class="hidden">
+      <h2 style="text-align:center;">Airdrop Page</h2>
+    </section>
+
+    <!-- CKS TOKEN VIEW -->
+    <section id="cks-view" class="hidden">
+      <h2 style="text-align:center;">CKS Token Page</h2>
     </section>
 
   </main>
 
-  <!-- Bottom Switch -->
+  <!-- BOTTOM SWITCH BUTTONS -->
   <div class="bottom-toggle">
-    <button id="btn-quests" class="toggle-btn active">
-      <span class="icon">📋</span>
-      <span>Quests</span>
-    </button>
-    <button id="btn-swap" class="toggle-btn">
-      <span class="icon">🔄</span>
-      <span>Swap</span>
-    </button>
+    <button class="toggle-btn active" id="btn-bottom-quests">📋 Quests</button>
+    <button class="toggle-btn" id="btn-bottom-swap">🔄 Swap</button>
   </div>
 
 </div>
 
 <script>
   const questsView = document.getElementById("quests-view");
-  const btnQuests = document.getElementById("btn-quests");
-  const btnSwap = document.getElementById("btn-swap");
+  const swapView = document.getElementById("swap-view");
+  const airdropView = document.getElementById("airdrop-view");
+  const cksView = document.getElementById("cks-view");
 
-  btnQuests.onclick = () => {
-    questsView.classList.remove("hidden");
-    btnQuests.classList.add("active");
-    btnSwap.classList.remove("active");
-  };
+  const btnTopQuests = document.getElementById("btn-top-quests");
+  const btnTopSwap = document.getElementById("btn-top-swap");
+  const btnTopAirdrop = document.getElementById("btn-top-airdrop");
+  const btnTopCKS = document.getElementById("btn-top-cks");
 
-  btnSwap.onclick = () => {
+  const btnBottomQuests = document.getElementById("btn-bottom-quests");
+  const btnBottomSwap = document.getElementById("btn-bottom-swap");
+
+  function show(view) {
     questsView.classList.add("hidden");
-    btnSwap.classList.add("active");
-    btnQuests.classList.remove("active");
-  };
+    swapView.classList.add("hidden");
+    airdropView.classList.add("hidden");
+    cksView.classList.add("hidden");
+
+    document.querySelectorAll(".top-menu-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+
+    if (view === "quests") {
+      questsView.classList.remove("hidden");
+      btnTopQuests.classList.add("active");
+      btnBottomQuests.classList.add("active");
+    }
+    if (view === "swap") {
+      swapView.classList.remove("hidden");
+      btnTopSwap.classList.add("active");
+      btnBottomSwap.classList.add("active");
+    }
+    if (view === "airdrop") {
+      airdropView.classList.remove("hidden");
+      btnTopAirdrop.classList.add("active");
+    }
+    if (view === "cks") {
+      cksView.classList.remove("hidden");
+      btnTopCKS.classList.add("active");
+    }
+  }
+
+  btnTopQuests.onclick = () => show("quests");
+  btnTopSwap.onclick = () => show("swap");
+  btnTopAirdrop.onclick = () => show("airdrop");
+  btnTopCKS.onclick = () => show("cks");
+
+  btnBottomQuests.onclick = () => show("quests");
+  btnBottomSwap.onclick = () => show("swap");
+
 </script>
 
 </body>
