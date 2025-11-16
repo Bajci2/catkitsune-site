@@ -88,7 +88,6 @@
 
     main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
-    /* ===== TOP NAVIGATION BUTTONS ===== */
     .top-nav {
       margin-top: 10px;
       display: flex;
@@ -115,11 +114,9 @@
       border-color: #6a3df5;
     }
 
-    /* SECTION HIDE/SHOW */
     .view { display: none; }
     .view.active { display: block; }
 
-    /* HERO */
     .hero-card {
       background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
       border-radius: 24px;
@@ -148,7 +145,6 @@
     .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
     .stat-value { font-size: 18px; font-weight: 700; }
 
-    /* GRID LAYOUT */
     .content-grid {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -172,7 +168,6 @@
       width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
     }
 
-    /* Quests */
     .mission-list { display: flex; flex-direction: column; gap: 8px; }
 
     .mission-item {
@@ -194,7 +189,6 @@
 
     .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
 
-    /* Leaderboard */
     .leader-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
 
     .leader-item {
@@ -218,7 +212,6 @@
 
     .leader-points { font-weight: 600; font-size: 11px; }
 
-    /* NFT GALLERY */
     .nft-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -237,7 +230,6 @@
       color: var(--text-main);
     }
 
-    /* SWAP SECTION – ÚJ DROPDOWNOS VERZIÓ */
     .swap-card {
       max-width: 420px; width: 100%;
       background: #fff; border-radius: 22px;
@@ -329,13 +321,13 @@
     </div>
     <div class="top-actions">
 
-      <!-- WALLET BUTTON HERE -->
+      <!-- WALLET BUTTON -->
       <button class="login-btn" id="walletBtn">
         <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;">
         Connect Wallet
       </button>
 
-      <!-- ÚJ: TWITTER LOGIN GOMB -->
+      <!-- TWITTER LOGIN GOMB (JAVÍTVA) -->
       <button class="login-btn" id="twitterBtn" onclick="loginWithTwitter()">
         <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" style="width:18px;">
         Login with Twitter
@@ -353,7 +345,7 @@
     <button class="top-nav-btn" onclick="showView(event, 'cks')">CKS Token</button>
   </div>
 
-  <!-- ======================= QUESTS VIEW ======================= -->
+  <!-- QUESTS VIEW -->
   <main id="view-quests" class="view active">
 
     <div class="hero-card">
@@ -439,7 +431,7 @@
     </div>
   </main>
 
-  <!-- ======================= SWAP VIEW ======================= -->
+  <!-- SWAP VIEW -->
   <main id="view-swap" class="view">
 
     <div class="swap-card">
@@ -488,7 +480,7 @@
 
   </main>
 
-  <!-- ======================= AIRDROP VIEW ======================= -->
+  <!-- AIRDROP VIEW -->
   <main id="view-airdrop" class="view">
     <div style="text-align:center; padding:40px;">
       <h1>Airdrop Page</h1>
@@ -498,7 +490,7 @@
     </div>
   </main>
 
-  <!-- ======================= CKS TOKEN VIEW ======================= -->
+  <!-- CKS TOKEN VIEW -->
   <main id="view-cks" class="view">
     <div style="text-align:center; padding:40px;">
       <h1>CKS Token Info</h1>
@@ -580,10 +572,9 @@
     ev.target.classList.add("active");
   }
 
-  // ÚJ: Twitter Login funkció – később ide kötjük rá a backend OAuth-ot
+  /* TWITTER LOGIN – JAVÍTVA */
   function loginWithTwitter() {
-    // Ezt majd átírjuk a saját backend URL-edre
-    window.location.href = "/twitter-login";
+    window.location.href = "/api/twitter-login";
   }
 </script>
 
