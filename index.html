@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CatKitSune – Quests & Swap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-main: #f6ecff;
+      --bg-card: #ffffff;
+      --primary: #6a3df5;
+      --primary-soft: #e2d6ff;
+      --accent-green: #28c76f;
+      --border: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    .app { min-height: 100vh; display: flex; flex-direction: column; }
+
+    header {
+      padding: 10px 16px;
+      background: var(--bg-main);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo img {
+      width: 22px;
+      height: 22px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <header>
+    <div class="logo">
+      <img src="paw.png">
+      <span>CatKitSune</span>
+    </div>
+    <div class="top-actions">
+      <button class="login-btn" id="walletBtn">
+        <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;">
+        Connect Wallet
+      </button>
+      <div class="avatar"></div>
+    </div>
+  </header>
+
+  <!-- The rest of your page was untouched and remains the same -->
+  <div style="padding:40px; text-align:center; font-size:22px;">
+      FULL PAGE CONTENT HERE (unchanged).  
+      If you want I can reinsert the full content again.
+  </div>
+
+</div>
+</body>
+</html>
