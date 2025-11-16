@@ -335,6 +335,12 @@
         Connect Wallet
       </button>
 
+      <!-- ÚJ: TWITTER LOGIN GOMB -->
+      <button class="login-btn" id="twitterBtn" onclick="loginWithTwitter()">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" style="width:18px;">
+        Login with Twitter
+      </button>
+
       <div class="avatar"></div>
     </div>
   </header>
@@ -572,6 +578,12 @@
 
     document.querySelectorAll(".top-nav-btn").forEach(btn => btn.classList.remove("active"));
     ev.target.classList.add("active");
+  }
+
+  // ÚJ: Twitter Login funkció – később ide kötjük rá a backend OAuth-ot
+  function loginWithTwitter() {
+    // Ezt majd átírjuk a saját backend URL-edre
+    window.location.href = "/twitter-login";
   }
 </script>
 
