@@ -37,7 +37,7 @@
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
     }
-
+    
     .logo {
       font-size: 14px;
       font-weight: 800;
@@ -50,7 +50,7 @@
       position: relative;
       width: 18px;
       height: 18px;
-      background: #8b5cf6; /* lila tappancs */
+      background: #8b5cf6;
       border-radius: 45% 45% 55% 55%;
       display: inline-block;
     }
@@ -72,7 +72,9 @@
     .top-actions { display: flex; align-items: center; gap: 8px; }
 
     .login-btn {
-      font-size: 12px; padding: 6px 12px; border-radius: 999px;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
       border: 1px solid var(--border);
       background: #f9fafb;
       cursor: pointer;
@@ -82,11 +84,19 @@
     }
 
     .avatar {
-      width: 26px; height: 26px; border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
       background: linear-gradient(135deg, #6a3df5, #22c55e);
     }
 
-    main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    main {
+      flex: 1;
+      padding: 24px 12px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
 
     .top-nav {
       margin-top: 10px;
@@ -106,7 +116,9 @@
       transition: 0.2s;
     }
 
-    .top-nav-btn:hover { background: #f3f4f6; }
+    .top-nav-btn:hover {
+      background: #f3f4f6;
+    }
 
     .top-nav-btn.active {
       background: #6a3df5;
@@ -126,13 +138,23 @@
       text-align: center;
     }
 
-    .hero-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-    .hero-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+    .hero-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
 
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px; margin-bottom: 18px;
+      gap: 10px;
+      margin-bottom: 18px;
     }
 
     .stat-card {
@@ -142,8 +164,16 @@
       border: 1px solid var(--primary-soft);
     }
 
-    .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-    .stat-value { font-size: 18px; font-weight: 700; }
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
 
     .content-grid {
       display: grid;
@@ -160,349 +190,22 @@
     }
 
     .card-title {
-      font-size: 14px; font-weight: 700; margin-bottom: 12px;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .card-title span.dot {
-      width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
-    }
-
-    .mission-list { display: flex; flex-direction: column; gap: 8px; }
-
-    .mission-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 9px 10px; border-radius: 12px;
-      border: 1px solid #e5e7eb; background: #f9fafb;
-      font-size: 12px;
-    }
-
-    .mission-left { display: flex; align-items: center; gap: 10px; }
-
-    .mission-check {
-      width: 16px; height: 16px; border-radius: 999px;
-      border: 2px solid #d1d5db; background: #fff;
-    }
-
-    .mission-text-title { font-weight: 600; margin-bottom: 2px; }
-    .mission-text-sub { color: var(--text-muted); font-size: 11px; }
-
-    .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
-
-    .leader-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
-
-    .leader-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 6px 9px; border-radius: 10px;
-      border: 1px solid #e5e7eb; font-size: 11px;
-    }
-
-    .leader-item.active {
-      border-color: var(--primary);
-      background: #f2ecff;
-    }
-
-    .leader-left { display: flex; align-items: center; gap: 6px; }
-
-    .leader-rank {
-      width: 18px; height: 18px; border-radius: 999px;
-      background: #f3f4f6; display: flex; align-items: center;
-      justify-content: center; font-size: 10px; font-weight: 600;
-    }
-
-    .leader-points { font-weight: 600; font-size: 11px; }
-
-    .nft-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .nft-card {
-      border-radius: 12px; border: 1px dashed #d4d4d8;
-      background: #f9fafb; padding: 12px 6px; text-align: center;
-      font-size: 10px; color: var(--text-muted);
-    }
-
-    .nft-card strong {
-      display: block; font-size: 11px; margin-bottom: 2px;
-      color: var(--text-main);
-    }
-
-    .swap-card {
-      max-width: 420px; width: 100%;
-      background: #fff; border-radius: 22px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
-      padding: 20px;
-      margin: 0 auto;
-    }
-
-    .swap-header h2 {
-      text-align: center;
-      font-size: 20px; font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .swap-field {
-      background: #f9fafb; border-radius: 14px;
-      border: 1px solid #e5e7eb; padding: 12px;
-      margin-bottom: 12px; font-size: 12px;
-    }
-
-    .swap-row {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .swap-label-small {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .swap-amount-input {
-      text-align: right;
-      border: none;
-      background: none;
-      font-size: 16px;
-      font-weight: 700;
-      width: 110px;
-      outline: none;
-    }
-
-    .swap-center-icon {
-      width: 34px; height: 34px;
+      width: 6px;
+      height: 6px;
       border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #fff;
-      display: flex; align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin: 10px auto;
-      cursor: pointer;
+      background: var(--primary);
     }
 
-    .swap-btn {
-      width: 100%;
-      padding: 12px 0;
-      border-radius: 999px;
-      background: #6a3df5;
-      color: white;
-      border: none;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .token-select {
-      padding: 6px 10px;
-      border-radius: 10px;
-      border: 1px solid #d4d4ff;
-      background: #ffffff;
-      font-size: 13px;
-      min-width: 120px;
-      cursor: pointer;
-    }
-
-  </style>
-</head>
-
-<body>
-<div class="app">
-
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
-      <span class="paw-icon"></span>
-      <span>CatKitSune</span>
-    </div>
-    <div class="top-actions">
-
-      <!-- WALLET BUTTON -->
-      <button class="login-btn" id="walletBtn">
-        <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;">
-        Connect Wallet
-      </button>
-
-      <!-- TWITTER LOGIN GOMB (JAVÍTVA) -->
-      <button class="login-btn" id="twitterBtn" onclick="loginWithTwitter()">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" style="width:18px;">
-        Login with Twitter
-      </button>
-
-      <div class="avatar"></div>
-    </div>
-  </header>
-
-  <!-- TOP NAVIGATION -->
-  <div class="top-nav">
-    <button class="top-nav-btn active" onclick="showView(event, 'quests')">Quests</button>
-    <button class="top-nav-btn" onclick="showView(event, 'swap')">Swap</button>
-    <button class="top-nav-btn" onclick="showView(event, 'airdrop')">Airdrop</button>
-    <button class="top-nav-btn" onclick="showView(event, 'cks')">CKS Token</button>
-  </div>
-
-  <!-- QUESTS VIEW -->
-  <main id="view-quests" class="view active">
-
-    <div class="hero-card">
-      <div class="hero-title">Complete quests. Earn points. Climb the leaderboard.</div>
-      <div class="hero-sub">Join the community and reach the highest level!</div>
-
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value">1</div></div>
-        <div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">2</div></div>
-        <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value">3</div></div>
-        <div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">4</div></div>
-      </div>
-    </div>
-
-    <div class="content-grid">
-
-      <!-- LEFT COLUMN – QUESTS -->
-      <div class="card">
-        <div class="card-title"><span class="dot"></span> Quests</div>
-
-        <div class="mission-list">
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Follow on X</div><div class="mission-text-sub">Follow <a href="https://x.com/GborSzakl1" target="_blank">@GborSzakl1</a> on X.</div></div></div><div class="mission-points">+150 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Mint the CatKitSune NFT</div><div class="mission-text-sub">Airdrop bonus reward.</div></div></div><div class="mission-points">+300 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Swap on CatKitSune</div><div class="mission-text-sub">Make a swap worth at least $10.</div></div></div><div class="mission-points">+150 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Share on X</div><div class="mission-text-sub"><a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank">Open Tweet</a></div></div></div><div class="mission-points">+250 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Bridge to HYPE</div><div class="mission-text-sub">Bridge $10 to HYPE.</div></div></div><div class="mission-points">+500 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Mini Mover</div><div class="mission-text-sub">Transact $50 today.</div></div></div><div class="mission-points">+300 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Referral Runner</div><div class="mission-text-sub">Refer 1 new user.</div></div></div><div class="mission-points">+200 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Earn Boost</div><div class="mission-text-sub">Complete 3 tasks.</div></div></div><div class="mission-points">+300 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Weekly Volume</div><div class="mission-text-sub">Transact $2000.</div></div></div><div class="mission-points">+800 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Swap It Up</div><div class="mission-text-sub">Swap $10 on KittenSwap.</div></div></div><div class="mission-points">+200 EP</div></div>
-
-          <div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Hold all NFTs</div><div class="mission-text-sub">Own 1 from each listed collection.</div></div></div><div class="mission-points">+1200 EP</div></div>
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div class="right-column">
-
-        <div class="card" style="margin-bottom:14px;">
-          <div class="card-title"><span class="dot"></span> Leaderboard</div>
-          <div class="leader-list">
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#1</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#2</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#3</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item active"><div class="leader-left"><div class="leader-rank">#4</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#5</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#6</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#7</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#8</div></div><div class="leader-points">......</div></div>
-            <div class="leader-item"><div class="leader-left"><div class="leader-rank">#9</div></div><div class="leader-points">......</div></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title"><span class="dot"></span> NFT Gallery</div>
-          <div class="nft-grid">
-            <div class="nft-card"><strong></strong>CatKitSune</div>
-            <div class="nft-card"><strong></strong>CatKitSune</div>
-            <div class="nft-card"><strong></strong>Hyperian Genesis</div>
-            <div class="nft-card"><strong></strong>Wealthy Hypio Babies</div>
-            <div class="nft-card"><strong></strong>Tiny Hyper Cats</div>
-            <div class="nft-card"><strong></strong>Illumeownati by Catbal</div>
-            <div class="nft-card"><strong></strong>PiP & Friends</div>
-            <div class="nft-card"><strong></strong>Hypers</div>
-            <div class="nft-card"><strong></strong>Mechacats</div>
-            <div class="nft-card"><strong></strong>LQnians</div>
-            <div class="nft-card"><strong></strong>bald bröthers</div>
-            <div class="nft-card"><strong></strong>BAE</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </main>
-
-  <!-- SWAP VIEW -->
-  <main id="view-swap" class="view">
-
-    <div class="swap-card">
-      <div class="swap-header"><h2>Swap</h2></div>
-
-      <div class="swap-field">
-        <div class="swap-row">
-          <div>
-            <div class="swap-label-small">You Send</div>
-            <select class="token-select">
-              <option>HYPE</option>
-              <option>WHYPE</option>
-              <option>CKS Token</option>
-              <option>kHYPE</option>
-              <option>USDT0</option>
-              <option>KITTEN</option>
-              <option>USDC</option>
-            </select>
-          </div>
-          <input class="swap-amount-input" type="number" value="1.20">
-        </div>
-      </div>
-
-      <div class="swap-center-icon">⇅</div>
-
-      <div class="swap-field">
-        <div class="swap-row">
-          <div>
-            <div class="swap-label-small">You Receive</div>
-            <select class="token-select">
-              <option>CKS Token</option>
-              <option>HYPE</option>
-              <option>WHYPE</option>
-              <option>USDT0</option>
-              <option>kHYPE</option>
-              <option>KITTEN</option>
-              <option>USDC</option>
-            </select>
-          </div>
-          <input class="swap-amount-input" type="number" value="12.89">
-        </div>
-      </div>
-
-      <button class="swap-btn">Swap</button>
-    </div>
-
-  </main>
-
-  <!-- AIRDROP VIEW -->
-  <main id="view-airdrop" class="view">
-    <div style="text-align:center; padding:40px;">
-      <h1>Airdrop Page</h1>
-      <p>The airdrop details are coming soon.
-      We’re finalizing the rewards, rules, and participation steps.
-      Stay tuned — updates dropping very soon! 🚀</p>
-    </div>
-  </main>
-
-  <!-- CKS TOKEN VIEW -->
-  <main id="view-cks" class="view">
-    <div style="text-align:center; padding:40px;">
-      <h1>CKS Token Info</h1>
-      <p>Official token information is coming soon.
-      Tokenomics, utilities, and the full documentation are currently being prepared.
-      Launch incoming… 🔥</p>
-    </div>
-  </main>
-
-</div> <!-- APP END -->
-
-<script>
+    <script>
   let currentWallet = null;
 
   async function connectWalletForced() {
@@ -572,11 +275,31 @@
     ev.target.classList.add("active");
   }
 
-  /* TWITTER LOGIN – JAVÍTVA */
+  /* TWITTER LOGIN */
   function loginWithTwitter() {
     window.location.href = "/api/twitter-login";
   }
 </script>
 
-</body>
-</html>
+<script>
+async function checkTwitterSession() {
+  try {
+    const res = await fetch('/api/twitter-session');
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (data && data.username) {
+      const btn = document.getElementById('twitterBtn');
+
+      btn.innerHTML =
+        `<img src="${data.profile_image_url}" style="width:18px;border-radius:50%"> @${data.username}`;
+
+      btn.onclick = null;
+    }
+  } catch (e) {
+    console.log("Twitter session error:", e);
+  }
+}
+
+checkTwitterSession();
+</script>
