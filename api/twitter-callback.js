@@ -3,30 +3,26 @@ export default async function handler(req, res) {
     const { code, state } = req.query;
 
     if (!code) {
-      return res.status(400).json({
-        ok: false,
-        error: "Missing authorization code",
-      });
+      return res.status(400).json({ ok: false, error: "Missing code" });
     }
 
-    const CLIENT_ID = process.env.TWITTER_CLIENT_ID;
-    const CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET;
-    const REDIRECT_URI = "https://catkitsune.xyz/api/twitter-callback";
-
-    // 1️⃣ TOKEN EXCHANGE — csere authorization code → access token
+    // --- TOKEN CSERE ---
     const tokenResponse = await fetch("https://api.twitter.com/2/oauth2/token", {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
         Authorization:
           "Basic " +
-          Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64"),
+          Buffer.from(
+            process.env.TWITTER_CLIENT_ID + ":" + process.env.TWITTER_CLIENT_SECRET
+          ).toString("base64"),
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        code: code,
+        code,
         grant_type: "authorization_code",
-        redirect_uri: REDIRECT_URI,
-        code_verifier: "challenge", // ugyanaz mint login-nél!
+        client_id: process.env.TWITTER_CLIENT_ID,
+        redirect_uri: "https://catkitsune.xyz/api/twitter-callback",
+        code_verifier: "challenge",
       }),
     });
 
@@ -35,38 +31,41 @@ export default async function handler(req, res) {
     if (!tokenData.access_token) {
       return res.status(400).json({
         ok: false,
-        error: "Token csere sikertelen",
+        error: "Token exchange failed",
         details: tokenData,
       });
     }
 
-    const accessToken = tokenData.access_token;
-
-    // 2️⃣ USER ADATOK LEKÉRÉSE
+    // --- USER ADATOK LETÖLTÉSE ---
     const userResponse = await fetch(
       "https://api.twitter.com/2/users/me?user.fields=profile_image_url,name,username",
       {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${tokenData.access_token}`,
         },
       }
     );
 
-    const userData = await userResponse.json();
+    const user = await userResponse.json();
 
-    // 3️⃣ VISSZA FRONTENDNEK
-    return res.status(200).json({
-      ok: true,
-      message: "Twitter callback + token csere működik",
-      token: tokenData,
-      user: userData,
-      state,
-    });
-  } catch (e) {
-    return res.status(500).json({
-      ok: false,
-      error: "Server error",
-      details: e.message,
-    });
+    if (!user.data) {
+      return res.status(400).json({
+        ok: false,
+        error: "User fetch error",
+        details: user,
+      });
+    }
+
+    // --- ADATOK KINYERÉSE ---
+    const name = encodeURIComponent(user.data.name);
+    const username = encodeURIComponent(user.data.username);
+    const avatar = encodeURIComponent(user.data.profile_image_url);
+
+    // --- ÁTIRÁNYÍTÁS A FŐOLDALRA ---
+    return res.redirect(
+      `https://catkitsune.xyz/?name=${name}&username=${username}&avatar=${avatar}`
+    );
+  } catch (err) {
+    return res.status(500).json({ ok: false, error: err.message });
   }
 }
