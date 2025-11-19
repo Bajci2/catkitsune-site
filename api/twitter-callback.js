@@ -1,5 +1,3 @@
-// /api/twitter-callback.js
-
 export default async function handler(req, res) {
   try {
     const { code, state } = req.query;
@@ -7,59 +5,68 @@ export default async function handler(req, res) {
     if (!code) {
       return res.status(400).json({
         ok: false,
-        error: "Hiányzik a 'code' paraméter."
+        error: "Missing authorization code",
       });
     }
 
-    // Twitter app adatai
     const CLIENT_ID = process.env.TWITTER_CLIENT_ID;
     const CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET;
+    const REDIRECT_URI = "https://catkitsune.xyz/api/twitter-callback";
 
-    // A token csere endpoint
-    const tokenUrl = "https://api.twitter.com/2/oauth2/token";
-
-    // Authorization Basic header létrehozása
-    const basicAuth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64");
-
-    // Token csere request
-    const body = new URLSearchParams({
-      grant_type: "authorization_code",
-      code: code,
-      redirect_uri: "https://catkitsune.xyz/api/twitter-callback",
-      code_verifier: "challenge"
-    });
-
-    const response = await fetch(tokenUrl, {
+    // 1️⃣ TOKEN EXCHANGE — csere authorization code → access token
+    const tokenResponse = await fetch("https://api.twitter.com/2/oauth2/token", {
       method: "POST",
       headers: {
-        "Authorization": `Basic ${basicAuth}`,
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization:
+          "Basic " +
+          Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64"),
       },
-      body: body.toString()
+      body: new URLSearchParams({
+        code: code,
+        grant_type: "authorization_code",
+        redirect_uri: REDIRECT_URI,
+        code_verifier: "challenge", // ugyanaz mint login-nél!
+      }),
     });
 
-    const data = await response.json();
+    const tokenData = await tokenResponse.json();
 
-    if (!response.ok) {
+    if (!tokenData.access_token) {
       return res.status(400).json({
         ok: false,
         error: "Token csere sikertelen",
-        details: data
+        details: tokenData,
       });
     }
 
-    // Sikeres token csere
+    const accessToken = tokenData.access_token;
+
+    // 2️⃣ USER ADATOK LEKÉRÉSE
+    const userResponse = await fetch(
+      "https://api.twitter.com/2/users/me?user.fields=profile_image_url,name,username",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const userData = await userResponse.json();
+
+    // 3️⃣ VISSZA FRONTENDNEK
     return res.status(200).json({
       ok: true,
-      message: "Twitter callback + token csere működik!",
-      token_response: data
+      message: "Twitter callback + token csere működik",
+      token: tokenData,
+      user: userData,
+      state,
     });
-
-  } catch (error) {
+  } catch (e) {
     return res.status(500).json({
       ok: false,
-      error: "Szerver hiba",
-      details: error.message
+      error: "Server error",
+      details: e.message,
     });
   }
 }
