@@ -1,71 +1,57 @@
 export default async function handler(req, res) {
+  const { code, state } = req.query;
+
+  if (!code) {
+    return res.status(400).json({ error: "Missing code" });
+  }
+
+  const TOKEN_URL = "https://api.twitter.com/2/oauth2/token";
+
+  const params = new URLSearchParams({
+    code: code,
+    grant_type: "authorization_code",
+    redirect_uri: "https://catkitsune.xyz/api/twitter-callback",
+    client_id: process.env.TWITTER_CLIENT_ID,
+    code_verifier: "challenge",
+  });
+
   try {
-    const { code, state } = req.query;
-
-    if (!code) {
-      return res.status(400).json({ ok: false, error: "Missing code" });
-    }
-
-    // --- TOKEN CSERE ---
-    const tokenResponse = await fetch("https://api.twitter.com/2/oauth2/token", {
+    const tokenRes = await fetch(TOKEN_URL, {
       method: "POST",
-      headers: {
-        Authorization:
-          "Basic " +
-          Buffer.from(
-            process.env.TWITTER_CLIENT_ID + ":" + process.env.TWITTER_CLIENT_SECRET
-          ).toString("base64"),
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        code,
-        grant_type: "authorization_code",
-        client_id: process.env.TWITTER_CLIENT_ID,
-        redirect_uri: "https://catkitsune.xyz/api/twitter-callback",
-        code_verifier: "challenge",
-      }),
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
     });
 
-    const tokenData = await tokenResponse.json();
+    const token = await tokenRes.json();
 
-    if (!tokenData.access_token) {
-      return res.status(400).json({
-        ok: false,
-        error: "Token exchange failed",
-        details: tokenData,
-      });
+    if (!token.access_token) {
+      return res.status(500).json({ error: "Failed to obtain access token", token });
     }
 
-    // --- USER ADATOK LETÖLTÉSE ---
-    const userResponse = await fetch(
-      "https://api.twitter.com/2/users/me?user.fields=profile_image_url,name,username",
-      {
-        headers: {
-          Authorization: `Bearer ${tokenData.access_token}`,
-        },
-      }
-    );
+    const userRes = await fetch("https://api.twitter.com/2/users/me", {
+      headers: {
+        Authorization: `Bearer ${token.access_token}`,
+      },
+    });
 
-    const user = await userResponse.json();
+    const userData = await userRes.json();
 
-    if (!user.data) {
-      return res.status(400).json({
-        ok: false,
-        error: "User fetch error",
-        details: user,
-      });
+    if (!userData.data) {
+      return res.status(500).json({ error: "User fetch failed", userData });
     }
 
-    // --- ADATOK KINYERÉSE ---
-    const name = encodeURIComponent(user.data.name);
-    const username = encodeURIComponent(user.data.username);
-    const avatar = encodeURIComponent(user.data.profile_image_url);
+    const name = userData.data.name;
+    const username = userData.data.username;
+    const avatar = userData.data.profile_image_url;
 
-    // --- ÁTIRÁNYÍTÁS A FŐOLDALRA ---
     return res.redirect(
-      `https://catkitsune.xyz/?name=${name}&username=${username}&avatar=${avatar}`
+      `https://catkitsune.xyz?name=${encodeURIComponent(
+        name
+      )}&username=${encodeURIComponent(
+        username
+      )}&avatar=${encodeURIComponent(avatar)}`
     );
-  } catch (err) {
-    return res.status(500).json({ ok: false, error: err.message });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 }
