@@ -1,57 +1,53 @@
 export default async function handler(req, res) {
-  const { code, state } = req.query;
+  const code = req.query.code;
 
   if (!code) {
     return res.status(400).json({ error: "Missing code" });
   }
 
-  const TOKEN_URL = "https://api.twitter.com/2/oauth2/token";
+  const CLIENT_ID = process.env.NEXT_PUBLIC_TWITTER_CLIENT_ID;
+  const CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET;
+  const REDIRECT_URI = "https://catkitsune.xyz/api/twitter-callback";
 
-  const params = new URLSearchParams({
-    code: code,
-    grant_type: "authorization_code",
-    redirect_uri: "https://catkitsune.xyz/api/twitter-callback",
-    client_id: process.env.TWITTER_CLIENT_ID,
-    code_verifier: "challenge",
-  });
+  const basicAuth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64");
 
   try {
-    const tokenRes = await fetch(TOKEN_URL, {
+    const tokenResponse = await fetch("https://api.twitter.com/2/oauth2/token", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: params.toString(),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": `Basic ${basicAuth}`,
+      },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: REDIRECT_URI,
+        code_verifier: "challenge"
+      })
     });
 
-    const token = await tokenRes.json();
+    const token = await tokenResponse.json();
 
     if (!token.access_token) {
-      return res.status(500).json({ error: "Failed to obtain access token", token });
+      return res.status(400).json({ error: "Failed to obtain access token", token });
     }
 
-    const userRes = await fetch("https://api.twitter.com/2/users/me", {
+    // --- USER DATA ---
+    const userReq = await fetch("https://api.twitter.com/2/users/me?user.fields=profile_image_url,name,username", {
       headers: {
-        Authorization: `Bearer ${token.access_token}`,
+        "Authorization": `Bearer ${token.access_token}`,
       },
     });
 
-    const userData = await userRes.json();
+    const user = await userReq.json();
 
-    if (!userData.data) {
-      return res.status(500).json({ error: "User fetch failed", userData });
-    }
+    const name = encodeURIComponent(user.data.name);
+    const username = encodeURIComponent(user.data.username);
+    const avatar = encodeURIComponent(user.data.profile_image_url);
 
-    const name = userData.data.name;
-    const username = userData.data.username;
-    const avatar = userData.data.profile_image_url;
+    return res.redirect(`https://catkitsune.xyz/?name=${name}&username=${username}&avatar=${avatar}`);
 
-    return res.redirect(
-      `https://catkitsune.xyz?name=${encodeURIComponent(
-        name
-      )}&username=${encodeURIComponent(
-        username
-      )}&avatar=${encodeURIComponent(avatar)}`
-    );
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    return res.status(500).json({ error: e.message });
   }
 }
