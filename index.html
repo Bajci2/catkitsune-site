@@ -47,26 +47,13 @@
     }
 
     .paw-icon {
-      position: relative;
-      width: 18px;
-      height: 18px;
-      background: #8b5cf6;
-      border-radius: 45% 45% 55% 55%;
+      width: 24px;
+      height: 24px;
       display: inline-block;
-    }
-
-    .paw-icon::before {
-      content: "";
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: #8b5cf6;
-      border-radius: 50%;
-      top: -4px;
-      left: 1px;
-      box-shadow:
-        8px 0 0 #8b5cf6,
-        4px -4px 0 #8b5cf6;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="70" cy="45" rx="25" ry="35" fill="%238b5cf6"/><ellipse cx="130" cy="45" rx="25" ry="35" fill="%238b5cf6"/><ellipse cx="40" cy="85" rx="22" ry="32" fill="%238b5cf6" transform="rotate(-20 40 85)"/><ellipse cx="160" cy="85" rx="22" ry="32" fill="%238b5cf6" transform="rotate(20 160 85)"/><path d="M 100 90 Q 70 120 65 155 Q 65 175 85 180 Q 100 183 115 180 Q 135 175 135 155 Q 130 120 100 90 Z" fill="%238b5cf6"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
     .top-actions { display: flex; align-items: center; gap: 8px; }
