@@ -203,19 +203,85 @@
     .nft-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-top: 8px;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .nft-card {
-      border-radius: 12px; border: 1px dashed #d4d4d8;
-      background: #f9fafb; padding: 12px 6px; text-align: center;
-      font-size: 10px; color: var(--text-muted);
+      border-radius: 10px;
+      border: 1px dashed #d4d4d8;
+      background: #f9fafb;
+      padding: 18px 10px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 75px;
+      aspect-ratio: 1;
+    }
+
+    .nft-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .nft-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+      border-style: solid;
+      background: white;
+      box-shadow: 0 6px 16px rgba(106, 61, 245, 0.15);
+    }
+
+    .nft-card:hover::before {
+      opacity: 1;
+    }
+
+    .nft-card > div {
+      position: relative;
+      z-index: 1;
+      width: 100%;
     }
 
     .nft-card strong {
-      display: block; font-size: 11px; margin-bottom: 2px;
+      display: block;
+      font-size: 10.5px;
       color: var(--text-main);
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .nft-count {
+      display: block;
+      font-size: 9.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+      margin-top: 4px;
+    }
+
+    .nft-card:hover .nft-count {
+      color: var(--primary);
     }
 
     .swap-card {
@@ -522,18 +588,96 @@ Login with Twitter
 <div class="card">
 <div class="card-title"><span class="dot"></span> NFT Gallery</div>
 <div class="nft-grid">
-<div class="nft-card"><strong></strong>CatKitSune</div>
-<div class="nft-card"><strong></strong>CatKitSune</div>
-<div class="nft-card"><strong></strong>Hyperian Genesis</div>
-<div class="nft-card"><strong></strong>Wealthy Hypio Babies</div>
-<div class="nft-card"><strong></strong>Tiny Hyper Cats</div>
-<div class="nft-card"><strong></strong>Illumeownati by Catbal</div>
-<div class="nft-card"><strong></strong>PiP & Friends</div>
-<div class="nft-card"><strong></strong>Hypers</div>
-<div class="nft-card"><strong></strong>Mechacats</div>
-<div class="nft-card"><strong></strong>LQnians</div>
-<div class="nft-card"><strong></strong>bald bröthers</div>
-<div class="nft-card"><strong></strong>BAE</div>
+<div class="nft-card">
+  <div>
+    <strong>CatKitSune</strong>
+    <span class="nft-count" id="nft-0">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Hypurr</strong>
+    <span class="nft-count" id="nft-1">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Hyperian Genesis</strong>
+    <span class="nft-count" id="nft-2">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Wealthy Hypio Babies</strong>
+    <span class="nft-count" id="nft-3">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Tiny Hyper Cats</strong>
+    <span class="nft-count" id="nft-4">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Illumeownati by Catbal</strong>
+    <span class="nft-count" id="nft-5">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>PiP & Friends</strong>
+    <span class="nft-count" id="nft-6">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Hypers</strong>
+    <span class="nft-count" id="nft-7">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Mechacats</strong>
+    <span class="nft-count" id="nft-8">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>LQnians</strong>
+    <span class="nft-count" id="nft-9">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>bald bröthers</strong>
+    <span class="nft-count" id="nft-10">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>BAE</strong>
+    <span class="nft-count" id="nft-11">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Hypo</strong>
+    <span class="nft-count" id="nft-12">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Locals Only by DEMI</strong>
+    <span class="nft-count" id="nft-13">0 owned</span>
+  </div>
+</div>
+<div class="nft-card">
+  <div>
+    <strong>Odd Otties</strong>
+    <span class="nft-count" id="nft-14">0 owned</span>
+  </div>
+</div>
 </div>
 </div>
 </div>
@@ -636,6 +780,9 @@ async function connectWallet() {
     updateWalletButton();
     document.getElementById('swapBtn').disabled = false;
     showNotification('✅ Wallet sikeresen csatlakoztatva!');
+    
+    // NFT balances ellenőrzése
+    checkNFTBalances();
   } catch (error) {
     console.error('Wallet csatlakozási hiba:', error);
     if (error.code === 4001) showNotification('❌ Csatlakozás visszautasítva');
@@ -940,6 +1087,25 @@ if (typeof window.ethereum !== 'undefined') {
   window.ethereum.on('chainChanged', function () {
     showNotification('🔗 Hálózat megváltozott');
     window.location.reload();
+  });
+}
+
+// NFT BALANCE CHECK (demo - valós blockchain lekérdezéshez szükséges smart contract)
+async function checkNFTBalances() {
+  if (!walletConnected) return;
+  
+  // Demo adatok - valós implementációhoz Web3.js vagy Ethers.js kell
+  const demoBalances = [2, 1, 0, 3, 1, 0, 2, 1, 0, 1, 0, 1, 0, 2, 1];
+  
+  demoBalances.forEach((balance, index) => {
+    const element = document.getElementById(`nft-${index}`);
+    if (element) {
+      element.textContent = `${balance} owned`;
+      if (balance > 0) {
+        element.style.color = '#16a34a';
+        element.style.fontWeight = '600';
+      }
+    }
   });
 }
 </script>
