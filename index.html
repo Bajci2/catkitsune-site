@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>CatKitSune – Quests &amp; Swap</title>
+<title>CatKitSune – Quests & Swap</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -44,13 +43,14 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      cursor: pointer;
     }
 
     .paw-icon {
       position: relative;
       width: 18px;
       height: 18px;
-      background: #8b5cf6; /* lila tappancs */
+      background: #8b5cf6;
       border-radius: 45% 45% 55% 55%;
       display: inline-block;
     }
@@ -79,6 +79,12 @@
       display:flex;
       align-items:center;
       gap:6px;
+      transition: all 0.2s;
+    }
+
+    .login-btn:hover {
+      background: #f3f4f6;
+      transform: translateY(-1px);
     }
 
     .avatar {
@@ -175,6 +181,13 @@
       padding: 9px 10px; border-radius: 12px;
       border: 1px solid #e5e7eb; background: #f9fafb;
       font-size: 12px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .mission-item:hover {
+      border-color: var(--primary);
+      background: #f2ecff;
     }
 
     .mission-left { display: flex; align-items: center; gap: 10px; }
@@ -182,6 +195,11 @@
     .mission-check {
       width: 16px; height: 16px; border-radius: 999px;
       border: 2px solid #d1d5db; background: #fff;
+    }
+
+    .mission-check.completed {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
     }
 
     .mission-text-title { font-weight: 600; margin-bottom: 2px; }
@@ -283,6 +301,12 @@
       font-size: 14px;
       margin: 10px auto;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .swap-center-icon:hover {
+      transform: rotate(180deg);
+      background: #f3f4f6;
     }
 
     .swap-btn {
@@ -295,6 +319,18 @@
       font-weight: 700;
       font-size: 14px;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .swap-btn:hover {
+      background: #5a2dd5;
+      transform: translateY(-2px);
+    }
+
+    .swap-btn:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .token-select {
@@ -307,27 +343,36 @@
       cursor: pointer;
     }
 
+    @media (max-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   </style>
 </head>
 <body>
 <div class="app">
 <!-- HEADER -->
 <header>
-<div class="logo">
+<div class="logo" onclick="showView(event, 'quests')">
 <span class="paw-icon"></span>
 <span>CatKitSune</span>
 </div>
 <div class="top-actions">
 <!-- WALLET BUTTON -->
-<button class="login-btn" id="walletBtn">
+<button class="login-btn" id="walletBtn" onclick="connectWallet()">
 <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"/>
-        Connect Wallet
+        <span id="walletText">Connect Wallet</span>
       </button>
-<!-- TWITTER LOGIN GOMB (JAVÍTVA) -->
+<!-- TWITTER LOGIN -->
 <button class="login-btn" id="twitterBtn" onclick="loginWithTwitter()">
 <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" style="width:18px;"/>
         Login with Twitter
-      </button><div id="twitterAvatar" style="display:none; align-items:center; gap:6px;"></div>
+      </button>
+<div id="twitterAvatar" style="display:none; align-items:center; gap:6px;"></div>
 <div class="avatar"></div>
 </div>
 </header>
@@ -344,10 +389,10 @@
 <div class="hero-title">Complete quests. Earn points. Climb the leaderboard.</div>
 <div class="hero-sub">Join the community and reach the highest level!</div>
 <div class="stats-row">
-<div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value">1</div></div>
-<div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">2</div></div>
-<div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value">3</div></div>
-<div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">4</div></div>
+<div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value" id="totalPoints">0</div></div>
+<div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">11</div></div>
+<div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="completedQuests">0</div></div>
+<div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">#4</div></div>
 </div>
 </div>
 <div class="content-grid">
@@ -355,17 +400,126 @@
 <div class="card">
 <div class="card-title"><span class="dot"></span> Quests</div>
 <div class="mission-list">
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Follow on X</div><div class="mission-text-sub">Follow <a href="https://x.com/GborSzakl1" target="_blank">@GborSzakl1</a> on X.</div></div></div><div class="mission-points">+150 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Mint the CatKitSune NFT</div><div class="mission-text-sub">Airdrop bonus reward.</div></div></div><div class="mission-points">+300 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Swap on CatKitSune</div><div class="mission-text-sub">Make a swap worth at least $10.</div></div></div><div class="mission-points">+150 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Share on X</div><div class="mission-text-sub"><a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank">Open Tweet</a></div></div></div><div class="mission-points">+250 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Bridge to HYPE</div><div class="mission-text-sub">Bridge $10 to HYPE.</div></div></div><div class="mission-points">+500 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Mini Mover</div><div class="mission-text-sub">Transact $50 today.</div></div></div><div class="mission-points">+300 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Referral Runner</div><div class="mission-text-sub">Refer 1 new user.</div></div></div><div class="mission-points">+200 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Earn Boost</div><div class="mission-text-sub">Complete 3 tasks.</div></div></div><div class="mission-points">+300 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Weekly Volume</div><div class="mission-text-sub">Transact $2000.</div></div></div><div class="mission-points">+800 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Swap It Up</div><div class="mission-text-sub">Swap $10 on KittenSwap.</div></div></div><div class="mission-points">+200 EP</div></div>
-<div class="mission-item"><div class="mission-left"><div class="mission-check"></div><div><div class="mission-text-title">Hold all NFTs</div><div class="mission-text-sub">Own 1 from each listed collection.</div></div></div><div class="mission-points">+1200 EP</div></div>
+<div class="mission-item" onclick="completeQuest(this, 150)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Follow on X</div>
+<div class="mission-text-sub">Follow <a href="https://x.com/GborSzakl1" target="_blank" onclick="event.stopPropagation()">@GborSzakl1</a> on X.</div>
+</div>
+</div>
+<div class="mission-points">+150 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 300)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Mint the CatKitSune NFT</div>
+<div class="mission-text-sub">Airdrop bonus reward.</div>
+</div>
+</div>
+<div class="mission-points">+300 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 150)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Swap on CatKitSune</div>
+<div class="mission-text-sub">Make a swap worth at least $10.</div>
+</div>
+</div>
+<div class="mission-points">+150 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 250)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Share on X</div>
+<div class="mission-text-sub"><a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank" onclick="event.stopPropagation()">Open Tweet</a></div>
+</div>
+</div>
+<div class="mission-points">+250 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 500)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Bridge to HYPE</div>
+<div class="mission-text-sub">Bridge $10 to HYPE.</div>
+</div>
+</div>
+<div class="mission-points">+500 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 300)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Mini Mover</div>
+<div class="mission-text-sub">Transact $50 today.</div>
+</div>
+</div>
+<div class="mission-points">+300 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 200)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Referral Runner</div>
+<div class="mission-text-sub">Refer 1 new user.</div>
+</div>
+</div>
+<div class="mission-points">+200 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 300)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Earn Boost</div>
+<div class="mission-text-sub">Complete 3 tasks.</div>
+</div>
+</div>
+<div class="mission-points">+300 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 800)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Weekly Volume</div>
+<div class="mission-text-sub">Transact $2000.</div>
+</div>
+</div>
+<div class="mission-points">+800 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 200)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Swap It Up</div>
+<div class="mission-text-sub">Swap $10 on KittenSwap.</div>
+</div>
+</div>
+<div class="mission-points">+200 EP</div>
+</div>
+
+<div class="mission-item" onclick="completeQuest(this, 1200)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Hold all NFTs</div>
+<div class="mission-text-sub">Own 1 from each listed collection.</div>
+</div>
+</div>
+<div class="mission-points">+1200 EP</div>
+</div>
 </div>
 </div>
 <!-- RIGHT COLUMN -->
@@ -373,15 +527,15 @@
 <div class="card" style="margin-bottom:14px;">
 <div class="card-title"><span class="dot"></span> Leaderboard</div>
 <div class="leader-list">
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#1</div></div><div class="leader-points">......</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#2</div></div><div class="leader-points">......</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#3</div></div><div class="leader-points">......</div></div>
-<div class="leader-item active"><div class="leader-left"><div class="leader-rank">#4</div></div><div class="leader-points">......</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#5</div></div><div class="leader-points">......</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#6</div></div><div class="leader-points">......</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#7</div></div><div class="leader-points">......</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#8</div></div><div class="leader-points">......</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#9</div></div><div class="leader-points">......</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#1</div><span>Alice</span></div><div class="leader-points">4,200 EP</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#2</div><span>Bob</span></div><div class="leader-points">3,850 EP</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#3</div><span>Charlie</span></div><div class="leader-points">3,100 EP</div></div>
+<div class="leader-item active"><div class="leader-left"><div class="leader-rank">#4</div><span>You</span></div><div class="leader-points" id="userLeaderPoints">0 EP</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#5</div><span>Dave</span></div><div class="leader-points">2,300 EP</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#6</div><span>Eve</span></div><div class="leader-points">1,950 EP</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#7</div><span>Frank</span></div><div class="leader-points">1,400 EP</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#8</div><span>Grace</span></div><div class="leader-points">1,100 EP</div></div>
+<div class="leader-item"><div class="leader-left"><div class="leader-rank">#9</div><span>Heidi</span></div><div class="leader-points">850 EP</div></div>
 </div>
 </div>
 <div class="card">
@@ -393,7 +547,7 @@
 <div class="nft-card"><strong></strong>Wealthy Hypio Babies</div>
 <div class="nft-card"><strong></strong>Tiny Hyper Cats</div>
 <div class="nft-card"><strong></strong>Illumeownati by Catbal</div>
-<div class="nft-card"><strong></strong>PiP &amp; Friends</div>
+<div class="nft-card"><strong></strong>PiP & Friends</div>
 <div class="nft-card"><strong></strong>Hypers</div>
 <div class="nft-card"><strong></strong>Mechacats</div>
 <div class="nft-card"><strong></strong>LQnians</div>
@@ -412,38 +566,38 @@
 <div class="swap-row">
 <div>
 <div class="swap-label-small">You Send</div>
-<select class="token-select">
-<option>HYPE</option>
-<option>WHYPE</option>
-<option>CKS Token</option>
-<option>kHYPE</option>
-<option>USDT0</option>
-<option>KITTEN</option>
-<option>USDC</option>
+<select class="token-select" id="tokenFrom" onchange="calculateSwap()">
+<option value="HYPE">HYPE</option>
+<option value="WHYPE">WHYPE</option>
+<option value="CKS">CKS Token</option>
+<option value="kHYPE">kHYPE</option>
+<option value="USDT0">USDT0</option>
+<option value="KITTEN">KITTEN</option>
+<option value="USDC">USDC</option>
 </select>
 </div>
-<input class="swap-amount-input" type="number" value="1.20"/>
+<input class="swap-amount-input" id="amountFrom" type="number" value="1.20" oninput="calculateSwap()"/>
 </div>
 </div>
-<div class="swap-center-icon">⇅</div>
+<div class="swap-center-icon" onclick="swapTokens()">⇅</div>
 <div class="swap-field">
 <div class="swap-row">
 <div>
 <div class="swap-label-small">You Receive</div>
-<select class="token-select">
-<option>CKS Token</option>
-<option>HYPE</option>
-<option>WHYPE</option>
-<option>USDT0</option>
-<option>kHYPE</option>
-<option>KITTEN</option>
-<option>USDC</option>
+<select class="token-select" id="tokenTo" onchange="calculateSwap()">
+<option value="CKS">CKS Token</option>
+<option value="HYPE">HYPE</option>
+<option value="WHYPE">WHYPE</option>
+<option value="USDT0">USDT0</option>
+<option value="kHYPE">kHYPE</option>
+<option value="KITTEN">KITTEN</option>
+<option value="USDC">USDC</option>
 </select>
 </div>
-<input class="swap-amount-input" type="number" value="12.89"/>
+<input class="swap-amount-input" id="amountTo" type="number" value="12.89" readonly/>
 </div>
 </div>
-<button class="swap-btn">Swap</button>
+<button class="swap-btn" id="swapBtn" onclick="executeSwap()">Swap</button>
 </div>
 </main>
 <!-- AIRDROP VIEW -->
@@ -451,7 +605,7 @@
 <div style="text-align:center; padding:40px;">
 <h1>Airdrop Page</h1>
 <p>The airdrop details are coming soon.
-      We’re finalizing the rewards, rules, and participation steps.
+      We're finalizing the rewards, rules, and participation steps.
       Stay tuned — updates dropping very soon! 🚀</p>
 </div>
 </main>
@@ -464,28 +618,267 @@
       Launch incoming… 🔥</p>
 </div>
 </main>
-</div> <!-- APP END -->
+</div>
+
 <script>
+// GLOBÁLIS VÁLTOZÓK
+let walletConnected = false;
+let walletAddress = '';
+let totalPoints = 0;
+let completedCount = 0;
+
+// VIEW VÁLTÁS
+function showView(event, viewName) {
+  // Összes view elrejtése
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  // Összes gomb inactive
+  document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
+  
+  // Aktív view megjelenítése
+  document.getElementById('view-' + viewName).classList.add('active');
+  
+  // Aktív gomb kijelölése
+  if (event && event.target) {
+    event.target.classList.add('active');
+  }
+}
+
+// WALLET CSATLAKOZÁS
+async function connectWallet() {
+  if (typeof window.ethereum === 'undefined') {
+    alert('Kérlek telepítsd a MetaMask-ot! 🦊\n\nLetöltés: https://metamask.io');
+    return;
+  }
+  
+  try {
+    const accounts = await window.ethereum.request({ 
+      method: 'eth_requestAccounts' 
+    });
+    
+    walletAddress = accounts[0];
+    walletConnected = true;
+    
+    // Gomb frissítése
+    const shortAddress = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+    document.getElementById('walletText').textContent = shortAddress;
+    document.getElementById('walletBtn').style.background = '#e2d6ff';
+    
+    // Swap gomb engedélyezése
+    document.getElementById('swapBtn').disabled = false;
+    
+    alert('Wallet sikeresen csatlakoztatva! ✅');
+  } catch (error) {
+    console.error('Wallet csatlakozási hiba:', error);
+    alert('Hiba történt a wallet csatlakoztatása során! ❌');
+  }
+}
+
+// TWITTER LOGIN (demo verzió)
 function loginWithTwitter() {
-  window.location.href = "/api/twitter-login";
+  // Éles környezetben itt lenne az OAuth folyamat
+  // Most csak demo célokra szimuláljuk
+  alert('Twitter bejelentkezés fejlesztés alatt! 🐦\n\nHamarosan elérhető lesz az OAuth integráció.');
+  
+  // Demo adatok
+  const demoUser = {
+    username: 'GborSzakl1',
+    profile_image_url: 'https://cdn-icons-png.flaticon.com/512/733/733579.png'
+  };
+  
+  document.getElementById('twitterBtn').style.display = 'none';
+  const av = document.getElementById('twitterAvatar');
+  av.innerHTML = `<img src="${demoUser.profile_image_url}" style="width:30px;height:30px;border-radius:50%;"><span>@${demoUser.username}</span>`;
+  av.style.display = 'flex';
 }
-function getQueryParam(name) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(name);
+
+// QUEST TELJESÍTÉSE
+function completeQuest(element, points) {
+  const checkbox = element.querySelector('.mission-check');
+  
+  // Ha már teljesítve van, ne csináljunk semmit
+  if (checkbox.classList.contains('completed')) {
+    return;
+  }
+  
+  // Teljesítés jelzése
+  checkbox.classList.add('completed');
+  element.style.opacity = '0.7';
+  element.style.pointerEvents = 'none';
+  
+  // Pontok hozzáadása
+  totalPoints += points;
+  completedCount++;
+  
+  // UI frissítése
+  document.getElementById('totalPoints').textContent = totalPoints;
+  document.getElementById('completedQuests').textContent = completedCount;
+  document.getElementById('userLeaderPoints').textContent = totalPoints + ' EP';
+  
+  // Animáció
+  element.style.transform = 'scale(0.98)';
+  setTimeout(() => {
+    element.style.transform = 'scale(1)';
+  }, 200);
+  
+  // Értesítés
+  showNotification(`+${points} EP szerzett! 🎉`);
 }
-async function loadTwitterUser() {
-  const access_token = getQueryParam("access_token");
-  if (!access_token) return;
-  const r = await fetch(`/api/twitter-user?access_token=${access_token}`);
-  const d = await r.json();
-  if (!d.ok) return;
-  const u = d.user;
-  document.getElementById("twitterBtn").style.display = "none";
-  const av = document.getElementById("twitterAvatar");
-  av.innerHTML = `<img src="${u.profile_image_url}" style="width:30px;height:30px;border-radius:50%;"><span>@${u.username}</span>`;
-  av.style.display = "flex";
+
+// ÉRTESÍTÉS MEGJELENÍTÉSE
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, #6a3df5, #22c55e);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 10px 30px rgba(106, 61, 245, 0.3);
+  `;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
 }
-window.onload = loadTwitterUser;
+
+// SWAP FUNKCIÓK
+const exchangeRates = {
+  'HYPE': 1.0,
+  'WHYPE': 1.0,
+  'CKS': 10.5,
+  'kHYPE': 0.95,
+  'USDT0': 1.2,
+  'KITTEN': 0.15,
+  'USDC': 1.21
+};
+
+function calculateSwap() {
+  const fromToken = document.getElementById('tokenFrom').value;
+  const toToken = document.getElementById('tokenTo').value;
+  const fromAmount = parseFloat(document.getElementById('amountFrom').value) || 0;
+  
+  if (fromToken === toToken) {
+    document.getElementById('amountTo').value = fromAmount.toFixed(2);
+    return;
+  }
+  
+  const fromRate = exchangeRates[fromToken] || 1;
+  const toRate = exchangeRates[toToken] || 1;
+  
+  const result = (fromAmount * fromRate / toRate).toFixed(2);
+  document.getElementById('amountTo').value = result;
+}
+
+function swapTokens() {
+  const fromSelect = document.getElementById('tokenFrom');
+  const toSelect = document.getElementById('tokenTo');
+  const fromInput = document.getElementById('amountFrom');
+  const toInput = document.getElementById('amountTo');
+  
+  // Tokenek cseréje
+  const tempToken = fromSelect.value;
+  fromSelect.value = toSelect.value;
+  toSelect.value = tempToken;
+  
+  // Értékek cseréje
+  const tempAmount = fromInput.value;
+  fromInput.value = toInput.value;
+  toInput.value = tempAmount;
+  
+  calculateSwap();
+}
+
+function executeSwap() {
+  if (!walletConnected) {
+    alert('Először csatlakoztasd a walletodat! 💼');
+    return;
+  }
+  
+  const fromToken = document.getElementById('tokenFrom').value;
+  const toToken = document.getElementById('tokenTo').value;
+  const fromAmount = document.getElementById('amountFrom').value;
+  const toAmount = document.getElementById('amountTo').value;
+  
+  if (!fromAmount || parseFloat(fromAmount) <= 0) {
+    alert('Adj meg egy érvényes összeget! 🔢');
+    return;
+  }
+  
+  // Swap szimuláció
+  const swapBtn = document.getElementById('swapBtn');
+  swapBtn.textContent = 'Swapping...';
+  swapBtn.disabled = true;
+  
+  setTimeout(() => {
+    showNotification(`✅ Swap sikeres! ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`);
+    swapBtn.textContent = 'Swap';
+    swapBtn.disabled = false;
+    
+    // Quest teljesítés (ha $10 felett van)
+    const usdValue = parseFloat(fromAmount) * (exchangeRates[fromToken] || 1);
+    if (usdValue >= 10) {
+      const swapQuest = document.querySelector('.mission-item:nth-child(3)');
+      if (swapQuest && !swapQuest.querySelector('.mission-check').classList.contains('completed')) {
+        setTimeout(() => completeQuest(swapQuest, 150), 1000);
+      }
+    }
+  }, 2000);
+}
+
+// ANIMÁCIÓK
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOut {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(400px);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// INICIALIZÁLÁS
+calculateSwap();
+
+// MetaMask accountok változásának figyelése
+if (typeof window.ethereum !== 'undefined') {
+  window.ethereum.on('accountsChanged', function (accounts) {
+    if (accounts.length === 0) {
+      walletConnected = false;
+      document.getElementById('walletText').textContent = 'Connect Wallet';
+      document.getElementById('walletBtn').style.background = '#f9fafb';
+      document.getElementById('swapBtn').disabled = true;
+    } else {
+      walletAddress = accounts[0];
+      const shortAddress = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+      document.getElementById('walletText').textContent = shortAddress;
+    }
+  });
+}
 </script>
 </body>
 </html>
