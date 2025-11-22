@@ -50,7 +50,7 @@
       width: 24px;
       height: 24px;
       display: inline-block;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="70" cy="45" rx="25" ry="35" fill="%238b5cf6"/><ellipse cx="130" cy="45" rx="25" ry="35" fill="%238b5cf6"/><ellipse cx="40" cy="85" rx="22" ry="32" fill="%238b5cf6" transform="rotate(-20 40 85)"/><ellipse cx="160" cy="85" rx="22" ry="32" fill="%238b5cf6" transform="rotate(20 160 85)"/><path d="M 100 90 Q 70 120 65 155 Q 65 175 85 180 Q 100 183 115 180 Q 135 175 135 155 Q 130 120 100 90 Z" fill="%238b5cf6"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="65" cy="50" rx="23" ry="33" fill="%238b5cf6"/><ellipse cx="135" cy="50" rx="23" ry="33" fill="%238b5cf6"/><ellipse cx="35" cy="80" rx="20" ry="30" fill="%238b5cf6" transform="rotate(-25 35 80)"/><ellipse cx="165" cy="80" rx="20" ry="30" fill="%238b5cf6" transform="rotate(25 165 80)"/><ellipse cx="100" cy="130" rx="55" ry="50" fill="%238b5cf6"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -330,6 +330,167 @@
       cursor: pointer;
     }
 
+    /* LEADERBOARD STYLES */
+    .leaderboard-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .leaderboard-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .leaderboard-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .leaderboard-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .leaderboard-search {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .leaderboard-search input {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      outline: none;
+      background: white;
+    }
+
+    .leaderboard-search input:focus {
+      border-color: var(--primary);
+    }
+
+    .leaderboard-search::before {
+      content: "🔍";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .leaderboard-table {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .leaderboard-table-header {
+      display: grid;
+      grid-template-columns: 80px 1fr 2fr 1fr;
+      padding: 14px 20px;
+      background: #f9fafb;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .leaderboard-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 2fr 1fr;
+      padding: 14px 20px;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 13px;
+      transition: all 0.2s;
+      align-items: center;
+    }
+
+    .leaderboard-row:last-child {
+      border-bottom: none;
+    }
+
+    .leaderboard-row:hover {
+      background: #f9fafb;
+    }
+
+    .leaderboard-row.highlight {
+      background: #f2ecff;
+      border-left: 3px solid var(--primary);
+    }
+
+    .rank-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    .rank-medal {
+      font-size: 18px;
+    }
+
+    .user-cell {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .address-cell {
+      font-family: 'Courier New', monospace;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .points-cell {
+      font-weight: 700;
+      color: var(--primary);
+      text-align: right;
+    }
+
+    .leaderboard-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .stat-box {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-box-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .stat-box-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .leaderboard-table-header,
+      .leaderboard-row {
+        grid-template-columns: 60px 1fr 1fr;
+      }
+      .address-cell {
+        display: none;
+      }
+      .leaderboard-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 768px) {
       .content-grid {
         grid-template-columns: 1fr;
@@ -367,6 +528,7 @@
 <div class="top-nav">
 <button class="top-nav-btn active" onclick="showView(event, 'quests')">Quests</button>
 <button class="top-nav-btn" onclick="showView(event, 'swap')">Swap</button>
+<button class="top-nav-btn" onclick="showView(event, 'leaderboard')">Leaderboard</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">Airdrop</button>
 <button class="top-nav-btn" onclick="showView(event, 'cks')">CKS Token</button>
 </div>
@@ -524,6 +686,7 @@
 <div class="leader-item"><div class="leader-left"><div class="leader-rank">#8</div><span>Grace</span></div><div class="leader-points">1,100 EP</div></div>
 <div class="leader-item"><div class="leader-left"><div class="leader-rank">#9</div><span>Heidi</span></div><div class="leader-points">850 EP</div></div>
 </div>
+<button onclick="showView(event, 'leaderboard')" style="width:100%;margin-top:12px;padding:8px;background:#6a3df5;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:600;font-size:12px;">View Full Leaderboard</button>
 </div>
 <div class="card">
 <div class="card-title"><span class="dot"></span> NFT Gallery</div>
@@ -961,6 +1124,7 @@ document.head.appendChild(style);
 window.onload = function() {
   calculateSwap();
   loadTwitterUser();
+  generateLeaderboard();
   
   // Wallet visszatöltése ha volt csatlakoztatva
   const savedWallet = sessionStorage.getItem('wallet_address');
@@ -992,6 +1156,66 @@ if (typeof window.ethereum !== 'undefined') {
     showNotification('🔗 Hálózat megváltozott');
     window.location.reload();
   });
+}
+
+// LEADERBOARD GENERÁLÁS
+const leaderboardData = [
+  { name: "Czaban Eszter", address: "0x7f51f871a67c2c", points: 68503 },
+  { name: "Czaban László", address: "0x8e6d676c9b51", points: 68282 },
+  { name: "Balogh Sándor", address: "0xa80a2c2fca00bf", points: 65890 },
+  { name: "Illés Katalin", address: "0x5cc462ff2d0f5", points: 67409 },
+  { name: "Illés Márk", address: "0x588cbabc5a581", points: 68884 },
+  { name: "Kiss Róbert", address: "0x8672992c2cfb2e", points: 69326 },
+  { name: "Papp Gábor", address: "0x408b8d358fcdbb", points: 67921 },
+  { name: "Halász Éva", address: "0xa85808b052dca", points: 67449 },
+  { name: "Gál Eszter", address: "0xec2317b846c27", points: 64538 },
+  { name: "Balogh Éva", address: "0x412b08d65cc2", points: 66465 },
+  { name: "Gál Laura", address: "0xc268dcbfd08bb8b", points: 66998 },
+  { name: "Nagy Péter", address: "0x9a3f4e7c2b81d9", points: 63245 },
+  { name: "Tóth Anna", address: "0x7e2f9a8d1c45b6", points: 62890 },
+  { name: "Kovács János", address: "0x4d8a6f3e9b27c1", points: 61754 },
+  { name: "Szabó Mária", address: "0x6c9b2d7a4e31f8", points: 60123 }
+];
+
+let filteredData = [...leaderboardData];
+
+function generateLeaderboard() {
+  const container = document.getElementById('leaderboardRows');
+  const currentUser = walletAddress.toLowerCase();
+  
+  filteredData.sort((a, b) => b.points - a.points);
+  
+  container.innerHTML = filteredData.map((player, index) => {
+    const rank = index + 1;
+    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+    const isCurrentUser = player.address.toLowerCase() === currentUser;
+    
+    return `
+      <div class="leaderboard-row ${isCurrentUser ? 'highlight' : ''}">
+        <div class="rank-cell">
+          ${medal ? `<span class="rank-medal">${medal}</span>` : `<span>#${rank}</span>`}
+        </div>
+        <div class="user-cell">${player.name}</div>
+        <div class="address-cell">${player.address}</div>
+        <div class="points-cell">${player.points.toLocaleString()}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterLeaderboard() {
+  const searchTerm = document.getElementById('leaderboardSearch').value.toLowerCase();
+  
+  if (!searchTerm) {
+    filteredData = [...leaderboardData];
+  } else {
+    filteredData = leaderboardData.filter(player => 
+      player.name.toLowerCase().includes(searchTerm) ||
+      player.address.toLowerCase().includes(searchTerm)
+    );
+  }
+  
+  generateLeaderboard();
 }
 </script>
 </body>
