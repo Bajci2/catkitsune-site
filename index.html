@@ -363,7 +363,7 @@
 </div>
 <div class="top-actions">
 <!-- WALLET BUTTON -->
-<button class="login-btn" id="walletBtn" onclick="connectWallet()">
+<button class="login-btn" id="walletBtn" onclick="toggleWallet()">
 <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"/>
         <span id="walletText">Connect Wallet</span>
       </button>
@@ -646,30 +646,79 @@ function showView(event, viewName) {
 // WALLET CSATLAKOZÁS
 async function connectWallet() {
   if (typeof window.ethereum === 'undefined') {
-    alert('Kérlek telepítsd a MetaMask-ot! 🦊\n\nLetöltés: https://metamask.io');
+    alert('🦊 Kérlek telepítsd a MetaMask-ot!\n\nLetöltés: https://metamask.io');
+    window.open('https://metamask.io/download/', '_blank');
     return;
   }
   
   try {
+    // MetaMask popup megjelenítése
     const accounts = await window.ethereum.request({ 
       method: 'eth_requestAccounts' 
     });
+    
+    if (accounts.length === 0) {
+      alert('❌ Nem választottál ki wallet címet!');
+      return;
+    }
     
     walletAddress = accounts[0];
     walletConnected = true;
     
     // Gomb frissítése
-    const shortAddress = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-    document.getElementById('walletText').textContent = shortAddress;
-    document.getElementById('walletBtn').style.background = '#e2d6ff';
+    updateWalletButton();
     
     // Swap gomb engedélyezése
     document.getElementById('swapBtn').disabled = false;
     
-    alert('Wallet sikeresen csatlakoztatva! ✅');
+    showNotification('✅ Wallet sikeresen csatlakoztatva!');
   } catch (error) {
     console.error('Wallet csatlakozási hiba:', error);
-    alert('Hiba történt a wallet csatlakoztatása során! ❌');
+    
+    if (error.code === 4001) {
+      // Felhasználó visszautasította
+      showNotification('❌ Csatlakozás visszautasítva');
+    } else {
+      alert('❌ Hiba történt a wallet csatlakoztatása során!\n\n' + error.message);
+    }
+  }
+}
+
+// WALLET LEVÁLASZTÁS
+function disconnectWallet() {
+  walletConnected = false;
+  walletAddress = '';
+  
+  // Gomb visszaállítása
+  document.getElementById('walletText').textContent = 'Connect Wallet';
+  document.getElementById('walletBtn').style.background = '#f9fafb';
+  document.getElementById('walletBtn').style.borderColor = '#e5e7eb';
+  
+  // Swap gomb letiltása
+  document.getElementById('swapBtn').disabled = true;
+  
+  showNotification('👋 Wallet leválasztva');
+}
+
+// WALLET GOMB FRISSÍTÉSE
+function updateWalletButton() {
+  const shortAddress = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+  document.getElementById('walletText').textContent = shortAddress;
+  document.getElementById('walletBtn').style.background = 'linear-gradient(135deg, #e2d6ff, #d6f5e3)';
+  document.getElementById('walletBtn').style.borderColor = '#6a3df5';
+}
+
+// WALLET GOMB TOGGLE
+function toggleWallet() {
+  if (walletConnected) {
+    // Ha csatlakozva van, akkor kérdezzük meg mit akar
+    const result = confirm('🔌 Szeretnéd leválasztani a wallet-et?');
+    if (result) {
+      disconnectWallet();
+    }
+  } else {
+    // Ha nincs csatlakozva, csatlakoztatás
+    connectWallet();
   }
 }
 
@@ -868,15 +917,21 @@ calculateSwap();
 if (typeof window.ethereum !== 'undefined') {
   window.ethereum.on('accountsChanged', function (accounts) {
     if (accounts.length === 0) {
-      walletConnected = false;
-      document.getElementById('walletText').textContent = 'Connect Wallet';
-      document.getElementById('walletBtn').style.background = '#f9fafb';
-      document.getElementById('swapBtn').disabled = true;
-    } else {
+      // Wallet lecsatlakozott
+      disconnectWallet();
+      showNotification('👋 Wallet lecsatlakoztatva a MetaMask-ban');
+    } else if (walletConnected) {
+      // Account váltás
       walletAddress = accounts[0];
-      const shortAddress = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
-      document.getElementById('walletText').textContent = shortAddress;
+      updateWalletButton();
+      showNotification('🔄 Wallet cím megváltozott');
     }
+  });
+  
+  // Chain változás figyelése
+  window.ethereum.on('chainChanged', function () {
+    showNotification('🔗 Hálózat megváltozott');
+    window.location.reload();
   });
 }
 </script>
