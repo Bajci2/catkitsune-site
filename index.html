@@ -365,15 +365,26 @@ Login with Twitter
 
 <div class="content-grid">
 <div class="card">
-<div class="card-title" style="margin-bottom:4px;display:flex;align-items:center;flex-wrap:wrap;">
-<span style="display:flex;align-items:center;gap:8px;">
-<span class="dot"></span> 
-<span>Ranglétra</span>
-</span>
+<div class="card-title" style="margin-bottom:20px;">
+<span class="dot"></span> Ranglétra
 </div>
-<div style="font-size:12px;color:#6b7280;margin-bottom:12px;">Top 500 játékosok pontozása</div>
 
-<div style="position:relative;margin-bottom:12px;">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
+<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">500</div>
+<div style="font-size:13px;color:#6b7280;">Összes játékos</div>
+</div>
+<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
+<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">21,222,037</div>
+<div style="font-size:13px;color:#6b7280;">Összesen pontok</div>
+</div>
+<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
+<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">37.0</div>
+<div style="font-size:13px;color:#6b7280;">Átlag küldetések</div>
+</div>
+</div>
+
+<div style="position:relative;margin-bottom:20px;">
 <input type="text" id="questsLeaderboardSearch" placeholder="Keress felhasználót vagy wallet címet..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;">
 <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
 </div>
@@ -387,21 +398,6 @@ Login with Twitter
 </div>
 
 <div id="questsLeaderboardRows" style="max-height:450px;overflow-y:auto;">
-</div>
-</div>
-
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px;">
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
-<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">500</div>
-<div style="font-size:13px;color:#6b7280;">Összes játékos</div>
-</div>
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
-<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">21,222,037</div>
-<div style="font-size:13px;color:#6b7280;">Összesen pontok</div>
-</div>
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
-<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">37.0</div>
-<div style="font-size:13px;color:#6b7280;">Átlag küldetések</div>
 </div>
 </div>
 </div>
