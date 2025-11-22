@@ -703,6 +703,9 @@ function disconnectWallet() {
   // Swap gomb letiltása
   document.getElementById('swapBtn').disabled = true;
   
+  // Session törlése
+  sessionStorage.removeItem('wallet_address');
+  
   showNotification('👋 Wallet leválasztva');
 }
 
@@ -712,6 +715,9 @@ function updateWalletButton() {
   document.getElementById('walletText').textContent = shortAddress;
   document.getElementById('walletBtn').style.background = 'linear-gradient(135deg, #e2d6ff, #d6f5e3)';
   document.getElementById('walletBtn').style.borderColor = '#6a3df5';
+  
+  // Wallet cím mentése
+  sessionStorage.setItem('wallet_address', walletAddress);
 }
 
 // WALLET GOMB TOGGLE
@@ -734,40 +740,58 @@ function loginWithTwitter() {
   window.location.href = "https://catkitsune-site.vercel.app/api/twitter-login";
 }
 
-// TWITTER USER BETÖLTÉSE (ha van access_token az URL-ben)
+// TWITTER USER BETÖLTÉSE (URL paraméterekből)
 async function loadTwitterUser() {
-  const access_token = getQueryParam("access_token");
-  if (!access_token) return;
+  // Ellenőrizzük az URL paramétereket
+  const name = getQueryParam("name");
+  const username = getQueryParam("username");
+  const avatar = getQueryParam("avatar");
   
-  try {
-    const response = await fetch(`https://catkitsune-site.vercel.app/api/twitter-user?access_token=${access_token}`);
-    const data = await response.json();
-    
-    if (!data.ok || !data.user) {
-      console.error('Twitter user fetch failed:', data);
-      return;
-    }
-    
-    const user = data.user;
-    
+  if (username && avatar) {
     // Twitter gomb elrejtése
     document.getElementById('twitterBtn').style.display = 'none';
     
     // Avatar megjelenítése
     const av = document.getElementById('twitterAvatar');
+    const decodedAvatar = decodeURIComponent(avatar);
+    const decodedUsername = decodeURIComponent(username);
+    const decodedName = name ? decodeURIComponent(name) : decodedUsername;
+    
     av.innerHTML = `
-      <img src="${user.profile_image_url}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
-      <span style="font-weight:600;">@${user.username}</span>
+      <img src="${decodedAvatar}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
+      <span style="font-weight:600;">@${decodedUsername}</span>
     `;
     av.style.display = 'flex';
     
-    showNotification(`🐦 Bejelentkezve: @${user.username}`);
+    showNotification(`🐦 Bejelentkezve: @${decodedUsername}`);
     
-    // Access token mentése (opcionális)
-    sessionStorage.setItem('twitter_token', access_token);
-    sessionStorage.setItem('twitter_user', JSON.stringify(user));
-  } catch (error) {
-    console.error('Error loading Twitter user:', error);
+    // User adatok mentése
+    sessionStorage.setItem('twitter_user', JSON.stringify({
+      name: decodedName,
+      username: decodedUsername,
+      avatar: decodedAvatar
+    }));
+    
+    // URL tisztítása (eltávolítjuk a paramétereket)
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
+  
+  // Ellenőrizzük a session storage-t
+  const savedUser = sessionStorage.getItem('twitter_user');
+  if (savedUser) {
+    try {
+      const user = JSON.parse(savedUser);
+      document.getElementById('twitterBtn').style.display = 'none';
+      const av = document.getElementById('twitterAvatar');
+      av.innerHTML = `
+        <img src="${user.avatar}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
+        <span style="font-weight:600;">@${user.username}</span>
+      `;
+      av.style.display = 'flex';
+    } catch (e) {
+      console.error('Error loading saved Twitter user:', e);
+    }
   }
 }
 
@@ -950,6 +974,15 @@ document.head.appendChild(style);
 window.onload = function() {
   calculateSwap();
   loadTwitterUser();
+  
+  // Wallet visszatöltése ha volt csatlakoztatva
+  const savedWallet = sessionStorage.getItem('wallet_address');
+  if (savedWallet && typeof window.ethereum !== 'undefined') {
+    walletAddress = savedWallet;
+    walletConnected = true;
+    updateWalletButton();
+    document.getElementById('swapBtn').disabled = false;
+  }
 };
 
 // MetaMask accountok változásának figyelése
