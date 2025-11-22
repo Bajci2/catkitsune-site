@@ -700,25 +700,30 @@
 
 <!-- FULL WIDTH LEADERBOARD -->
 <div class="card">
-<div class="card-title" style="margin-bottom:12px;">
-  <span class="dot"></span> Ranglétra
-  <span style="font-size:11px;color:#6b7280;font-weight:400;margin-left:8px;">Top 500 játékosok pontozása</span>
+<div class="card-title" style="margin-bottom:4px;display:flex;align-items:center;flex-wrap:wrap;">
+  <span style="display:flex;align-items:center;gap:8px;">
+    <span class="dot"></span> 
+    <span>Ranglétra</span>
+  </span>
 </div>
+<div style="font-size:12px;color:#6b7280;margin-bottom:12px;">Top 500 játékosok pontozása</div>
 
 <div style="position:relative;margin-bottom:12px;">
 <input type="text" id="questsLeaderboardSearch" placeholder="Keress felhasználót vagy wallet címet..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;">
 <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
 </div>
 
-<div style="background:#f9fafb;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;font-size:12px;font-weight:600;color:#6b7280;border:1px solid #e5e7eb;">
+<div style="border:1px solid #e5e7eb;border-radius:10px;background:white;overflow:hidden;">
+<div style="background:#f9fafb;padding:10px 14px;display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:2px solid #e5e7eb;position:sticky;top:0;z-index:10;">
 <div>Rang</div>
 <div>Felhasználó</div>
 <div>Cím</div>
 <div style="text-align:right;">Pontok</div>
 </div>
 
-<div id="questsLeaderboardRows" style="max-height:450px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:10px;background:white;">
+<div id="questsLeaderboardRows" style="max-height:450px;overflow-y:auto;">
 <!-- JavaScript generálja -->
+</div>
 </div>
 
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px;">
@@ -1190,23 +1195,29 @@ if (typeof window.ethereum !== 'undefined') {
 }
 
 // LEADERBOARD GENERÁLÁS
-const leaderboardData = [
-  { name: "Czaban Eszter", address: "0x7f51f871a67c2c", points: 68503 },
-  { name: "Czaban László", address: "0x8e6d676c9b51", points: 68282 },
-  { name: "Balogh Sándor", address: "0xa80a2c2fca00bf", points: 65890 },
-  { name: "Illés Katalin", address: "0x5cc462ff2d0f5", points: 67409 },
-  { name: "Illés Márk", address: "0x588cbabc5a581", points: 68884 },
-  { name: "Kiss Róbert", address: "0x8672992c2cfb2e", points: 69326 },
-  { name: "Papp Gábor", address: "0x408b8d358fcdbb", points: 67921 },
-  { name: "Halász Éva", address: "0xa85808b052dca", points: 67449 },
-  { name: "Gál Eszter", address: "0xec2317b846c27", points: 64538 },
-  { name: "Balogh Éva", address: "0x412b08d65cc2", points: 66465 },
-  { name: "Gál Laura", address: "0xc268dcbfd08bb8b", points: 66998 },
-  { name: "Nagy Péter", address: "0x9a3f4e7c2b81d9", points: 63245 },
-  { name: "Tóth Anna", address: "0x7e2f9a8d1c45b6", points: 62890 },
-  { name: "Kovács János", address: "0x4d8a6f3e9b27c1", points: 61754 },
-  { name: "Szabó Mária", address: "0x6c9b2d7a4e31f8", points: 60123 }
+const baseNames = [
+  "Czaban Eszter", "Czaban László", "Balogh Sándor", "Illés Katalin", "Illés Márk",
+  "Kiss Róbert", "Papp Gábor", "Halász Éva", "Gál Eszter", "Balogh Éva",
+  "Gál Laura", "Nagy Péter", "Tóth Anna", "Kovács János", "Szabó Mária",
+  "Horváth István", "Varga Zsófia", "Molnár Ferenc", "Simon Katalin", "Fekete Gábor",
+  "Farkas Éva", "Takács Péter", "Juhász Anna", "Lukács János", "Mészáros Mária",
+  "Oláh István", "Papp Zsófia", "Szilágyi Ferenc", "Hegedűs Katalin", "Rácz Gábor"
 ];
+
+// Generálunk 500 random játékost
+function generateRandomPlayers() {
+  const players = [];
+  for (let i = 0; i < 500; i++) {
+    const name = baseNames[i % baseNames.length] + (i >= 30 ? ` ${Math.floor(i/30)}` : '');
+    const randomAddress = '0x' + Math.random().toString(16).substring(2, 15);
+    const points = Math.floor(Math.random() * 50000) + 20000; // 20k-70k között
+    players.push({ name, address: randomAddress, points });
+  }
+  // Rendezés pontszám szerint csökkenő sorrendben
+  return players.sort((a, b) => b.points - a.points);
+}
+
+const leaderboardData = generateRandomPlayers();
 
 let filteredData = [...leaderboardData];
 let filteredQuestsData = [...leaderboardData];
