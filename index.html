@@ -139,6 +139,12 @@
     .stat-value { font-size: 18px; font-weight: 700; }
 
     .content-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .quests-section {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 20px;
@@ -528,7 +534,6 @@
 <div class="top-nav">
 <button class="top-nav-btn active" onclick="showView(event, 'quests')">Quests</button>
 <button class="top-nav-btn" onclick="showView(event, 'swap')">Swap</button>
-<button class="top-nav-btn" onclick="showView(event, 'leaderboard')">Leaderboard</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">Airdrop</button>
 <button class="top-nav-btn" onclick="showView(event, 'cks')">CKS Token</button>
 </div>
@@ -545,6 +550,8 @@
 </div>
 </div>
 <div class="content-grid">
+<!-- QUESTS SECTION (2 oszlop) -->
+<div class="quests-section">
 <!-- LEFT COLUMN – QUESTS -->
 <div class="card">
 <div class="card-title"><span class="dot"></span> Quests</div>
@@ -671,23 +678,7 @@
 </div>
 </div>
 </div>
-<!-- RIGHT COLUMN -->
-<div class="right-column">
-<div class="card" style="margin-bottom:14px;">
-<div class="card-title"><span class="dot"></span> Leaderboard</div>
-<div class="leader-list">
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#1</div><span>Alice</span></div><div class="leader-points">4,200 EP</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#2</div><span>Bob</span></div><div class="leader-points">3,850 EP</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#3</div><span>Charlie</span></div><div class="leader-points">3,100 EP</div></div>
-<div class="leader-item active"><div class="leader-left"><div class="leader-rank">#4</div><span>You</span></div><div class="leader-points" id="userLeaderPoints">0 EP</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#5</div><span>Dave</span></div><div class="leader-points">2,300 EP</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#6</div><span>Eve</span></div><div class="leader-points">1,950 EP</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#7</div><span>Frank</span></div><div class="leader-points">1,400 EP</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#8</div><span>Grace</span></div><div class="leader-points">1,100 EP</div></div>
-<div class="leader-item"><div class="leader-left"><div class="leader-rank">#9</div><span>Heidi</span></div><div class="leader-points">850 EP</div></div>
-</div>
-<button onclick="showView(event, 'leaderboard')" style="width:100%;margin-top:12px;padding:8px;background:#6a3df5;color:white;border:none;border-radius:10px;cursor:pointer;font-weight:600;font-size:12px;">View Full Leaderboard</button>
-</div>
+<!-- RIGHT COLUMN - NFT GALLERY ONLY -->
 <div class="card">
 <div class="card-title"><span class="dot"></span> NFT Gallery</div>
 <div class="nft-grid">
@@ -704,6 +695,45 @@
 <div class="nft-card"><strong></strong>bald bröthers</div>
 <div class="nft-card"><strong></strong>BAE</div>
 </div>
+</div>
+</div>
+
+<!-- FULL WIDTH LEADERBOARD -->
+<div class="card">
+<div class="card-title" style="margin-bottom:12px;">
+  <span class="dot"></span> Ranglétra
+  <span style="font-size:11px;color:#6b7280;font-weight:400;margin-left:8px;">Top 500 játékosok pontozása</span>
+</div>
+
+<div style="position:relative;margin-bottom:12px;">
+<input type="text" id="questsLeaderboardSearch" placeholder="Keress felhasználót vagy wallet címet..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;">
+<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
+</div>
+
+<div style="background:#f9fafb;border-radius:10px;padding:10px 14px;margin-bottom:8px;display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;font-size:12px;font-weight:600;color:#6b7280;border:1px solid #e5e7eb;">
+<div>Rang</div>
+<div>Felhasználó</div>
+<div>Cím</div>
+<div style="text-align:right;">Pontok</div>
+</div>
+
+<div id="questsLeaderboardRows" style="max-height:450px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:10px;background:white;">
+<!-- JavaScript generálja -->
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px;">
+  <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
+    <div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">500</div>
+    <div style="font-size:13px;color:#6b7280;">Összes játékos</div>
+  </div>
+  <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
+    <div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">21,222,037</div>
+    <div style="font-size:13px;color:#6b7280;">Összesen pontok</div>
+  </div>
+  <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
+    <div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">37.0</div>
+    <div style="font-size:13px;color:#6b7280;">Átlag küldetések</div>
+  </div>
 </div>
 </div>
 </div>
@@ -1124,6 +1154,7 @@ document.head.appendChild(style);
 window.onload = function() {
   calculateSwap();
   loadTwitterUser();
+  generateQuestsLeaderboard();
   generateLeaderboard();
   
   // Wallet visszatöltése ha volt csatlakoztatva
@@ -1178,10 +1209,56 @@ const leaderboardData = [
 ];
 
 let filteredData = [...leaderboardData];
+let filteredQuestsData = [...leaderboardData];
 
+// QUESTS OLDAL MINI LEADERBOARD
+function generateQuestsLeaderboard() {
+  const container = document.getElementById('questsLeaderboardRows');
+  if (!container) return;
+  
+  const currentUser = walletAddress ? walletAddress.toLowerCase() : '';
+  
+  filteredQuestsData.sort((a, b) => b.points - a.points);
+  
+  container.innerHTML = filteredQuestsData.map((player, index) => {
+    const rank = index + 1;
+    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+    const isCurrentUser = player.address.toLowerCase() === currentUser;
+    
+    return `
+      <div style="display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;padding:14px 16px;border-bottom:1px solid #f3f4f6;font-size:13px;align-items:center;transition:0.2s;${isCurrentUser ? 'background:#f2ecff;border-left:3px solid #6a3df5;' : ''}">
+        <div style="font-weight:700;display:flex;align-items:center;gap:8px;">
+          ${medal ? `<span style="font-size:18px;">${medal}</span>` : `<span>#${rank}</span>`}
+        </div>
+        <div style="font-weight:600;">${player.name}</div>
+        <div style="font-family:monospace;font-size:12px;color:#6b7280;">${player.address}</div>
+        <div style="text-align:right;font-weight:700;color:#6a3df5;">${player.points.toLocaleString()}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterQuestsLeaderboard() {
+  const searchTerm = document.getElementById('questsLeaderboardSearch').value.toLowerCase();
+  
+  if (!searchTerm) {
+    filteredQuestsData = [...leaderboardData];
+  } else {
+    filteredQuestsData = leaderboardData.filter(player => 
+      player.name.toLowerCase().includes(searchTerm) ||
+      player.address.toLowerCase().includes(searchTerm)
+    );
+  }
+  
+  generateQuestsLeaderboard();
+}
+
+// FULL LEADERBOARD OLDAL
 function generateLeaderboard() {
   const container = document.getElementById('leaderboardRows');
-  const currentUser = walletAddress.toLowerCase();
+  if (!container) return;
+  
+  const currentUser = walletAddress ? walletAddress.toLowerCase() : '';
   
   filteredData.sort((a, b) => b.points - a.points);
   
