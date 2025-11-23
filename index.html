@@ -379,6 +379,14 @@
       cursor: pointer;
     }
 
+    @media (max-width: 768px) {
+      .quests-section {
+        grid-template-columns: 1fr;
+      }
+      .nft-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   </style>
 </head>
 <body>
@@ -424,20 +432,33 @@ Login with Twitter
 <span class="dot"></span> Leaderboard
 </div>
 
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin-bottom:20px;">
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
-<div style="text-align:center;">
-<div style="font-size:32px;font-weight:800;color:#6a3df5;margin-bottom:8px;">500</div>
-<div style="font-size:14px;color:#6b7280;font-weight:500;">Total players</div>
+<div style="background:linear-gradient(135deg, #f6ecff 0%, #e8f5e9 100%);border:2px solid #6a3df5;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(106,61,245,0.15);">
+<div style="text-align:center;margin-bottom:16px;">
+<div style="font-size:22px;font-weight:800;color:#6a3df5;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;">
+🔥 CatKitSune Leaderboard is NOW LIVE!
 </div>
-<div style="text-align:center;">
-<div style="font-size:32px;font-weight:800;color:#6a3df5;margin-bottom:8px;">21,222,037</div>
-<div style="font-size:14px;color:#6b7280;font-weight:500;">Total points</div>
+<div style="font-size:15px;color:#111827;font-weight:600;margin-bottom:12px;">
+Rewarding active support 🚀
 </div>
-<div style="text-align:center;">
-<div style="font-size:32px;font-weight:800;color:#6a3df5;margin-bottom:8px;">37.0</div>
-<div style="font-size:14px;color:#6b7280;font-weight:500;">Average quests</div>
 </div>
+<div style="background:white;border-radius:10px;padding:16px;margin-bottom:12px;">
+<div style="font-size:14px;color:#374151;font-weight:500;margin-bottom:8px;">
+Follow us:
+</div>
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+<a href="https://x.com/GborSzakl1" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-weight:600;font-size:13px;transition:0.2s;">
+<span>👉</span> @GborSzakl1
+</a>
+<a href="https://x.com/MariannCso1714" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-weight:600;font-size:13px;transition:0.2s;">
+<span>👉</span> @MariannCso1714
+</a>
+</div>
+</div>
+<div style="text-align:center;font-size:14px;color:#374151;line-height:1.6;">
+Every <strong style="color:#e11d48;">like ❤️</strong>, <strong style="color:#22c55e;">retweet 🔁</strong> and <strong style="color:#6366f1;">reply 💬</strong> earns points<br>
+<span style="font-size:16px;font-weight:700;color:#6a3df5;margin-top:8px;display:inline-block;">
+Be among the TOP players 👑
+</span>
 </div>
 </div>
 
@@ -463,13 +484,20 @@ Login with Twitter
 🔗 Your Referral Link
 </div>
 <div style="position:relative;">
-<input type="text" id="referralLink" readonly value="https://catkitsune.com/ref/0x7a8b9c..." style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;" onclick="this.select()">
+<input type="text" id="referralLink" readonly value="https://catkitsune.com/ref/1" style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;" onclick="this.select()">
 <button onclick="copyReferralLink()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 16px;background:#6a3df5;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
 Copy
 </button>
 </div>
 <div style="margin-top:10px;font-size:12px;color:#6b7280;">
-Share your link and earn <strong style="color:#22c55e;">+200 EP</strong> for each referral!
+Share your link and earn <strong style="color:#22c55e;">+1 EP</strong> for each referral!
+</div>
+<div id="referralStats" style="margin-top:12px;padding:10px;background:white;border-radius:8px;font-size:12px;display:none;">
+<strong style="color:#6a3df5;">📊 Referral Stats:</strong>
+<div style="margin-top:6px;color:#6b7280;">
+Total referrals: <strong style="color:#22c55e;" id="refCount">0</strong> | 
+Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
+</div>
 </div>
 </div>
 </div>
@@ -854,9 +882,41 @@ function copyReferralLink() {
 
 function updateReferralLink() {
   if (walletAddress) {
-    const shortAddress = walletAddress.slice(0, 8);
-    document.getElementById('referralLink').value = `https://catkitsune.com/ref/${shortAddress}`;
+    // Generate user ID based on wallet or use random ID between 1-9999
+    const userId = Math.floor(Math.random() * 9999) + 1;
+    document.getElementById('referralLink').value = `https://catkitsune.com/ref/${userId}`;
+    sessionStorage.setItem('user_ref_id', userId);
+    
+    // Show referral stats
+    document.getElementById('referralStats').style.display = 'block';
+  } else {
+    // Default for non-connected wallets
+    document.getElementById('referralLink').value = `https://catkitsune.com/ref/1`;
   }
+}
+
+// Check if user came from a referral link
+function checkReferralCode() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+  
+  if (refCode && !sessionStorage.getItem('referred_by')) {
+    // User clicked on someone's referral link
+    sessionStorage.setItem('referred_by', refCode);
+    showNotification(`🎉 You were referred by user #${refCode}!`);
+    
+    // Award 1 point to the referrer (in real app, this would be server-side)
+    console.log(`Awarding 1 EP to referrer #${refCode}`);
+  }
+}
+
+// Track referral stats (demo - would be server-side in production)
+function updateReferralStats() {
+  const refCount = parseInt(sessionStorage.getItem('ref_count') || '0');
+  const refPoints = refCount * 1; // 1 EP per referral
+  
+  document.getElementById('refCount').textContent = refCount;
+  document.getElementById('refPoints').textContent = refPoints + ' EP';
 }
 
 
@@ -958,6 +1018,7 @@ function filterQuestsLeaderboard() {
 window.onload = function() {
   loadTwitterUser();
   generateQuestsLeaderboard();
+  checkReferralCode(); // Check if user came from referral link
   
   const savedWallet = sessionStorage.getItem('wallet_address');
   if (savedWallet && typeof window.ethereum !== 'undefined') {
@@ -965,6 +1026,7 @@ window.onload = function() {
     walletConnected = true;
     updateWalletButton();
     updateReferralLink();
+    updateReferralStats();
   }
 };
 
