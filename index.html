@@ -5,6 +5,7 @@
 <title>CatKitSune – Quests & Swap</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -578,7 +579,7 @@ Follow us:
 </div>
 </div>
 <div style="text-align:center;font-size:11px;color:#6b7280;line-height:1.4;">
-Every <strong style="color:#e11d48;">like ❤️</strong>, <strong style="color:#22c55e;">retweet 🔁</strong> and <strong style="color:#6366f1;">reply 💬</strong> earns points
+Share (retweet 🔁) our posts and earn <strong style="color:#22c55e;">+1 EP</strong> for each share!
 </div>
 <div style="text-align:center;margin-top:8px;">
 <span style="font-size:13px;font-weight:700;color:#6a3df5;">
@@ -752,31 +753,31 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 <div class="nft-grid">
 <div class="nft-card">
   <div>
-    <strong>CatKitSune</strong>
+    <strong>Wealthy Hypo Babies</strong>
     <span class="nft-count" id="nft-0">0 owned</span>
   </div>
 </div>
 <div class="nft-card">
   <div>
-    <strong>Hypurr</strong>
+    <strong>Tiny Hyper Cats</strong>
     <span class="nft-count" id="nft-1">0 owned</span>
   </div>
 </div>
 <div class="nft-card">
   <div>
-    <strong>Hyperian Genesis</strong>
+    <strong>Hypurr</strong>
     <span class="nft-count" id="nft-2">0 owned</span>
   </div>
 </div>
 <div class="nft-card">
   <div>
-    <strong>Wealthy Hypio Babies</strong>
+    <strong>Hyperian Genesis</strong>
     <span class="nft-count" id="nft-3">0 owned</span>
   </div>
 </div>
 <div class="nft-card">
   <div>
-    <strong>Tiny Hyper Cats</strong>
+    <strong>CatKitSune</strong>
     <span class="nft-count" id="nft-4">0 owned</span>
   </div>
 </div>
@@ -888,7 +889,8 @@ async function connectWallet() {
     showNotification('✅ Wallet successfully connected!');
     
     // NFT balances check
-    checkNFTBalances();
+    showNotification('🔍 Checking your NFT balances...');
+    await checkNFTBalances();
   } catch (error) {
     console.error('Wallet connection error:', error);
     if (error.code === 4001) showNotification('❌ Connection rejected');
@@ -1182,24 +1184,128 @@ if (typeof window.ethereum !== 'undefined') {
   });
 }
 
-// NFT BALANCE CHECK (demo - requires smart contract for real blockchain query)
+// NFT BALANCE CHECK - REAL WEB3 IMPLEMENTATION (HYPERLIQUID)
+const NFT_COLLECTIONS = [
+  {
+    name: 'Wealthy Hypo Babies',
+    address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb',
+    pointsPerNFT: 1,
+    galleryIndex: 0  // NFT Gallery card index
+  },
+  {
+    name: 'Tiny Hyper Cats',
+    address: '0xCC3D60fF11a268606C6a57bD6Db74b4208f1D30c',
+    pointsPerNFT: 1,
+    galleryIndex: 1
+  },
+  {
+    name: 'Hypurr',
+    address: '0x9125E2d6827a00B0F8330D6ef7BEF07730Bac685',
+    pointsPerNFT: 1,
+    galleryIndex: 2
+  },
+  {
+    name: 'Hyperian Genesis',
+    address: '0xB0F82655F249FC6561A94eB370d41bD24A861A9d',
+    pointsPerNFT: 1,
+    galleryIndex: 3
+  }
+];
+
+// Hyperliquid RPC endpoint
+const HYPERLIQUID_RPC = 'https://api.hyperliquid.xyz/evm';
+
+// ERC-721 ABI for balanceOf function
+const ERC721_ABI = [
+  'function balanceOf(address owner) view returns (uint256)'
+];
+
+let nftPointsEarned = 0;
+
 async function checkNFTBalances() {
-  if (!walletConnected) return;
+  if (!walletConnected || !walletAddress) {
+    console.log('Wallet not connected');
+    return;
+  }
   
-  // Demo data - Web3.js or Ethers.js required for real implementation
-  const demoBalances = [2, 1, 0, 3, 1, 0, 2, 1, 0, 1, 0, 1, 0, 2, 1];
+  console.log('🔍 Checking NFT balances for:', walletAddress);
   
-  demoBalances.forEach((balance, index) => {
-    const element = document.getElementById(`nft-${index}`);
-    if (element) {
-      element.textContent = `${balance} owned`;
-      if (balance > 0) {
-        element.style.color = '#16a34a';
-        element.style.fontWeight = '600';
+  try {
+    // Create provider for Hyperliquid
+    const provider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_RPC);
+    
+    let totalNFTs = 0;
+    let totalNFTPoints = 0;
+    
+    // Check each NFT collection
+    for (const collection of NFT_COLLECTIONS) {
+      try {
+        // Create contract instance
+        const contract = new ethers.Contract(
+          collection.address,
+          ERC721_ABI,
+          provider
+        );
+        
+        // Get balance
+        const balance = await contract.balanceOf(walletAddress);
+        const balanceNum = balance.toNumber();
+        
+        console.log(`${collection.name}: ${balanceNum} NFTs`);
+        
+        // Update UI using galleryIndex
+        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
+        if (nftElement) {
+          nftElement.textContent = `${balanceNum} owned`;
+          
+          if (balanceNum > 0) {
+            nftElement.style.color = '#16a34a'; // Green
+            nftElement.style.fontWeight = '600';
+          } else {
+            nftElement.style.color = '#6b7280'; // Gray
+            nftElement.style.fontWeight = '400';
+          }
+        }
+        
+        // Calculate points
+        const points = balanceNum * collection.pointsPerNFT;
+        totalNFTs += balanceNum;
+        totalNFTPoints += points;
+        
+      } catch (error) {
+        console.error(`Error checking ${collection.name}:`, error);
+        
+        // Update UI with error
+        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
+        if (nftElement) {
+          nftElement.textContent = '0 owned';
+          nftElement.style.color = '#6b7280';
+        }
       }
     }
-  });
+    
+    // Update total NFT points
+    nftPointsEarned = totalNFTPoints;
+    
+    // Update total points (NFT points + quest points + referral points)
+    const questPoints = completedCount; // From quests
+    const referralPoints = 0; // From referrals (if implemented)
+    totalPoints = nftPointsEarned + questPoints + referralPoints;
+    
+    document.getElementById('totalPoints').textContent = totalPoints;
+    
+    console.log(`✅ Total NFTs: ${totalNFTs}, Total Points from NFTs: ${totalNFTPoints} EP`);
+    
+    if (totalNFTs > 0) {
+      showNotification(`🎉 You own ${totalNFTs} NFT${totalNFTs > 1 ? 's' : ''}! +${totalNFTPoints} EP earned!`);
+    }
+    
+  } catch (error) {
+    console.error('Error checking NFT balances:', error);
+    showNotification('❌ Error checking NFT balances. Please try again.');
+  }
 }
+
 </script>
 </body>
 </html>
