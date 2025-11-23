@@ -117,6 +117,12 @@
       box-shadow: var(--shadow-card);
       margin-bottom: 12px;
       text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .hero-card:hover {
+      box-shadow: 0 12px 40px rgba(106, 61, 245, 0.2);
+      transform: translateY(-2px);
     }
 
     .hero-title { font-size: 18px; font-weight: 800; margin-bottom: 3px; }
@@ -133,6 +139,14 @@
       border-radius: 12px;
       padding: 8px 6px;
       border: 1px solid var(--primary-soft);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(106, 61, 245, 0.2);
+      border-color: var(--primary);
     }
 
     .stat-label { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; }
@@ -156,6 +170,13 @@
       border: 1px solid var(--border);
       box-shadow: var(--shadow-card);
       padding: 18px 16px;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 40px rgba(106, 61, 245, 0.15);
+      transform: translateY(-2px);
+      border-color: var(--primary-soft);
     }
 
     .card-title {
@@ -181,6 +202,8 @@
     .mission-item:hover {
       border-color: var(--primary);
       background: #f2ecff;
+      box-shadow: 0 4px 12px rgba(106, 61, 245, 0.2);
+      transform: translateY(-2px);
     }
 
     .mission-left { display: flex; align-items: center; gap: 10px; }
@@ -241,11 +264,11 @@
     }
 
     .nft-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       border-color: var(--primary);
       border-style: solid;
       background: white;
-      box-shadow: 0 6px 16px rgba(106, 61, 245, 0.15);
+      box-shadow: 0 8px 24px rgba(106, 61, 245, 0.25);
     }
 
     .nft-card:hover::before {
@@ -432,38 +455,42 @@ Login with Twitter
 <span class="dot"></span> Leaderboard
 </div>
 
-<div style="background:linear-gradient(135deg, #f6ecff 0%, #e8f5e9 100%);border:2px solid #6a3df5;border-radius:12px;padding:24px;margin-bottom:20px;box-shadow:0 4px 20px rgba(106,61,245,0.15);">
-<div style="text-align:center;margin-bottom:16px;">
-<div style="font-size:22px;font-weight:800;color:#6a3df5;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;">
+<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;margin-bottom:20px;max-width:700px;margin-left:auto;margin-right:auto;">
+<div style="text-align:center;margin-bottom:12px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:4px;">
 🔥 CatKitSune Leaderboard is NOW LIVE!
 </div>
-<div style="font-size:15px;color:#111827;font-weight:600;margin-bottom:12px;">
+<div style="font-size:12px;color:#6b7280;font-weight:500;">
 Rewarding active support 🚀
 </div>
 </div>
-<div style="background:white;border-radius:10px;padding:16px;margin-bottom:12px;">
-<div style="font-size:14px;color:#374151;font-weight:500;margin-bottom:8px;">
+<div style="text-align:center;margin-bottom:12px;">
+<div style="font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">
 Follow us:
 </div>
-<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-<a href="https://x.com/GborSzakl1" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-weight:600;font-size:13px;transition:0.2s;">
-<span>👉</span> @GborSzakl1
+<div style="display:inline-flex;gap:8px;align-items:center;">
+<a href="https://x.com/GborSzakl1" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:#f9fafb;color:#1da1f2;text-decoration:none;border-radius:6px;font-weight:600;font-size:11px;border:1px solid #e5e7eb;transition:0.2s;">
+<svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+@GborSzakl1
 </a>
-<a href="https://x.com/MariannCso1714" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-weight:600;font-size:13px;transition:0.2s;">
-<span>👉</span> @MariannCso1714
+<a href="https://x.com/MariannCso1714" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:#f9fafb;color:#1da1f2;text-decoration:none;border-radius:6px;font-weight:600;font-size:11px;border:1px solid #e5e7eb;transition:0.2s;">
+<svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+@MariannCso1714
 </a>
 </div>
 </div>
-<div style="text-align:center;font-size:14px;color:#374151;line-height:1.6;">
-Every <strong style="color:#e11d48;">like ❤️</strong>, <strong style="color:#22c55e;">retweet 🔁</strong> and <strong style="color:#6366f1;">reply 💬</strong> earns points<br>
-<span style="font-size:16px;font-weight:700;color:#6a3df5;margin-top:8px;display:inline-block;">
+<div style="text-align:center;font-size:11px;color:#6b7280;line-height:1.4;">
+Every <strong style="color:#e11d48;">like ❤️</strong>, <strong style="color:#22c55e;">retweet 🔁</strong> and <strong style="color:#6366f1;">reply 💬</strong> earns points
+</div>
+<div style="text-align:center;margin-top:8px;">
+<span style="font-size:13px;font-weight:700;color:#6a3df5;">
 Be among the TOP players 👑
 </span>
 </div>
 </div>
 
 <div style="position:relative;margin-bottom:20px;">
-<input type="text" id="questsLeaderboardSearch" placeholder="Search for user or wallet address..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;">
+<input type="text" id="questsLeaderboardSearch" placeholder="Search for user or wallet address..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;transition:all 0.3s ease;" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
 <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
 </div>
 
@@ -484,7 +511,7 @@ Be among the TOP players 👑
 🔗 Your Referral Link
 </div>
 <div style="position:relative;">
-<input type="text" id="referralLink" readonly value="https://catkitsune.com/ref/1" style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;" onclick="this.select()">
+<input type="text" id="referralLink" readonly value="https://catkitsune.com/ref/1" style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;transition:all 0.3s ease;" onclick="this.select()" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#d4d4ff';this.style.boxShadow='none'">
 <button onclick="copyReferralLink()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 16px;background:#6a3df5;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
 Copy
 </button>
@@ -505,6 +532,9 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 <div class="quests-section">
 <div class="card">
 <div class="card-title"><span class="dot"></span> Quests</div>
+<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#856404;">
+⚠️ <strong>Not Live Yet</strong> - Quests are currently in testing phase
+</div>
 <div class="mission-list">
 <div class="mission-item" onclick="completeQuest(this, 150)">
 <div class="mission-left">
@@ -566,7 +596,7 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 </div>
 <div class="mission-points">+300 EP</div>
 </div>
-<div class="mission-item" onclick="completeQuest(this, 200)">
+<div class="mission-item" onclick="completeQuest(this, 1)">
 <div class="mission-left">
 <div class="mission-check"></div>
 <div>
@@ -574,7 +604,7 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 <div class="mission-text-sub">Refer 1 new user.</div>
 </div>
 </div>
-<div class="mission-points">+200 EP</div>
+<div class="mission-points">+1 EP</div>
 </div>
 <div class="mission-item" onclick="completeQuest(this, 300)">
 <div class="mission-left">
@@ -947,6 +977,12 @@ style.textContent = `
   @keyframes slideOut {
     from { transform: translateX(0); opacity: 1; }
     to { transform: translateX(400px); opacity: 0; }
+  }
+  a[href*="x.com"]:hover {
+    background: #1da1f2 !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(29, 161, 242, 0.3);
   }
 `;
 document.head.appendChild(style);
