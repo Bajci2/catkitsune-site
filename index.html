@@ -1213,7 +1213,7 @@ const NFT_COLLECTIONS = [
 ];
 
 // Hyperliquid RPC endpoint
-const HYPERLIQUID_RPC = 'https://api.hyperliquid.xyz/evm';
+const HYPERLIQUID_RPC = 'https://rpc.hyperliquid.xyz/evm';
 
 // ERC-721 ABI for balanceOf function
 const ERC721_ABI = [
@@ -1224,15 +1224,27 @@ let nftPointsEarned = 0;
 
 async function checkNFTBalances() {
   if (!walletConnected || !walletAddress) {
-    console.log('Wallet not connected');
+    console.log('❌ Wallet not connected');
     return;
   }
   
   console.log('🔍 Checking NFT balances for:', walletAddress);
+  console.log('📡 RPC Endpoint:', HYPERLIQUID_RPC);
   
   try {
     // Create provider for Hyperliquid
+    console.log('⚙️ Creating provider...');
     const provider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_RPC);
+    
+    // Test connection
+    try {
+      const network = await provider.getNetwork();
+      console.log('✅ Connected to network:', network);
+    } catch (error) {
+      console.error('❌ RPC Connection failed:', error);
+      showNotification('❌ Cannot connect to Hyperliquid RPC. Check your network connection.');
+      return;
+    }
     
     let totalNFTs = 0;
     let totalNFTPoints = 0;
@@ -1240,6 +1252,8 @@ async function checkNFTBalances() {
     // Check each NFT collection
     for (const collection of NFT_COLLECTIONS) {
       try {
+        console.log(`📦 Checking ${collection.name}...`);
+        
         // Create contract instance
         const contract = new ethers.Contract(
           collection.address,
@@ -1251,7 +1265,7 @@ async function checkNFTBalances() {
         const balance = await contract.balanceOf(walletAddress);
         const balanceNum = balance.toNumber();
         
-        console.log(`${collection.name}: ${balanceNum} NFTs`);
+        console.log(`✅ ${collection.name}: ${balanceNum} NFTs`);
         
         // Update UI using galleryIndex
         const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
@@ -1273,7 +1287,7 @@ async function checkNFTBalances() {
         totalNFTPoints += points;
         
       } catch (error) {
-        console.error(`Error checking ${collection.name}:`, error);
+        console.error(`❌ Error checking ${collection.name}:`, error.message);
         
         // Update UI with error
         const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
@@ -1298,10 +1312,12 @@ async function checkNFTBalances() {
     
     if (totalNFTs > 0) {
       showNotification(`🎉 You own ${totalNFTs} NFT${totalNFTs > 1 ? 's' : ''}! +${totalNFTPoints} EP earned!`);
+    } else {
+      showNotification('ℹ️ No NFTs found in your wallet.');
     }
     
   } catch (error) {
-    console.error('Error checking NFT balances:', error);
+    console.error('❌ Error checking NFT balances:', error);
     showNotification('❌ Error checking NFT balances. Please try again.');
   }
 }
