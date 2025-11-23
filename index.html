@@ -457,6 +457,21 @@ Login with Twitter
 <div id="questsLeaderboardRows" style="max-height:250px;overflow-y:auto;">
 </div>
 </div>
+
+<div style="margin-top:20px;background:linear-gradient(135deg,#f6ecff,#e8f5e9);border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
+<div style="font-size:14px;font-weight:700;color:#6a3df5;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+🔗 Your Referral Link
+</div>
+<div style="position:relative;">
+<input type="text" id="referralLink" readonly value="https://catkitsune.com/ref/0x7a8b9c..." style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;" onclick="this.select()">
+<button onclick="copyReferralLink()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 16px;background:#6a3df5;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
+Copy
+</button>
+</div>
+<div style="margin-top:10px;font-size:12px;color:#6b7280;">
+Share your link and earn <strong style="color:#22c55e;">+200 EP</strong> for each referral!
+</div>
+</div>
 </div>
 
 <div class="quests-section">
@@ -713,6 +728,7 @@ async function connectWallet() {
     walletAddress = accounts[0];
     walletConnected = true;
     updateWalletButton();
+    updateReferralLink();
     showNotification('✅ Wallet successfully connected!');
     
     // NFT balances check
@@ -822,6 +838,27 @@ function completeQuest(element, points) {
   setTimeout(() => element.style.transform = 'scale(1)', 200);
   showNotification(`+${points} EP earned! 🎉`);
 }
+
+function copyReferralLink() {
+  const input = document.getElementById('referralLink');
+  input.select();
+  input.setSelectionRange(0, 99999);
+  
+  navigator.clipboard.writeText(input.value).then(() => {
+    showNotification('🔗 Referral link copied!');
+  }).catch(() => {
+    document.execCommand('copy');
+    showNotification('🔗 Referral link copied!');
+  });
+}
+
+function updateReferralLink() {
+  if (walletAddress) {
+    const shortAddress = walletAddress.slice(0, 8);
+    document.getElementById('referralLink').value = `https://catkitsune.com/ref/${shortAddress}`;
+  }
+}
+
 
 function showNotification(message) {
   const notification = document.createElement('div');
