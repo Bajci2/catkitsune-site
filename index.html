@@ -31,7 +31,7 @@
     .app { min-height: 100vh; display: flex; flex-direction: column; }
 
     header {
-      padding: 10px 16px;
+      padding: 6px 16px;
       background: var(--bg-main);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
@@ -79,18 +79,18 @@
       background: linear-gradient(135deg, #6a3df5, #22c55e);
     }
 
-    main { flex: 1; padding: 24px 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    main { flex: 1; padding: 0 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
     .top-nav {
-      margin-top: 10px;
+      margin-top: 4px;
       display: flex;
       justify-content: center;
       gap: 12px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .top-nav-btn {
-      padding: 8px 18px;
+      padding: 6px 16px;
       font-size: 13px;
       border-radius: 999px;
       border: 1px solid #d4d4d8;
@@ -112,31 +112,31 @@
 
     .hero-card {
       background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
-      border-radius: 24px;
-      padding: 32px 20px 20px;
+      border-radius: 20px;
+      padding: 16px 14px 14px;
       box-shadow: var(--shadow-card);
-      margin-bottom: 20px;
+      margin-bottom: 12px;
       text-align: center;
     }
 
-    .hero-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
-    .hero-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+    .hero-title { font-size: 18px; font-weight: 800; margin-bottom: 3px; }
+    .hero-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
 
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px; margin-bottom: 18px;
+      gap: 8px; margin-bottom: 0;
     }
 
     .stat-card {
       background: #fff;
-      border-radius: 18px;
-      padding: 10px 8px;
+      border-radius: 12px;
+      padding: 8px 6px;
       border: 1px solid var(--primary-soft);
     }
 
-    .stat-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-    .stat-value { font-size: 18px; font-weight: 700; }
+    .stat-label { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; }
+    .stat-value { font-size: 16px; font-weight: 700; }
 
     .content-grid {
       display: flex;
@@ -379,14 +379,6 @@
       cursor: pointer;
     }
 
-    @media (max-width: 768px) {
-      .quests-section {
-        grid-template-columns: 1fr;
-      }
-      .stats-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
   </style>
 </head>
 <body>
@@ -412,9 +404,6 @@ Login with Twitter
 
 <div class="top-nav">
 <button class="top-nav-btn active" onclick="showView(event, 'quests')">Quests</button>
-<button class="top-nav-btn" onclick="showView(event, 'swap')">Swap</button>
-<button class="top-nav-btn" onclick="showView(event, 'airdrop')">Airdrop</button>
-<button class="top-nav-btn" onclick="showView(event, 'cks')">CKS Token</button>
 </div>
 
 <main class="view active" id="view-quests">
@@ -435,18 +424,20 @@ Login with Twitter
 <span class="dot"></span> Leaderboard
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
-<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">500</div>
-<div style="font-size:13px;color:#6b7280;">Total players</div>
+<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin-bottom:20px;">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+<div style="text-align:center;">
+<div style="font-size:32px;font-weight:800;color:#6a3df5;margin-bottom:8px;">500</div>
+<div style="font-size:14px;color:#6b7280;font-weight:500;">Total players</div>
 </div>
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
-<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">21,222,037</div>
-<div style="font-size:13px;color:#6b7280;">Total points</div>
+<div style="text-align:center;">
+<div style="font-size:32px;font-weight:800;color:#6a3df5;margin-bottom:8px;">21,222,037</div>
+<div style="font-size:14px;color:#6b7280;font-weight:500;">Total points</div>
 </div>
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
-<div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">37.0</div>
-<div style="font-size:13px;color:#6b7280;">Average quests</div>
+<div style="text-align:center;">
+<div style="font-size:32px;font-weight:800;color:#6a3df5;margin-bottom:8px;">37.0</div>
+<div style="font-size:14px;color:#6b7280;font-weight:500;">Average quests</div>
+</div>
 </div>
 </div>
 
@@ -463,7 +454,7 @@ Login with Twitter
 <div style="text-align:right;">Points</div>
 </div>
 
-<div id="questsLeaderboardRows" style="max-height:450px;overflow-y:auto;">
+<div id="questsLeaderboardRows" style="max-height:250px;overflow-y:auto;">
 </div>
 </div>
 </div>
@@ -684,62 +675,6 @@ Login with Twitter
 </div>
 </div>
 </main>
-
-<main class="view" id="view-swap">
-<div class="swap-card">
-<div class="swap-header"><h2>Swap</h2></div>
-<div class="swap-field">
-<div class="swap-row">
-<div>
-<div class="swap-label-small">You Send</div>
-<select class="token-select" id="tokenFrom" onchange="calculateSwap()">
-<option value="HYPE">HYPE</option>
-<option value="WHYPE">WHYPE</option>
-<option value="CKS">CKS Token</option>
-<option value="kHYPE">kHYPE</option>
-<option value="USDT0">USDT0</option>
-<option value="KITTEN">KITTEN</option>
-<option value="USDC">USDC</option>
-</select>
-</div>
-<input class="swap-amount-input" id="amountFrom" type="number" value="1.20" oninput="calculateSwap()"/>
-</div>
-</div>
-<div class="swap-center-icon" onclick="swapTokens()">⇅</div>
-<div class="swap-field">
-<div class="swap-row">
-<div>
-<div class="swap-label-small">You Receive</div>
-<select class="token-select" id="tokenTo" onchange="calculateSwap()">
-<option value="CKS">CKS Token</option>
-<option value="HYPE">HYPE</option>
-<option value="WHYPE">WHYPE</option>
-<option value="USDT0">USDT0</option>
-<option value="kHYPE">kHYPE</option>
-<option value="KITTEN">KITTEN</option>
-<option value="USDC">USDC</option>
-</select>
-</div>
-<input class="swap-amount-input" id="amountTo" type="number" value="12.89" readonly/>
-</div>
-</div>
-<button class="swap-btn" id="swapBtn" onclick="executeSwap()">Swap</button>
-</div>
-</main>
-
-<main class="view" id="view-airdrop">
-<div style="text-align:center; padding:40px;">
-<h1>Airdrop Page</h1>
-<p>The airdrop details are coming soon. We're finalizing the rewards, rules, and participation steps. Stay tuned — updates dropping very soon! 🚀</p>
-</div>
-</main>
-
-<main class="view" id="view-cks">
-<div style="text-align:center; padding:40px;">
-<h1>CKS Token Info</h1>
-<p>Official token information is coming soon. Tokenomics, utilities, and the full documentation are currently being prepared. Launch incoming… 🔥</p>
-</div>
-</main>
 </div>
 
 <script>
@@ -778,10 +713,9 @@ async function connectWallet() {
     walletAddress = accounts[0];
     walletConnected = true;
     updateWalletButton();
-    document.getElementById('swapBtn').disabled = false;
     showNotification('✅ Wallet successfully connected!');
     
-    // NFT balances ellenőrzése
+    // NFT balances check
     checkNFTBalances();
   } catch (error) {
     console.error('Wallet connection error:', error);
@@ -795,7 +729,6 @@ function disconnectWallet() {
   document.getElementById('walletText').textContent = 'Connect Wallet';
   document.getElementById('walletBtn').style.background = '#f9fafb';
   document.getElementById('walletBtn').style.borderColor = '#e5e7eb';
-  document.getElementById('swapBtn').disabled = true;
   sessionStorage.removeItem('wallet_address');
   showNotification('👋 Wallet disconnected');
 }
@@ -908,79 +841,6 @@ function showNotification(message) {
   }, 3000);
 }
 
-const exchangeRates = {
-  'HYPE': 1.0, 'WHYPE': 1.0, 'CKS': 10.5,
-  'kHYPE': 0.95, 'USDT0': 1.2, 'KITTEN': 0.15, 'USDC': 1.21
-};
-
-function calculateSwap() {
-  const fromToken = document.getElementById('tokenFrom').value;
-  const toToken = document.getElementById('tokenTo').value;
-  const fromAmount = parseFloat(document.getElementById('amountFrom').value) || 0;
-  
-  if (fromToken === toToken) {
-    document.getElementById('amountTo').value = fromAmount.toFixed(2);
-    return;
-  }
-  
-  const fromRate = exchangeRates[fromToken] || 1;
-  const toRate = exchangeRates[toToken] || 1;
-  const result = (fromAmount * fromRate / toRate).toFixed(2);
-  document.getElementById('amountTo').value = result;
-}
-
-function swapTokens() {
-  const fromSelect = document.getElementById('tokenFrom');
-  const toSelect = document.getElementById('tokenTo');
-  const fromInput = document.getElementById('amountFrom');
-  const toInput = document.getElementById('amountTo');
-  
-  const tempToken = fromSelect.value;
-  fromSelect.value = toSelect.value;
-  toSelect.value = tempToken;
-  
-  const tempAmount = fromInput.value;
-  fromInput.value = toInput.value;
-  toInput.value = tempAmount;
-  
-  calculateSwap();
-}
-
-function executeSwap() {
-  if (!walletConnected) {
-    alert('Connect your wallet first! 💼');
-    return;
-  }
-  
-  const fromToken = document.getElementById('tokenFrom').value;
-  const toToken = document.getElementById('tokenTo').value;
-  const fromAmount = document.getElementById('amountFrom').value;
-  const toAmount = document.getElementById('amountTo').value;
-  
-  if (!fromAmount || parseFloat(fromAmount) <= 0) {
-    alert('Enter a valid amount! 🔢');
-    return;
-  }
-  
-  const swapBtn = document.getElementById('swapBtn');
-  swapBtn.textContent = 'Swapping...';
-  swapBtn.disabled = true;
-  
-  setTimeout(() => {
-    showNotification(`✅ Swap successful! ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`);
-    swapBtn.textContent = 'Swap';
-    swapBtn.disabled = false;
-    
-    const usdValue = parseFloat(fromAmount) * (exchangeRates[fromToken] || 1);
-    if (usdValue >= 10) {
-      const swapQuest = document.querySelector('.mission-item:nth-child(3)');
-      if (swapQuest && !swapQuest.querySelector('.mission-check').classList.contains('completed')) {
-        setTimeout(() => completeQuest(swapQuest, 150), 1000);
-      }
-    }
-  }, 2000);
-}
-
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideIn {
@@ -1059,7 +919,6 @@ function filterQuestsLeaderboard() {
 }
 
 window.onload = function() {
-  calculateSwap();
   loadTwitterUser();
   generateQuestsLeaderboard();
   
@@ -1068,7 +927,6 @@ window.onload = function() {
     walletAddress = savedWallet;
     walletConnected = true;
     updateWalletButton();
-    document.getElementById('swapBtn').disabled = false;
   }
 };
 
