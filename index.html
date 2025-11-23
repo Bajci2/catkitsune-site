@@ -432,35 +432,35 @@ Login with Twitter
 <div class="content-grid">
 <div class="card">
 <div class="card-title" style="margin-bottom:20px;">
-<span class="dot"></span> Ranglétra
+<span class="dot"></span> Leaderboard
 </div>
 
 <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
 <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
 <div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">500</div>
-<div style="font-size:13px;color:#6b7280;">Összes játékos</div>
+<div style="font-size:13px;color:#6b7280;">Total players</div>
 </div>
 <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
 <div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">21,222,037</div>
-<div style="font-size:13px;color:#6b7280;">Összesen pontok</div>
+<div style="font-size:13px;color:#6b7280;">Total points</div>
 </div>
 <div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;">
 <div style="font-size:28px;font-weight:800;color:#6a3df5;margin-bottom:6px;">37.0</div>
-<div style="font-size:13px;color:#6b7280;">Átlag küldetések</div>
+<div style="font-size:13px;color:#6b7280;">Average quests</div>
 </div>
 </div>
 
 <div style="position:relative;margin-bottom:20px;">
-<input type="text" id="questsLeaderboardSearch" placeholder="Keress felhasználót vagy wallet címet..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;">
+<input type="text" id="questsLeaderboardSearch" placeholder="Search for user or wallet address..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;">
 <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
 </div>
 
 <div style="border:1px solid #e5e7eb;border-radius:10px;background:white;overflow:hidden;">
 <div style="background:#f9fafb;padding:10px 14px;display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:2px solid #e5e7eb;position:sticky;top:0;z-index:10;">
-<div>Rang</div>
-<div>Felhasználó</div>
-<div>Cím</div>
-<div style="text-align:right;">Pontok</div>
+<div>Rank</div>
+<div>User</div>
+<div>Address</div>
+<div style="text-align:right;">Points</div>
 </div>
 
 <div id="questsLeaderboardRows" style="max-height:450px;overflow-y:auto;">
@@ -757,7 +757,7 @@ function showView(event, viewName) {
 
 async function connectWallet() {
   if (typeof window.ethereum === 'undefined') {
-    alert('🦊 Kérlek telepítsd a MetaMask-ot!\n\nLetöltés: https://metamask.io');
+    alert('🦊 Please install MetaMask!\n\nDownload: https://metamask.io');
     window.open('https://metamask.io/download/', '_blank');
     return;
   }
@@ -771,7 +771,7 @@ async function connectWallet() {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     
     if (accounts.length === 0) {
-      alert('❌ Nem választottál ki wallet címet!');
+      alert('❌ You did not select a wallet address!');
       return;
     }
     
@@ -779,13 +779,13 @@ async function connectWallet() {
     walletConnected = true;
     updateWalletButton();
     document.getElementById('swapBtn').disabled = false;
-    showNotification('✅ Wallet sikeresen csatlakoztatva!');
+    showNotification('✅ Wallet successfully connected!');
     
     // NFT balances ellenőrzése
     checkNFTBalances();
   } catch (error) {
-    console.error('Wallet csatlakozási hiba:', error);
-    if (error.code === 4001) showNotification('❌ Csatlakozás visszautasítva');
+    console.error('Wallet connection error:', error);
+    if (error.code === 4001) showNotification('❌ Connection rejected');
   }
 }
 
@@ -797,7 +797,7 @@ function disconnectWallet() {
   document.getElementById('walletBtn').style.borderColor = '#e5e7eb';
   document.getElementById('swapBtn').disabled = true;
   sessionStorage.removeItem('wallet_address');
-  showNotification('👋 Wallet leválasztva');
+  showNotification('👋 Wallet disconnected');
 }
 
 function updateWalletButton() {
@@ -810,7 +810,7 @@ function updateWalletButton() {
 
 function toggleWallet() {
   if (walletConnected) {
-    if (confirm('🔌 Szeretnéd leválasztani a wallet-et?')) disconnectWallet();
+    if (confirm('🔌 Do you want to disconnect the wallet?')) disconnectWallet();
   } else {
     connectWallet();
   }
@@ -837,7 +837,7 @@ async function loadTwitterUser() {
       <span style="font-weight:600;">@${decodedUsername}</span>
     `;
     av.style.display = 'flex';
-    showNotification(`🐦 Bejelentkezve: @${decodedUsername}`);
+    showNotification(`🐦 Logged in: @${decodedUsername}`);
     
     sessionStorage.setItem('twitter_user', JSON.stringify({
       name: decodedName,
@@ -887,7 +887,7 @@ function completeQuest(element, points) {
   
   element.style.transform = 'scale(0.98)';
   setTimeout(() => element.style.transform = 'scale(1)', 200);
-  showNotification(`+${points} EP szerzett! 🎉`);
+  showNotification(`+${points} EP earned! 🎉`);
 }
 
 function showNotification(message) {
@@ -948,7 +948,7 @@ function swapTokens() {
 
 function executeSwap() {
   if (!walletConnected) {
-    alert('Először csatlakoztasd a walletodat! 💼');
+    alert('Connect your wallet first! 💼');
     return;
   }
   
@@ -958,7 +958,7 @@ function executeSwap() {
   const toAmount = document.getElementById('amountTo').value;
   
   if (!fromAmount || parseFloat(fromAmount) <= 0) {
-    alert('Adj meg egy érvényes összeget! 🔢');
+    alert('Enter a valid amount! 🔢');
     return;
   }
   
@@ -967,7 +967,7 @@ function executeSwap() {
   swapBtn.disabled = true;
   
   setTimeout(() => {
-    showNotification(`✅ Swap sikeres! ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`);
+    showNotification(`✅ Swap successful! ${fromAmount} ${fromToken} → ${toAmount} ${toToken}`);
     swapBtn.textContent = 'Swap';
     swapBtn.disabled = false;
     
@@ -996,12 +996,12 @@ document.head.appendChild(style);
 
 // LEADERBOARD DATA
 const baseNames = [
-  "Czaban Eszter", "Czaban László", "Balogh Sándor", "Illés Katalin", "Illés Márk",
-  "Kiss Róbert", "Papp Gábor", "Halász Éva", "Gál Eszter", "Balogh Éva",
-  "Gál Laura", "Nagy Péter", "Tóth Anna", "Kovács János", "Szabó Mária",
-  "Horváth István", "Varga Zsófia", "Molnár Ferenc", "Simon Katalin", "Fekete Gábor",
-  "Farkas Éva", "Takács Péter", "Juhász Anna", "Lukács János", "Mészáros Mária",
-  "Oláh István", "Papp Zsófia", "Szilágyi Ferenc", "Hegedűs Katalin", "Rácz Gábor"
+  "Emma Johnson", "Liam Smith", "Olivia Williams", "Noah Brown", "Ava Jones",
+  "Ethan Garcia", "Sophia Martinez", "Mason Rodriguez", "Isabella Lee", "Lucas Anderson",
+  "Mia Taylor", "Oliver Thomas", "Charlotte Moore", "Elijah Jackson", "Amelia White",
+  "James Harris", "Harper Clark", "Benjamin Lewis", "Evelyn Walker", "Logan Hall",
+  "Abigail Allen", "Alexander Young", "Emily King", "Michael Wright", "Elizabeth Lopez",
+  "Daniel Hill", "Sofia Scott", "Matthew Green", "Avery Adams", "Henry Baker"
 ];
 
 function generateRandomPlayers() {
@@ -1035,9 +1035,9 @@ function generateQuestsLeaderboard() {
         <div style="font-weight:700;display:flex;align-items:center;gap:8px;">
           ${medal ? `<span style="font-size:18px;">${medal}</span>` : `<span>#${rank}</span>`}
         </div>
-        <div style="font-weight:600;">${player.name}</div>
-        <div style="font-family:monospace;font-size:12px;color:#6b7280;">${player.address}</div>
-        <div style="text-align:right;font-weight:700;color:#6a3df5;">${player.points.toLocaleString()}</div>
+        <div style="font-weight:600;">........</div>
+        <div style="font-family:monospace;font-size:12px;color:#6b7280;">........</div>
+        <div style="text-align:right;font-weight:700;color:#6a3df5;">........</div>
       </div>
     `;
   }).join('');
@@ -1076,25 +1076,25 @@ if (typeof window.ethereum !== 'undefined') {
   window.ethereum.on('accountsChanged', function (accounts) {
     if (accounts.length === 0) {
       disconnectWallet();
-      showNotification('👋 Wallet lecsatlakoztatva a MetaMask-ban');
+      showNotification('👋 Wallet disconnected in MetaMask');
     } else if (walletConnected) {
       walletAddress = accounts[0];
       updateWalletButton();
-      showNotification('🔄 Wallet cím megváltozott');
+      showNotification('🔄 Wallet address changed');
     }
   });
   
   window.ethereum.on('chainChanged', function () {
-    showNotification('🔗 Hálózat megváltozott');
+    showNotification('🔗 Network changed');
     window.location.reload();
   });
 }
 
-// NFT BALANCE CHECK (demo - valós blockchain lekérdezéshez szükséges smart contract)
+// NFT BALANCE CHECK (demo - requires smart contract for real blockchain query)
 async function checkNFTBalances() {
   if (!walletConnected) return;
   
-  // Demo adatok - valós implementációhoz Web3.js vagy Ethers.js kell
+  // Demo data - Web3.js or Ethers.js required for real implementation
   const demoBalances = [2, 1, 0, 3, 1, 0, 2, 1, 0, 1, 0, 1, 0, 2, 1];
   
   demoBalances.forEach((balance, index) => {
