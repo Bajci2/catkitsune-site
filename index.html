@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>CatKitSune – Quests & Swap</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-main: #f6ecff;
+      --bg-card: #ffffff;
+      --primary: #6a3df5;
+      --primary-soft: #e2d6ff;
+      --accent-green: #28c76f;
+      --border: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.12);
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    .app { min-height: 100vh; display: flex; flex-direction: column; }
+
+    header {
+      padding: 6px 16px;
+      background: var(--bg-main);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .paw-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="65" cy="50" rx="23" ry="33" fill="%238b5cf6"/><ellipse cx="135" cy="50" rx="23" ry="33" fill="%238b5cf6"/><ellipse cx="35" cy="80" rx="20" ry="30" fill="%238b5cf6" transform="rotate(-25 35 80)"/><ellipse cx="165" cy="80" rx="20" ry="30" fill="%238b5cf6" transform="rotate(25 165 80)"/><ellipse cx="100" cy="130" rx="55" ry="50" fill="%238b5cf6"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .top-actions { display: flex; align-items: center; gap: 8px; }
+
+    .login-btn {
+      font-size: 12px; padding: 6px 12px; border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #f9fafb;
+      cursor: pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      transition: all 0.2s;
+    }
+
+    .login-btn:hover {
+      background: #f3f4f6;
+      transform: translateY(-1px);
+    }
+
+    .avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, #6a3df5, #22c55e);
+    }
+
+    main { flex: 1; padding: 0 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+    .top-nav {
+      margin-top: 4px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .top-nav-btn {
+      padding: 6px 16px;
+      font-size: 13px;
+      border-radius: 999px;
+      border: 1px solid #d4d4d8;
+      background: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .top-nav-btn:hover { background: #f3f4f6; }
+
+    .top-nav-btn.active {
+      background: #6a3df5;
+      color: white;
+      border-color: #6a3df5;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .hero-card {
+      background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
+      border-radius: 20px;
+      padding: 16px 14px 14px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .hero-card:hover::before {
+      opacity: 1;
+    }
+
+    .hero-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card:hover {
+      box-shadow: 0 12px 40px rgba(106, 61, 245, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .hero-title { font-size: 18px; font-weight: 800; margin-bottom: 3px; }
+    .hero-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px; margin-bottom: 0;
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px 6px;
+      border: 1px solid var(--primary-soft);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    .stat-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(106, 61, 245, 0.15);
+      border-color: var(--primary);
+      background: white;
+    }
+
+    .stat-label { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; }
+    .stat-value { font-size: 16px; font-weight: 700; }
+
+    .content-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .quests-section {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 18px 16px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.05), rgba(34, 197, 94, 0.05));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card:hover {
+      box-shadow: 0 12px 40px rgba(106, 61, 245, 0.15);
+      transform: translateY(-2px);
+      border-color: var(--primary-soft);
+    }
+
+    .card-title {
+      font-size: 14px; font-weight: 700; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .card-title span.dot {
+      width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
+    }
+
+    .mission-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .mission-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 10px; border-radius: 12px;
+      border: 1px solid #e5e7eb; background: #f9fafb;
+      font-size: 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .mission-item:hover::before {
+      opacity: 1;
+    }
+
+    .mission-item > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .mission-item:hover {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 6px 16px rgba(106, 61, 245, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .mission-left { display: flex; align-items: center; gap: 10px; }
+
+    .mission-check {
+      width: 16px; height: 16px; border-radius: 999px;
+      border: 2px solid #d1d5db; background: #fff;
+    }
+
+    .mission-check.completed {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+    }
+
+    .mission-text-title { font-weight: 600; margin-bottom: 2px; }
+    .mission-text-sub { color: var(--text-muted); font-size: 11px; }
+
+    .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
+
+    .nft-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .nft-card {
+      border-radius: 10px;
+      border: 1px dashed #d4d4d8;
+      background: #f9fafb;
+      padding: 14px 8px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 90px;
+    }
+    
+    .nft-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .nft-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      border-style: solid;
+      background: white;
+      box-shadow: 0 8px 24px rgba(106, 61, 245, 0.25);
+    }
+
+    .nft-card:hover::before {
+      opacity: 1;
+    }
+
+    .nft-card > div {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .nft-card strong {
+      display: block;
+      font-size: 10.5px;
+      color: var(--text-main);
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+      line-height: 1.3;
+      word-break: break-word;
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .nft-count {
+      display: block;
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .nft-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .nft-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      border-style: solid;
+      background: white;
+      box-shadow: 0 8px 24px rgba(106, 61, 245, 0.25);
+    }
+
+    .nft-card:hover::before {
+      opacity: 1;
+    }
+
+    .nft-card > div {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .nft-card strong {
+      display: block;
+      font-size: 10.5px;
+      color: var(--text-main);
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .nft-count {
+      display: block;
+      font-size: 9.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+      margin-top: 4px;
+    }
+
+    .nft-card:hover .nft-count {
+      color: var(--primary);
+    }
+
+    .swap-card {
+      max-width: 420px; width: 100%;
+      background: #fff; border-radius: 22px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 20px;
+      margin: 0 auto;
+    }
+
+    .swap-header h2 {
+      text-align: center;
+      font-size: 20px; font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .swap-field {
+      background: #f9fafb; border-radius: 14px;
+      border: 1px solid #e5e7eb; padding: 12px;
+      margin-bottom: 12px; font-size: 12px;
+    }
+
+    .swap-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .swap-label-small {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .swap-amount-input {
+      text-align: right;
+      border: none;
+      background: none;
+      font-size: 16px;
+      font-weight: 700;
+      width: 110px;
+      outline: none;
+    }
+
+    .swap-center-icon {
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      display: flex; align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      margin: 10px auto;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .swap-center-icon:hover {
+      transform: rotate(180deg);
+      background: #f3f4f6;
+    }
+
+    .swap-btn {
+      width: 100%;
+      padding: 12px 0;
+      border-radius: 999px;
+      background: #6a3df5;
+      color: white;
+      border: none;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .swap-btn:hover {
+      background: #5a2dd5;
+      transform: translateY(-2px);
+    }
+
+    .swap-btn:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .token-select {
+      padding: 6px 10px;
+      border-radius: 10px;
+      border: 1px solid #d4d4ff;
+      background: #ffffff;
+      font-size: 13px;
+      min-width: 120px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .quests-section {
+        grid-template-columns: 1fr;
+      }
+      .nft-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="logo" onclick="showView(event, 'quests')">
+<span class="paw-icon"></span>
+<span>CatKitSune</span>
+</div>
+<div class="top-actions">
+<button class="login-btn" id="walletBtn" onclick="toggleWallet()">
+<img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"/>
+<span id="walletText">Connect Wallet</span>
+</button>
+<button class="login-btn" id="twitterBtn" onclick="loginWithTwitter()">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" style="width:18px;"/>
+Login with Twitter
+</button>
+<div id="twitterAvatar" style="display:none; align-items:center; gap:6px;"></div>
+<div class="avatar"></div>
+</div>
+</header>
+
+<div class="top-nav">
+<button class="top-nav-btn active" onclick="showView(event, 'quests')">Quests</button>
+</div>
+
+<main class="view active" id="view-quests">
+<div class="hero-card">
+<div class="hero-title">Complete quests. Earn points. Climb the leaderboard.</div>
+<div class="hero-sub">Join the community and reach the highest level!</div>
+<div class="stats-row">
+<div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value" id="totalPoints">0</div></div>
+<div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">11</div></div>
+<div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="completedQuests">0</div></div>
+<div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">#4</div></div>
+</div>
+</div>
+
+<div class="content-grid">
+<div class="card">
+<div class="card-title" style="margin-bottom:20px;">
+<span class="dot"></span> Leaderboard
+</div>
+
+<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;margin-bottom:20px;max-width:700px;margin-left:auto;margin-right:auto;">
+<div style="text-align:center;margin-bottom:12px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:4px;">
+🔥 CatKitSune Leaderboard is NOW LIVE!
+</div>
+<div style="font-size:12px;color:#6b7280;font-weight:500;">
+Rewarding active support 🚀
+</div>
+</div>
+<div style="text-align:center;margin-bottom:12px;">
+<div style="font-size:11px;color:#6b7280;margin-bottom:6px;font-weight:500;">
+Follow us:
+</div>
+<div style="display:inline-flex;gap:8px;align-items:center;">
+<a href="https://x.com/GborSzakl1" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:#f9fafb;color:#1da1f2;text-decoration:none;border-radius:6px;font-weight:600;font-size:11px;border:1px solid #e5e7eb;transition:0.2s;">
+<svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+@GborSzakl1
+</a>
+<a href="https://x.com/MariannCso1714" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;background:#f9fafb;color:#1da1f2;text-decoration:none;border-radius:6px;font-weight:600;font-size:11px;border:1px solid #e5e7eb;transition:0.2s;">
+<svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+@MariannCso1714
+</a>
+</div>
+</div>
+<div style="text-align:center;font-size:11px;color:#6b7280;line-height:1.4;">
+Share (retweet 🔁) our posts and earn <strong style="color:#22c55e;">+1 EP</strong> for each share!
+</div>
+<div style="text-align:center;margin-top:8px;">
+<span style="font-size:13px;font-weight:700;color:#6a3df5;">
+Be among the TOP players 👑
+</span>
+</div>
+</div>
+
+<div style="position:relative;margin-bottom:20px;">
+<input type="text" id="questsLeaderboardSearch" placeholder="Search for user or wallet address..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;transition:all 0.3s ease;" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
+<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
+</div>
+
+<div style="border:1px solid #e5e7eb;border-radius:10px;background:white;overflow:hidden;">
+<div style="background:#f9fafb;padding:10px 14px;display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:2px solid #e5e7eb;position:sticky;top:0;z-index:10;">
+<div>Rank</div>
+<div>User</div>
+<div>Address</div>
+<div style="text-align:right;">Points</div>
+</div>
+
+<div id="questsLeaderboardRows" style="max-height:250px;overflow-y:auto;">
+</div>
+</div>
+
+<div style="margin-top:20px;background:linear-gradient(135deg,#f6ecff,#e8f5e9);border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
+<div style="font-size:14px;font-weight:700;color:#6a3df5;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+🔗 Your Referral Link
+</div>
+<div style="position:relative;">
+<input type="text" id="referralLink" readonly value="https://catkitsune.com/ref/1" style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;transition:all 0.3s ease;" onclick="this.select()" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#d4d4ff';this.style.boxShadow='none'">
+<button onclick="copyReferralLink()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 16px;background:#6a3df5;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
+Copy
+</button>
+</div>
+<div style="margin-top:10px;font-size:12px;color:#6b7280;">
+Share your link and earn <strong style="color:#22c55e;">+1 EP</strong> for each referral!
+</div>
+<div id="referralStats" style="margin-top:12px;padding:10px;background:white;border-radius:8px;font-size:12px;display:none;">
+<strong style="color:#6a3df5;">📊 Referral Stats:</strong>
+<div style="margin-top:6px;color:#6b7280;">
+Total referrals: <strong style="color:#22c55e;" id="refCount">0</strong> | 
+Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
+</div>
+<button onclick="simulateReferral()" style="margin-top:8px;padding:6px 12px;background:#6a3df5;color:white;border:none;border-radius:6px;font-size:11px;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
+🧪 Simulate Referral (Demo)
+</button>
+</div>
+</div>
+</div>
+
+<div class="quests-section">
+<div class="card">
+<div class="card-title"><span class="dot"></span> Quests</div>
+<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#856404;">
+⚠️ <strong>Not Live Yet</strong> - Quests are currently in testing phase
+</div>
+<div class="mission-list">
+<div class="mission-item" onclick="completeQuest(this, 150)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Follow on X</div>
+<div class="mission-text-sub">Follow <a href="https://x.com/GborSzakl1" target="_blank" onclick="event.stopPropagation()">@GborSzakl1</a> on X.</div>
+</div>
+</div>
+<div class="mission-points">+150 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 300)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Mint the CatKitSune NFT</div>
+<div class="mission-text-sub">Airdrop bonus reward.</div>
+</div>
+</div>
+<div class="mission-points">+300 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 150)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Swap on CatKitSune</div>
+<div class="mission-text-sub">Make a swap worth at least $10.</div>
+</div>
+</div>
+<div class="mission-points">+150 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 250)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Share on X</div>
+<div class="mission-text-sub"><a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank" onclick="event.stopPropagation()">Open Tweet</a></div>
+</div>
+</div>
+<div class="mission-points">+250 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 500)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Bridge to HYPE</div>
+<div class="mission-text-sub">Bridge $10 to HYPE.</div>
+</div>
+</div>
+<div class="mission-points">+500 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 300)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Mini Mover</div>
+<div class="mission-text-sub">Transact $50 today.</div>
+</div>
+</div>
+<div class="mission-points">+300 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 1)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Referral Runner</div>
+<div class="mission-text-sub">Refer 1 new user.</div>
+</div>
+</div>
+<div class="mission-points">+1 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 300)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Earn Boost</div>
+<div class="mission-text-sub">Complete 3 tasks.</div>
+</div>
+</div>
+<div class="mission-points">+300 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 800)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Weekly Volume</div>
+<div class="mission-text-sub">Transact $2000.</div>
+</div>
+</div>
+<div class="mission-points">+800 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 200)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Swap It Up</div>
+<div class="mission-text-sub">Swap $10 on KittenSwap.</div>
+</div>
+</div>
+<div class="mission-points">+200 EP</div>
+</div>
+<div class="mission-item" onclick="completeQuest(this, 1200)">
+<div class="mission-left">
+<div class="mission-check"></div>
+<div>
+<div class="mission-text-title">Hold all NFTs</div>
+<div class="mission-text-sub">Own 1 from each listed collection.</div>
+</div>
+</div>
+<div class="mission-points">+1200 EP</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="dot"></span> NFT Gallery</div>
+<div class="nft-grid">
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Wealthy Hypo Babies</strong>
+  </div>
+  <span class="nft-count" id="nft-0" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Tiny Hyper Cats</strong>
+  </div>
+  <span class="nft-count" id="nft-1" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hypurr</strong>
+  </div>
+  <span class="nft-count" id="nft-2" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hyperian Genesis</strong>
+  </div>
+  <span class="nft-count" id="nft-3" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>CatKitSune</strong>
+  </div>
+  <span class="nft-count" id="nft-4" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Illumeownati by Catbal</strong>
+  </div>
+  <span class="nft-count" id="nft-5" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>PiP & Friends</strong>
+  </div>
+  <span class="nft-count" id="nft-6" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hypers</strong>
+  </div>
+  <span class="nft-count" id="nft-7" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Mechacats</strong>
+  </div>
+  <span class="nft-count" id="nft-8" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>LQnians</strong>
+  </div>
+  <span class="nft-count" id="nft-9" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>bald bröthers</strong>
+  </div>
+  <span class="nft-count" id="nft-10" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>BAE</strong>
+  </div>
+  <span class="nft-count" id="nft-11" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hypo</strong>
+  </div>
+  <span class="nft-count" id="nft-12" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Locals Only by DEMI</strong>
+  </div>
+  <span class="nft-count" id="nft-13" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Odd Otties</strong>
+  </div>
+  <span class="nft-count" id="nft-14" style="margin-top:4px;font-size:10px;">0 owned</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<script>
+let walletConnected = false;
+let walletAddress = '';
+let totalPoints = 0;
+let completedCount = 0;
+
+function showView(event, viewName) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('view-' + viewName).classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
+}
+
+async function connectWallet() {
+  if (typeof window.ethereum === 'undefined') {
+    alert('🦊 Please install MetaMask!\n\nDownload: https://metamask.io');
+    window.open('https://metamask.io/download/', '_blank');
+    return;
+  }
+  
+  try {
+    await window.ethereum.request({
+      method: 'wallet_requestPermissions',
+      params: [{ eth_accounts: {} }]
+    });
+    
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    
+    if (accounts.length === 0) {
+      alert('❌ You did not select a wallet address!');
+      return;
+    }
+    
+    walletAddress = accounts[0];
+    walletConnected = true;
+    updateWalletButton();
+    updateReferralLink();
+    showNotification('✅ Wallet successfully connected!');
+    
+    // NFT balances check
+    showNotification('🔍 Checking your NFT balances...');
+    await checkNFTBalances();
+  } catch (error) {
+    console.error('Wallet connection error:', error);
+    if (error.code === 4001) showNotification('❌ Connection rejected');
+  }
+}
+
+function disconnectWallet() {
+  walletConnected = false;
+  walletAddress = '';
+  document.getElementById('walletText').textContent = 'Connect Wallet';
+  document.getElementById('walletBtn').style.background = '#f9fafb';
+  document.getElementById('walletBtn').style.borderColor = '#e5e7eb';
+  sessionStorage.removeItem('wallet_address');
+  showNotification('👋 Wallet disconnected');
+}
+
+function updateWalletButton() {
+  const shortAddress = walletAddress.slice(0, 6) + '...' + walletAddress.slice(-4);
+  document.getElementById('walletText').textContent = shortAddress;
+  document.getElementById('walletBtn').style.background = 'linear-gradient(135deg, #e2d6ff, #d6f5e3)';
+  document.getElementById('walletBtn').style.borderColor = '#6a3df5';
+  sessionStorage.setItem('wallet_address', walletAddress);
+}
+
+function toggleWallet() {
+  if (walletConnected) {
+    if (confirm('🔌 Do you want to disconnect the wallet?')) disconnectWallet();
+  } else {
+    connectWallet();
+  }
+}
+
+function loginWithTwitter() {
+  // Demo mode - simulate Twitter login
+  const demoUsers = [
+    { name: 'CryptoWhale', username: 'cryptowhale', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=whale' },
+    { name: 'NFT Collector', username: 'nftcollector', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=collector' },
+    { name: 'DeFi Master', username: 'defimaster', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=master' }
+  ];
+  
+  const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
+  
+  // Hide Twitter button
+  document.getElementById('twitterBtn').style.display = 'none';
+  
+  // Show avatar
+  const av = document.getElementById('twitterAvatar');
+  av.innerHTML = `
+    <img src="${randomUser.avatar}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
+    <span style="font-weight:600;">@${randomUser.username}</span>
+  `;
+  av.style.display = 'flex';
+  
+  // Save to session
+  sessionStorage.setItem('twitter_user', JSON.stringify(randomUser));
+  
+  showNotification(`🐦 Demo login as @${randomUser.username}`);
+  
+  console.log('✅ Twitter demo login successful');
+}
+
+async function loadTwitterUser() {
+  const savedUser = sessionStorage.getItem('twitter_user');
+  if (savedUser) {
+    try {
+      const user = JSON.parse(savedUser);
+      document.getElementById('twitterBtn').style.display = 'none';
+      const av = document.getElementById('twitterAvatar');
+      av.innerHTML = `
+        <img src="${user.avatar}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
+        <span style="font-weight:600;">@${user.username}</span>
+      `;
+      av.style.display = 'flex';
+      console.log('✅ Loaded saved Twitter user:', user.username);
+    } catch (e) {
+      console.error('Error loading saved Twitter user:', e);
+    }
+  }
+}
+
+function getQueryParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
+function completeQuest(element, points) {
+  const checkbox = element.querySelector('.mission-check');
+  if (checkbox.classList.contains('completed')) return;
+  
+  checkbox.classList.add('completed');
+  element.style.opacity = '0.7';
+  element.style.pointerEvents = 'none';
+  
+  totalPoints += points;
+  completedCount++;
+  
+  document.getElementById('totalPoints').textContent = totalPoints;
+  document.getElementById('completedQuests').textContent = completedCount;
+  
+  element.style.transform = 'scale(0.98)';
+  setTimeout(() => element.style.transform = 'scale(1)', 200);
+  showNotification(`+${points} EP earned! 🎉`);
+}
+
+function copyReferralLink() {
+  const input = document.getElementById('referralLink');
+  input.select();
+  input.setSelectionRange(0, 99999);
+  
+  navigator.clipboard.writeText(input.value).then(() => {
+    showNotification('🔗 Referral link copied!');
+  }).catch(() => {
+    document.execCommand('copy');
+    showNotification('🔗 Referral link copied!');
+  });
+}
+
+function updateReferralLink() {
+  if (walletAddress) {
+    // Get or create user ID
+    let userId = sessionStorage.getItem('user_ref_id');
+    if (!userId) {
+      userId = Math.floor(Math.random() * 9999) + 1;
+      sessionStorage.setItem('user_ref_id', userId);
+      
+      // Initialize referral count in localStorage
+      if (!localStorage.getItem(`ref_count_${userId}`)) {
+        localStorage.setItem(`ref_count_${userId}`, '0');
+      }
+    }
+    
+    document.getElementById('referralLink').value = `https://catkitsune.com/ref/${userId}`;
+    
+    // Show referral stats
+    document.getElementById('referralStats').style.display = 'block';
+    
+    // Update stats display
+    updateReferralStats();
+  } else {
+    // Default for non-connected wallets
+    document.getElementById('referralLink').value = `https://catkitsune.com/ref/1`;
+    document.getElementById('referralStats').style.display = 'none';
+  }
+}
+
+// Check if user came from a referral link
+function checkReferralCode() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const refCode = urlParams.get('ref');
+  
+  if (refCode && !sessionStorage.getItem('referred_by')) {
+    // User clicked on someone's referral link
+    sessionStorage.setItem('referred_by', refCode);
+    
+    // Increment referrer's count in localStorage
+    const currentCount = parseInt(localStorage.getItem(`ref_count_${refCode}`) || '0');
+    localStorage.setItem(`ref_count_${refCode}`, (currentCount + 1).toString());
+    
+    showNotification(`🎉 You were referred by user #${refCode}!`);
+    
+    // Award 1 point to the referrer (in real app, this would be server-side)
+    console.log(`✅ Awarded 1 EP to referrer #${refCode}. New count: ${currentCount + 1}`);
+  }
+}
+
+// Track referral stats (demo - uses localStorage)
+function updateReferralStats() {
+  const userId = sessionStorage.getItem('user_ref_id');
+  if (!userId) return;
+  
+  const refCount = parseInt(localStorage.getItem(`ref_count_${userId}`) || '0');
+  const refPoints = refCount * 1; // 1 EP per referral
+  
+  document.getElementById('refCount').textContent = refCount;
+  document.getElementById('refPoints').textContent = refPoints + ' EP';
+  
+  // Add referral points to total
+  totalPoints = (nftPointsEarned || 0) + completedCount + refPoints;
+  document.getElementById('totalPoints').textContent = totalPoints;
+}
+
+// Demo: Simulate someone clicking your referral link
+function simulateReferral() {
+  const userId = sessionStorage.getItem('user_ref_id');
+  if (!userId) {
+    showNotification('❌ Please connect wallet first!');
+    return;
+  }
+  
+  // Increment count
+  const currentCount = parseInt(localStorage.getItem(`ref_count_${userId}`) || '0');
+  localStorage.setItem(`ref_count_${userId}`, (currentCount + 1).toString());
+  
+  // Update display
+  updateReferralStats();
+  
+  showNotification(`🎉 Simulated referral! +1 EP`);
+  console.log(`✅ User #${userId} now has ${currentCount + 1} referrals`);
+}
+  document.getElementById('refPoints').textContent = refPoints + ' EP';
+}
+
+
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed; top: 80px; right: 20px;
+    background: linear-gradient(135deg, #6a3df5, #22c55e);
+    color: white; padding: 12px 20px; border-radius: 12px;
+    font-weight: 600; font-size: 14px; z-index: 1000;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 10px 30px rgba(106, 61, 245, 0.3);
+  `;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  setTimeout(() => {
+    notification.style.animation = 'slideOut 0.3s ease';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from { transform: translateX(400px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(400px); opacity: 0; }
+  }
+  a[href*="x.com"]:hover {
+    background: #1da1f2 !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(29, 161, 242, 0.3);
+  }
+`;
+document.head.appendChild(style);
+
+// LEADERBOARD DATA
+const baseNames = [
+  "Emma Johnson", "Liam Smith", "Olivia Williams", "Noah Brown", "Ava Jones",
+  "Ethan Garcia", "Sophia Martinez", "Mason Rodriguez", "Isabella Lee", "Lucas Anderson",
+  "Mia Taylor", "Oliver Thomas", "Charlotte Moore", "Elijah Jackson", "Amelia White",
+  "James Harris", "Harper Clark", "Benjamin Lewis", "Evelyn Walker", "Logan Hall",
+  "Abigail Allen", "Alexander Young", "Emily King", "Michael Wright", "Elizabeth Lopez",
+  "Daniel Hill", "Sofia Scott", "Matthew Green", "Avery Adams", "Henry Baker"
+];
+
+function generateRandomPlayers() {
+  const players = [];
+  for (let i = 0; i < 500; i++) {
+    const name = baseNames[i % baseNames.length] + (i >= 30 ? ` ${Math.floor(i/30)}` : '');
+    const randomAddress = '0x' + Math.random().toString(16).substring(2, 15);
+    const points = Math.floor(Math.random() * 50000) + 20000;
+    const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+    players.push({ name, address: randomAddress, points, avatar });
+  }
+  return players.sort((a, b) => b.points - a.points);
+}
+
+const leaderboardData = generateRandomPlayers();
+let filteredQuestsData = [...leaderboardData];
+
+function generateQuestsLeaderboard() {
+  const container = document.getElementById('questsLeaderboardRows');
+  if (!container) {
+    console.error('❌ Leaderboard container not found!');
+    return;
+  }
+  
+  const currentUser = walletAddress ? walletAddress.toLowerCase() : '';
+  filteredQuestsData.sort((a, b) => b.points - a.points);
+  
+  console.log('✅ Generating leaderboard with', filteredQuestsData.length, 'players');
+  
+  container.innerHTML = filteredQuestsData.map((player, index) => {
+    const rank = index + 1;
+    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+    const isCurrentUser = player.address.toLowerCase() === currentUser;
+    
+    return `
+      <div style="display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;padding:14px 16px;border-bottom:1px solid #f3f4f6;font-size:13px;align-items:center;transition:0.2s;${isCurrentUser ? 'background:#f2ecff;border-left:3px solid #6a3df5;' : ''}">
+        <div style="font-weight:700;display:flex;align-items:center;gap:8px;">
+          ${medal ? `<span style="font-size:18px;">${medal}</span>` : `<span>#${rank}</span>`}
+        </div>
+        <div style="font-weight:600;display:flex;align-items:center;gap:6px;">
+          <img src="${player.avatar}" style="width:24px;height:24px;border-radius:50%;">
+          ${player.name}
+        </div>
+        <div style="font-family:monospace;font-size:12px;color:#6b7280;">${player.address}</div>
+        <div style="text-align:right;font-weight:700;color:#6a3df5;">${player.points} EP</div>
+      </div>
+    `;
+  }).join('');
+  
+  console.log('✅ Leaderboard generated successfully!');
+}
+
+function filterQuestsLeaderboard() {
+  const searchTerm = document.getElementById('questsLeaderboardSearch').value.toLowerCase();
+  
+  if (!searchTerm) {
+    filteredQuestsData = [...leaderboardData];
+  } else {
+    filteredQuestsData = leaderboardData.filter(player => 
+      player.name.toLowerCase().includes(searchTerm) ||
+      player.address.toLowerCase().includes(searchTerm)
+    );
+  }
+  
+  generateQuestsLeaderboard();
+}
+
+window.onload = function() {
+  loadTwitterUser();
+  generateQuestsLeaderboard();
+  checkReferralCode(); // Check if user came from referral link
+  
+  const savedWallet = sessionStorage.getItem('wallet_address');
+  if (savedWallet && typeof window.ethereum !== 'undefined') {
+    walletAddress = savedWallet;
+    walletConnected = true;
+    updateWalletButton();
+    updateReferralLink();
+    updateReferralStats();
+  }
+};
+
+if (typeof window.ethereum !== 'undefined') {
+  window.ethereum.on('accountsChanged', function (accounts) {
+    if (accounts.length === 0) {
+      disconnectWallet();
+      showNotification('👋 Wallet disconnected in MetaMask');
+    } else if (walletConnected) {
+      walletAddress = accounts[0];
+      updateWalletButton();
+      showNotification('🔄 Wallet address changed');
+    }
+  });
+  
+  window.ethereum.on('chainChanged', function () {
+    showNotification('🔗 Network changed');
+    window.location.reload();
+  });
+}
+
+// NFT BALANCE CHECK - REAL WEB3 IMPLEMENTATION (HYPERLIQUID)
+const NFT_COLLECTIONS = [
+  {
+    name: 'Wealthy Hypo Babies',
+    address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb',
+    pointsPerNFT: 1,
+    galleryIndex: 0  // NFT Gallery card index
+  },
+  {
+    name: 'Tiny Hyper Cats',
+    address: '0xCC3D60fF11a268606C6a57bD6Db74b4208f1D30c',
+    pointsPerNFT: 1,
+    galleryIndex: 1
+  },
+  {
+    name: 'Hypurr',
+    address: '0x9125E2d6827a00B0F8330D6ef7BEF07730Bac685',
+    pointsPerNFT: 1,
+    galleryIndex: 2
+  },
+  {
+    name: 'Hyperian Genesis',
+    address: '0xB0F82655F249FC6561A94eB370d41bD24A861A9d',
+    pointsPerNFT: 1,
+    galleryIndex: 3
+  },
+  {
+    name: 'Illumeownati by Catbal',
+    address: '0xDdaB956F9EeE629510B4410627cd63C0448A78aB',
+    pointsPerNFT: 1,
+    galleryIndex: 5
+  },
+  {
+    name: 'PiP & Friends',
+    address: '0xbc4a26ba78ce05E8bCbF069Bbb87FB3E1dAC8DF8',
+    pointsPerNFT: 1,
+    galleryIndex: 6
+  },
+  {
+    name: 'Hypers',
+    address: '0x8A3bda085fD13E71FA2851D7a4b4B8af9671c5aB',
+    pointsPerNFT: 1,
+    galleryIndex: 7
+  },
+  {
+    name: 'Mechacats',
+    address: '0xeA8Cc2a7da4E91c559514B8192eF1cfe1497AC74',
+    pointsPerNFT: 1,
+    galleryIndex: 8
+  },
+  {
+    name: 'LQnians',
+    address: '0xfD43e36a9D4002C54a84DAB089a2EdE92ffB5C60',
+    pointsPerNFT: 1,
+    galleryIndex: 9
+  },
+  {
+    name: 'bald bröthers',
+    address: '0x7d87FfB185Fc27Cbee62468A9b5eA00d538b74A6',
+    pointsPerNFT: 1,
+    galleryIndex: 10
+  },
+  {
+    name: 'BAE',
+    address: '0x31ce9E3Fd78B593c2F37f62AE0fa72A23a2472df',
+    pointsPerNFT: 1,
+    galleryIndex: 11
+  },
+  {
+    name: 'Hypo',
+    address: '0x9583b5632372F50e949361df977464D619b2f826',
+    pointsPerNFT: 1,
+    galleryIndex: 12
+  },
+  {
+    name: 'Locals Only by DEMI',
+    address: '0x62FCFAf7573AD8B41a0FBF347AfEb85e06599A75',
+    pointsPerNFT: 1,
+    galleryIndex: 13
+  },
+  {
+    name: 'Odd Otties',
+    address: '0x43A9652E2B3cE8970e8d33d8C34252a59a6596Aa',
+    pointsPerNFT: 1,
+    galleryIndex: 14
+  }
+];
+
+// Hyperliquid RPC endpoint
+const HYPERLIQUID_RPC = 'https://rpc.hyperliquid.xyz/evm';
+
+// ERC-721 ABI for balanceOf function
+const ERC721_ABI = [
+  'function balanceOf(address owner) view returns (uint256)'
+];
+
+let nftPointsEarned = 0;
+
+async function checkNFTBalances() {
+  if (!walletConnected || !walletAddress) {
+    console.log('❌ Wallet not connected');
+    return;
+  }
+  
+  // Check if Ethers.js is loaded
+  if (typeof ethers === 'undefined') {
+    console.error('❌ Ethers.js library not loaded!');
+    showNotification('❌ Web3 library loading error. Please refresh the page.');
+    return;
+  }
+  
+  console.log('🔍 Checking NFT balances for:', walletAddress);
+  console.log('📡 RPC Endpoint:', HYPERLIQUID_RPC);
+  console.log('✅ Ethers.js version:', ethers.version);
+  
+  try {
+    // Create provider for Hyperliquid
+    console.log('⚙️ Creating provider...');
+    const provider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_RPC);
+    
+    // Test connection
+    try {
+      const network = await provider.getNetwork();
+      console.log('✅ Connected to network:', network);
+    } catch (error) {
+      console.error('❌ RPC Connection failed:', error);
+      showNotification('❌ Cannot connect to Hyperliquid RPC. Check your network connection.');
+      return;
+    }
+    
+    let totalNFTs = 0;
+    let totalNFTPoints = 0;
+    
+    // Check each NFT collection
+    for (const collection of NFT_COLLECTIONS) {
+      try {
+        console.log(`📦 Checking ${collection.name}...`);
+        
+        // Create contract instance
+        const contract = new ethers.Contract(
+          collection.address,
+          ERC721_ABI,
+          provider
+        );
+        
+        // Get balance
+        const balance = await contract.balanceOf(walletAddress);
+        const balanceNum = balance.toNumber();
+        
+        console.log(`✅ ${collection.name}: ${balanceNum} NFTs`);
+        
+        // Update UI using galleryIndex
+        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
+        if (nftElement) {
+          if (balanceNum > 0) {
+            nftElement.textContent = `${balanceNum} owned`;
+            nftElement.style.color = '#16a34a'; // Green
+            nftElement.style.fontWeight = '600';
+          } else {
+            nftElement.textContent = '0 owned';
+            nftElement.style.color = '#6b7280'; // Gray
+            nftElement.style.fontWeight = '400';
+          }
+        }
+        
+        // Calculate points
+        const points = balanceNum * collection.pointsPerNFT;
+        totalNFTs += balanceNum;
+        totalNFTPoints += points;
+        
+      } catch (error) {
+        console.error(`❌ Error checking ${collection.name}:`, error.message);
+        
+        // Update UI with error
+        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
+        if (nftElement) {
+          nftElement.textContent = '0 owned';
+          nftElement.style.color = '#6b7280';
+        }
+      }
+    }
+    
+    // Update total NFT points
+    nftPointsEarned = totalNFTPoints;
+    
+    // Update total points (NFT points + quest points + referral points)
+    const questPoints = completedCount; // From quests
+    const referralPoints = 0; // From referrals (if implemented)
+    totalPoints = nftPointsEarned + questPoints + referralPoints;
+    
+    document.getElementById('totalPoints').textContent = totalPoints;
+    
+    console.log(`✅ Total NFTs: ${totalNFTs}, Total Points from NFTs: ${totalNFTPoints} EP`);
+    
+    if (totalNFTs > 0) {
+      showNotification(`🎉 You own ${totalNFTs} NFT${totalNFTs > 1 ? 's' : ''}! +${totalNFTPoints} EP earned!`);
+    } else {
+      showNotification('ℹ️ No NFTs found in your wallet.');
+    }
+    
+  } catch (error) {
+    console.error('❌ Error checking NFT balances:', error);
+    showNotification('❌ Error checking NFT balances. Please try again.');
+  }
+}
+
+</script>
+</body>
+</html>
