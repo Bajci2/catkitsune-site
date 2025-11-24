@@ -504,7 +504,7 @@ Be among the TOP players 👑
 🔗 Your Referral Link
 </div>
 <div style="position:relative;">
-<input type="text" id="referralLink" readonly value="https://catkitsune.com/ref/1" style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;transition:all 0.3s ease;" onclick="this.select()" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#d4d4ff';this.style.boxShadow='none'">
+<input type="text" id="referralLink" readonly value="https://catkitsune.com/?ref=1" style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;transition:all 0.3s ease;" onclick="this.select()" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#d4d4ff';this.style.boxShadow='none'">
 <button onclick="copyReferralLink()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 16px;background:#6a3df5;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
 Copy
 </button>
@@ -920,7 +920,7 @@ function updateReferralLink() {
         localStorage.setItem(`ref_count_${userId}`, '0');
       }
     }
-    document.getElementById('referralLink').value = `https://catkitsune.com/ref/${userId}`;
+    document.getElementById('referralLink').value = `https://catkitsune.com/?ref=${userId}`;
     document.getElementById('referralStats').style.display = 'block';
     updateReferralStats();
   }
