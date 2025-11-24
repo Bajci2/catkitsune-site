@@ -330,10 +330,10 @@
     }
 
     .nft-card {
-      border-radius: 12px;
-      border: 2px solid #e5e7eb;
-      background: white;
-      padding: 0;
+      border-radius: 10px;
+      border: 1px dashed #d4d4d8;
+      background: #f9fafb;
+      padding: 14px 8px;
       text-align: center;
       font-size: 11px;
       color: var(--text-muted);
@@ -342,46 +342,63 @@
       position: relative;
       overflow: hidden;
       display: flex;
-      flex-direction: column;
-      aspect-ratio: 1;
-    }
-    
-    .nft-card:hover {
-      border-color: #6a3df5;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(106, 61, 245, 0.15);
-    }
-    
-    .nft-image {
-      width: 100%;
-      height: 0;
-      padding-bottom: 100%;
-      background-size: cover;
-      background-position: center;
-      background-color: #f3f4f6;
-      position: relative;
-    }
-    
-    .nft-info {
-      padding: 10px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
+      align-items: center;
       justify-content: center;
+      width: 100%;
+      height: 90px;
     }
     
-    .nft-name {
+    .nft-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .nft-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+      border-style: solid;
+      background: white;
+      box-shadow: 0 8px 24px rgba(106, 61, 245, 0.25);
+    }
+
+    .nft-card:hover::before {
+      opacity: 1;
+    }
+
+    .nft-card > div {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .nft-card strong {
+      display: block;
+      font-size: 10.5px;
+      color: var(--text-main);
       font-weight: 600;
-      font-size: 11px;
-      color: #111827;
-      line-height: 1.2;
+      position: relative;
+      z-index: 1;
+      line-height: 1.3;
+      word-break: break-word;
+      max-width: 100%;
+      text-align: center;
     }
-    
+
     .nft-count {
+      display: block;
       font-size: 10px;
-      color: #6b7280;
+      color: var(--text-muted);
       font-weight: 500;
+      text-align: center;
+      margin-top: 4px;
     }
 
     .nft-card::before {
@@ -786,110 +803,95 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 <div class="card">
 <div class="card-title"><span class="dot"></span> NFT Gallery</div>
 <div class="nft-grid">
-<div class="nft-card" data-nft-index="0" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/wealthy-hypo-babies.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Wealthy Hypo Babies</div>
-    <span class="nft-count" id="nft-0">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Wealthy Hypo Babies</strong>
   </div>
+  <span class="nft-count" id="nft-0" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="1" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/tiny-hyper-cats.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Tiny Hyper Cats</div>
-    <span class="nft-count" id="nft-1">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Tiny Hyper Cats</strong>
   </div>
+  <span class="nft-count" id="nft-1" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="2" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/hypurr.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Hypurr</div>
-    <span class="nft-count" id="nft-2">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hypurr</strong>
   </div>
+  <span class="nft-count" id="nft-2" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="3" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/hyperian-genesis.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Hyperian Genesis</div>
-    <span class="nft-count" id="nft-3">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hyperian Genesis</strong>
   </div>
+  <span class="nft-count" id="nft-3" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="4" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/catkitsune.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">CatKitSune</div>
-    <span class="nft-count" id="nft-4">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>CatKitSune</strong>
   </div>
+  <span class="nft-count" id="nft-4" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="5" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/illumeownati.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Illumeownati by Catbal</div>
-    <span class="nft-count" id="nft-5">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Illumeownati by Catbal</strong>
   </div>
+  <span class="nft-count" id="nft-5" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="6" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/pip-friends.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">PiP & Friends</div>
-    <span class="nft-count" id="nft-6">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>PiP & Friends</strong>
   </div>
+  <span class="nft-count" id="nft-6" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="7" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/hypers.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Hypers</div>
-    <span class="nft-count" id="nft-7">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hypers</strong>
   </div>
+  <span class="nft-count" id="nft-7" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="8" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/mechacats.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Mechacats</div>
-    <span class="nft-count" id="nft-8">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Mechacats</strong>
   </div>
+  <span class="nft-count" id="nft-8" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="9" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/lqnians.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">LQnians</div>
-    <span class="nft-count" id="nft-9">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>LQnians</strong>
   </div>
+  <span class="nft-count" id="nft-9" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="10" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/bald-brothers.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">bald bröthers</div>
-    <span class="nft-count" id="nft-10">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>bald bröthers</strong>
   </div>
+  <span class="nft-count" id="nft-10" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="11" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/bae.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">BAE</div>
-    <span class="nft-count" id="nft-11">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>BAE</strong>
   </div>
+  <span class="nft-count" id="nft-11" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="12" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/hypo.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Hypo</div>
-    <span class="nft-count" id="nft-12">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Hypo</strong>
   </div>
+  <span class="nft-count" id="nft-12" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="13" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/locals-only.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Locals Only by DEMI</div>
-    <span class="nft-count" id="nft-13">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Locals Only by DEMI</strong>
   </div>
+  <span class="nft-count" id="nft-13" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
-<div class="nft-card" data-nft-index="14" style="display: none;">
-  <div class="nft-image" style="background-image: url('https://hyperliquid-assets.s3.amazonaws.com/collections/odd-otties.png');"></div>
-  <div class="nft-info">
-    <div class="nft-name">Odd Otties</div>
-    <span class="nft-count" id="nft-14">0 owned</span>
+<div style="display:flex;flex-direction:column;align-items:center;">
+  <div class="nft-card">
+    <strong>Odd Otties</strong>
   </div>
+  <span class="nft-count" id="nft-14" style="margin-top:4px;font-size:10px;">0 owned</span>
 </div>
 </div>
 </div>
@@ -1385,41 +1387,33 @@ async function checkNFTBalances() {
         
         console.log(`✅ ${collection.name}: ${balanceNum} NFTs`);
         
-        // Get NFT card element
-        const nftCard = document.querySelector(`[data-nft-index="${collection.galleryIndex}"]`);
+        // Update UI using galleryIndex
         const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
-        
-        if (balanceNum > 0) {
-          // Show card if has NFTs
-          if (nftCard) {
-            nftCard.style.display = 'flex';
-          }
-          
-          // Update count
-          if (nftElement) {
+        if (nftElement) {
+          if (balanceNum > 0) {
             nftElement.textContent = `${balanceNum} owned`;
             nftElement.style.color = '#16a34a'; // Green
             nftElement.style.fontWeight = '600';
-          }
-          
-          // Calculate points
-          const points = balanceNum * collection.pointsPerNFT;
-          totalNFTs += balanceNum;
-          totalNFTPoints += points;
-        } else {
-          // Hide card if 0 NFTs
-          if (nftCard) {
-            nftCard.style.display = 'none';
+          } else {
+            nftElement.textContent = '0 owned';
+            nftElement.style.color = '#6b7280'; // Gray
+            nftElement.style.fontWeight = '400';
           }
         }
+        
+        // Calculate points
+        const points = balanceNum * collection.pointsPerNFT;
+        totalNFTs += balanceNum;
+        totalNFTPoints += points;
         
       } catch (error) {
         console.error(`❌ Error checking ${collection.name}:`, error.message);
         
-        // Hide card on error
-        const nftCard = document.querySelector(`[data-nft-index="${collection.galleryIndex}"]`);
-        if (nftCard) {
-          nftCard.style.display = 'none';
+        // Update UI with error
+        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
+        if (nftElement) {
+          nftElement.textContent = '0 owned';
+          nftElement.style.color = '#6b7280';
         }
       }
     }
