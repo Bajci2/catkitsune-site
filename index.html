@@ -347,7 +347,7 @@
       width: 100%;
       height: 90px;
     }
-    
+
     .nft-card::before {
       content: '';
       position: absolute;
@@ -371,12 +371,6 @@
 
     .nft-card:hover::before {
       opacity: 1;
-    }
-
-    .nft-card > div {
-      position: relative;
-      z-index: 1;
-      width: 100%;
     }
 
     .nft-card strong {
@@ -399,158 +393,6 @@
       font-weight: 500;
       text-align: center;
       margin-top: 4px;
-    }
-
-    .nft-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 0;
-    }
-
-    .nft-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary);
-      border-style: solid;
-      background: white;
-      box-shadow: 0 8px 24px rgba(106, 61, 245, 0.25);
-    }
-
-    .nft-card:hover::before {
-      opacity: 1;
-    }
-
-    .nft-card > div {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-    }
-
-    .nft-card strong {
-      display: block;
-      font-size: 10.5px;
-      color: var(--text-main);
-      font-weight: 600;
-      position: relative;
-      z-index: 1;
-      line-height: 1.2;
-      margin-bottom: 6px;
-      word-break: break-word;
-    }
-
-    .nft-count {
-      display: block;
-      font-size: 9.5px;
-      color: var(--text-muted);
-      font-weight: 500;
-      position: relative;
-      z-index: 1;
-      margin-top: 4px;
-    }
-
-    .nft-card:hover .nft-count {
-      color: var(--primary);
-    }
-
-    .swap-card {
-      max-width: 420px; width: 100%;
-      background: #fff; border-radius: 22px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
-      padding: 20px;
-      margin: 0 auto;
-    }
-
-    .swap-header h2 {
-      text-align: center;
-      font-size: 20px; font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .swap-field {
-      background: #f9fafb; border-radius: 14px;
-      border: 1px solid #e5e7eb; padding: 12px;
-      margin-bottom: 12px; font-size: 12px;
-    }
-
-    .swap-row {
-      display: flex; align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .swap-label-small {
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .swap-amount-input {
-      text-align: right;
-      border: none;
-      background: none;
-      font-size: 16px;
-      font-weight: 700;
-      width: 110px;
-      outline: none;
-    }
-
-    .swap-center-icon {
-      width: 34px; height: 34px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      background: #fff;
-      display: flex; align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      margin: 10px auto;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .swap-center-icon:hover {
-      transform: rotate(180deg);
-      background: #f3f4f6;
-    }
-
-    .swap-btn {
-      width: 100%;
-      padding: 12px 0;
-      border-radius: 999px;
-      background: #6a3df5;
-      color: white;
-      border: none;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .swap-btn:hover {
-      background: #5a2dd5;
-      transform: translateY(-2px);
-    }
-
-    .swap-btn:disabled {
-      background: #d1d5db;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .token-select {
-      padding: 6px 10px;
-      border-radius: 10px;
-      border: 1px solid #d4d4ff;
-      background: #ffffff;
-      font-size: 13px;
-      min-width: 120px;
-      cursor: pointer;
     }
 
     @media (max-width: 768px) {
@@ -596,7 +438,7 @@ Login with Twitter
 <div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value" id="totalPoints">0</div></div>
 <div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">11</div></div>
 <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="completedQuests">0</div></div>
-<div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">#4</div></div>
+<div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">#TBD</div></div>
 </div>
 </div>
 
@@ -909,6 +751,7 @@ let walletConnected = false;
 let walletAddress = '';
 let totalPoints = 0;
 let completedCount = 0;
+let nftPointsEarned = 0;
 
 function showView(event, viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -925,15 +768,14 @@ async function connectWallet() {
   }
   
   try {
-    await window.ethereum.request({
-      method: 'wallet_requestPermissions',
-      params: [{ eth_accounts: {} }]
+    console.log('🔗 Requesting wallet connection...');
+    
+    const accounts = await window.ethereum.request({ 
+      method: 'eth_requestAccounts' 
     });
     
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    
     if (accounts.length === 0) {
-      alert('❌ You did not select a wallet address!');
+      showNotification('❌ No wallet selected!');
       return;
     }
     
@@ -941,14 +783,20 @@ async function connectWallet() {
     walletConnected = true;
     updateWalletButton();
     updateReferralLink();
-    showNotification('✅ Wallet successfully connected!');
+    showNotification('✅ Wallet connected!');
+    
+    console.log('✅ Wallet connected:', walletAddress);
     
     // NFT balances check
-    showNotification('🔍 Checking your NFT balances...');
+    showNotification('🔍 Checking NFT balances...');
     await checkNFTBalances();
   } catch (error) {
-    console.error('Wallet connection error:', error);
-    if (error.code === 4001) showNotification('❌ Connection rejected');
+    console.error('❌ Wallet connection error:', error);
+    if (error.code === 4001) {
+      showNotification('❌ Connection rejected');
+    } else {
+      showNotification('❌ Error: ' + error.message);
+    }
   }
 }
 
@@ -972,7 +820,7 @@ function updateWalletButton() {
 
 function toggleWallet() {
   if (walletConnected) {
-    if (confirm('🔌 Do you want to disconnect the wallet?')) disconnectWallet();
+    if (confirm('🔌 Disconnect wallet?')) disconnectWallet();
   } else {
     connectWallet();
   }
@@ -988,10 +836,7 @@ function loginWithTwitter() {
   
   const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
   
-  // Hide Twitter button
   document.getElementById('twitterBtn').style.display = 'none';
-  
-  // Show avatar
   const av = document.getElementById('twitterAvatar');
   av.innerHTML = `
     <img src="${randomUser.avatar}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
@@ -999,12 +844,9 @@ function loginWithTwitter() {
   `;
   av.style.display = 'flex';
   
-  // Save to session
   sessionStorage.setItem('twitter_user', JSON.stringify(randomUser));
-  
-  showNotification(`🐦 Demo login as @${randomUser.username}`);
-  
-  console.log('✅ Twitter demo login successful');
+  showNotification(`🐦 Demo login: @${randomUser.username}`);
+  console.log('✅ Twitter demo login');
 }
 
 async function loadTwitterUser() {
@@ -1019,16 +861,11 @@ async function loadTwitterUser() {
         <span style="font-weight:600;">@${user.username}</span>
       `;
       av.style.display = 'flex';
-      console.log('✅ Loaded saved Twitter user:', user.username);
+      console.log('✅ Loaded Twitter user:', user.username);
     } catch (e) {
-      console.error('Error loading saved Twitter user:', e);
+      console.error('Error loading Twitter user:', e);
     }
   }
-}
-
-function getQueryParam(name) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(name);
 }
 
 function completeQuest(element, points) {
@@ -1045,109 +882,71 @@ function completeQuest(element, points) {
   document.getElementById('totalPoints').textContent = totalPoints;
   document.getElementById('completedQuests').textContent = completedCount;
   
-  element.style.transform = 'scale(0.98)';
-  setTimeout(() => element.style.transform = 'scale(1)', 200);
   showNotification(`+${points} EP earned! 🎉`);
 }
 
 function copyReferralLink() {
   const input = document.getElementById('referralLink');
   input.select();
-  input.setSelectionRange(0, 99999);
-  
   navigator.clipboard.writeText(input.value).then(() => {
-    showNotification('🔗 Referral link copied!');
-  }).catch(() => {
-    document.execCommand('copy');
-    showNotification('🔗 Referral link copied!');
+    showNotification('🔗 Link copied!');
   });
 }
 
 function updateReferralLink() {
   if (walletAddress) {
-    // Get or create user ID
     let userId = sessionStorage.getItem('user_ref_id');
     if (!userId) {
       userId = Math.floor(Math.random() * 9999) + 1;
       sessionStorage.setItem('user_ref_id', userId);
-      
-      // Initialize referral count in localStorage
       if (!localStorage.getItem(`ref_count_${userId}`)) {
         localStorage.setItem(`ref_count_${userId}`, '0');
       }
     }
-    
     document.getElementById('referralLink').value = `https://catkitsune.com/ref/${userId}`;
-    
-    // Show referral stats
     document.getElementById('referralStats').style.display = 'block';
-    
-    // Update stats display
     updateReferralStats();
-  } else {
-    // Default for non-connected wallets
-    document.getElementById('referralLink').value = `https://catkitsune.com/ref/1`;
-    document.getElementById('referralStats').style.display = 'none';
   }
 }
 
-// Check if user came from a referral link
 function checkReferralCode() {
   const urlParams = new URLSearchParams(window.location.search);
   const refCode = urlParams.get('ref');
   
   if (refCode && !sessionStorage.getItem('referred_by')) {
-    // User clicked on someone's referral link
     sessionStorage.setItem('referred_by', refCode);
-    
-    // Increment referrer's count in localStorage
     const currentCount = parseInt(localStorage.getItem(`ref_count_${refCode}`) || '0');
     localStorage.setItem(`ref_count_${refCode}`, (currentCount + 1).toString());
-    
-    showNotification(`🎉 You were referred by user #${refCode}!`);
-    
-    // Award 1 point to the referrer (in real app, this would be server-side)
-    console.log(`✅ Awarded 1 EP to referrer #${refCode}. New count: ${currentCount + 1}`);
+    showNotification(`🎉 Referred by user #${refCode}!`);
   }
 }
 
-// Track referral stats (demo - uses localStorage)
 function updateReferralStats() {
   const userId = sessionStorage.getItem('user_ref_id');
   if (!userId) return;
   
   const refCount = parseInt(localStorage.getItem(`ref_count_${userId}`) || '0');
-  const refPoints = refCount * 1; // 1 EP per referral
+  const refPoints = refCount * 1;
   
   document.getElementById('refCount').textContent = refCount;
   document.getElementById('refPoints').textContent = refPoints + ' EP';
   
-  // Add referral points to total
   totalPoints = (nftPointsEarned || 0) + completedCount + refPoints;
   document.getElementById('totalPoints').textContent = totalPoints;
 }
 
-// Demo: Simulate someone clicking your referral link
 function simulateReferral() {
   const userId = sessionStorage.getItem('user_ref_id');
   if (!userId) {
-    showNotification('❌ Please connect wallet first!');
+    showNotification('❌ Connect wallet first!');
     return;
   }
   
-  // Increment count
   const currentCount = parseInt(localStorage.getItem(`ref_count_${userId}`) || '0');
   localStorage.setItem(`ref_count_${userId}`, (currentCount + 1).toString());
-  
-  // Update display
   updateReferralStats();
-  
   showNotification(`🎉 Simulated referral! +1 EP`);
-  console.log(`✅ User #${userId} now has ${currentCount + 1} referrals`);
 }
-  document.getElementById('refPoints').textContent = refPoints + ' EP';
-}
-
 
 function showNotification(message) {
   const notification = document.createElement('div');
@@ -1156,37 +955,14 @@ function showNotification(message) {
     background: linear-gradient(135deg, #6a3df5, #22c55e);
     color: white; padding: 12px 20px; border-radius: 12px;
     font-weight: 600; font-size: 14px; z-index: 1000;
-    animation: slideIn 0.3s ease;
     box-shadow: 0 10px 30px rgba(106, 61, 245, 0.3);
   `;
   notification.textContent = message;
   document.body.appendChild(notification);
-  setTimeout(() => {
-    notification.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+  setTimeout(() => notification.remove(), 3000);
 }
 
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes slideIn {
-    from { transform: translateX(400px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  @keyframes slideOut {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(400px); opacity: 0; }
-  }
-  a[href*="x.com"]:hover {
-    background: #1da1f2 !important;
-    color: white !important;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(29, 161, 242, 0.3);
-  }
-`;
-document.head.appendChild(style);
-
-// LEADERBOARD DATA
+// LEADERBOARD
 const baseNames = [
   "Emma Johnson", "Liam Smith", "Olivia Williams", "Noah Brown", "Ava Jones",
   "Ethan Garcia", "Sophia Martinez", "Mason Rodriguez", "Isabella Lee", "Lucas Anderson",
@@ -1221,7 +997,7 @@ function generateQuestsLeaderboard() {
   const currentUser = walletAddress ? walletAddress.toLowerCase() : '';
   filteredQuestsData.sort((a, b) => b.points - a.points);
   
-  console.log('✅ Generating leaderboard with', filteredQuestsData.length, 'players');
+  console.log('✅ Generating leaderboard:', filteredQuestsData.length, 'players');
   
   container.innerHTML = filteredQuestsData.map((player, index) => {
     const rank = index + 1;
@@ -1229,9 +1005,9 @@ function generateQuestsLeaderboard() {
     const isCurrentUser = player.address.toLowerCase() === currentUser;
     
     return `
-      <div style="display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;padding:14px 16px;border-bottom:1px solid #f3f4f6;font-size:13px;align-items:center;transition:0.2s;${isCurrentUser ? 'background:#f2ecff;border-left:3px solid #6a3df5;' : ''}">
-        <div style="font-weight:700;display:flex;align-items:center;gap:8px;">
-          ${medal ? `<span style="font-size:18px;">${medal}</span>` : `<span>#${rank}</span>`}
+      <div style="display:grid;grid-template-columns:80px 1.2fr 2fr 1fr;gap:12px;padding:14px 16px;border-bottom:1px solid #f3f4f6;font-size:13px;align-items:center;${isCurrentUser ? 'background:#f2ecff;border-left:3px solid #6a3df5;' : ''}">
+        <div style="font-weight:700;">
+          ${medal ? `<span style="font-size:18px;">${medal}</span>` : `#${rank}`}
         </div>
         <div style="font-weight:600;display:flex;align-items:center;gap:6px;">
           <img src="${player.avatar}" style="width:24px;height:24px;border-radius:50%;">
@@ -1243,7 +1019,7 @@ function generateQuestsLeaderboard() {
     `;
   }).join('');
   
-  console.log('✅ Leaderboard generated successfully!');
+  console.log('✅ Leaderboard generated!');
 }
 
 function filterQuestsLeaderboard() {
@@ -1261,10 +1037,98 @@ function filterQuestsLeaderboard() {
   generateQuestsLeaderboard();
 }
 
+// NFT BALANCE CHECK
+const NFT_COLLECTIONS = [
+  { name: 'Wealthy Hypo Babies', address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb', pointsPerNFT: 1, galleryIndex: 0 },
+  { name: 'Tiny Hyper Cats', address: '0xCC3D60fF11a268606C6a57bD6Db74b4208f1D30c', pointsPerNFT: 1, galleryIndex: 1 },
+  { name: 'Hypurr', address: '0x9125E2d6827a00B0F8330D6ef7BEF07730Bac685', pointsPerNFT: 1, galleryIndex: 2 },
+  { name: 'Hyperian Genesis', address: '0xB0F82655F249FC6561A94eB370d41bD24A861A9d', pointsPerNFT: 1, galleryIndex: 3 },
+  { name: 'Illumeownati by Catbal', address: '0xDdaB956F9EeE629510B4410627cd63C0448A78aB', pointsPerNFT: 1, galleryIndex: 5 },
+  { name: 'PiP & Friends', address: '0xbc4a26ba78ce05E8bCbF069Bbb87FB3E1dAC8DF8', pointsPerNFT: 1, galleryIndex: 6 },
+  { name: 'Hypers', address: '0x8A3bda085fD13E71FA2851D7a4b4B8af9671c5aB', pointsPerNFT: 1, galleryIndex: 7 },
+  { name: 'Mechacats', address: '0xeA8Cc2a7da4E91c559514B8192eF1cfe1497AC74', pointsPerNFT: 1, galleryIndex: 8 },
+  { name: 'LQnians', address: '0xfD43e36a9D4002C54a84DAB089a2EdE92ffB5C60', pointsPerNFT: 1, galleryIndex: 9 },
+  { name: 'bald bröthers', address: '0x7d87FfB185Fc27Cbee62468A9b5eA00d538b74A6', pointsPerNFT: 1, galleryIndex: 10 },
+  { name: 'BAE', address: '0x31ce9E3Fd78B593c2F37f62AE0fa72A23a2472df', pointsPerNFT: 1, galleryIndex: 11 },
+  { name: 'Hypo', address: '0x9583b5632372F50e949361df977464D619b2f826', pointsPerNFT: 1, galleryIndex: 12 },
+  { name: 'Locals Only by DEMI', address: '0x62FCFAf7573AD8B41a0FBF347AfEb85e06599A75', pointsPerNFT: 1, galleryIndex: 13 },
+  { name: 'Odd Otties', address: '0x43A9652E2B3cE8970e8d33d8C34252a59a6596Aa', pointsPerNFT: 1, galleryIndex: 14 }
+];
+
+const HYPERLIQUID_RPC = 'https://rpc.hyperliquid.xyz/evm';
+const ERC721_ABI = ['function balanceOf(address owner) view returns (uint256)'];
+
+async function checkNFTBalances() {
+  if (!walletConnected || !walletAddress) {
+    console.log('❌ Wallet not connected');
+    return;
+  }
+  
+  if (typeof ethers === 'undefined') {
+    console.error('❌ Ethers.js not loaded!');
+    showNotification('❌ Web3 library error');
+    return;
+  }
+  
+  console.log('🔍 Checking NFTs:', walletAddress);
+  
+  try {
+    const provider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_RPC);
+    const network = await provider.getNetwork();
+    console.log('✅ Connected:', network.name);
+    
+    let totalNFTs = 0;
+    let totalNFTPoints = 0;
+    
+    for (const collection of NFT_COLLECTIONS) {
+      try {
+        console.log(`📦 ${collection.name}...`);
+        const contract = new ethers.Contract(collection.address, ERC721_ABI, provider);
+        const balance = await contract.balanceOf(walletAddress);
+        const balanceNum = balance.toNumber();
+        
+        console.log(`✅ ${collection.name}: ${balanceNum}`);
+        
+        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
+        if (nftElement) {
+          nftElement.textContent = `${balanceNum} owned`;
+          if (balanceNum > 0) {
+            nftElement.style.color = '#16a34a';
+            nftElement.style.fontWeight = '600';
+          }
+        }
+        
+        totalNFTs += balanceNum;
+        totalNFTPoints += balanceNum * collection.pointsPerNFT;
+      } catch (error) {
+        console.error(`❌ ${collection.name}:`, error.message);
+      }
+    }
+    
+    nftPointsEarned = totalNFTPoints;
+    totalPoints = nftPointsEarned + completedCount;
+    document.getElementById('totalPoints').textContent = totalPoints;
+    
+    console.log(`✅ Total: ${totalNFTs} NFTs = ${totalNFTPoints} EP`);
+    
+    if (totalNFTs > 0) {
+      showNotification(`🎉 ${totalNFTs} NFTs! +${totalNFTPoints} EP`);
+    } else {
+      showNotification('ℹ️ No NFTs found');
+    }
+    
+  } catch (error) {
+    console.error('❌ NFT check error:', error);
+    showNotification('❌ NFT check failed');
+  }
+}
+
+// INIT
 window.onload = function() {
+  console.log('🚀 CatKitSune loading...');
   loadTwitterUser();
   generateQuestsLeaderboard();
-  checkReferralCode(); // Check if user came from referral link
+  checkReferralCode();
   
   const savedWallet = sessionStorage.getItem('wallet_address');
   if (savedWallet && typeof window.ethereum !== 'undefined') {
@@ -1274,232 +1138,21 @@ window.onload = function() {
     updateReferralLink();
     updateReferralStats();
   }
+  
+  console.log('✅ Ready!');
 };
 
 if (typeof window.ethereum !== 'undefined') {
-  window.ethereum.on('accountsChanged', function (accounts) {
+  window.ethereum.on('accountsChanged', (accounts) => {
     if (accounts.length === 0) {
       disconnectWallet();
-      showNotification('👋 Wallet disconnected in MetaMask');
     } else if (walletConnected) {
       walletAddress = accounts[0];
       updateWalletButton();
-      showNotification('🔄 Wallet address changed');
+      showNotification('🔄 Account changed');
     }
   });
-  
-  window.ethereum.on('chainChanged', function () {
-    showNotification('🔗 Network changed');
-    window.location.reload();
-  });
 }
-
-// NFT BALANCE CHECK - REAL WEB3 IMPLEMENTATION (HYPERLIQUID)
-const NFT_COLLECTIONS = [
-  {
-    name: 'Wealthy Hypo Babies',
-    address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb',
-    pointsPerNFT: 1,
-    galleryIndex: 0  // NFT Gallery card index
-  },
-  {
-    name: 'Tiny Hyper Cats',
-    address: '0xCC3D60fF11a268606C6a57bD6Db74b4208f1D30c',
-    pointsPerNFT: 1,
-    galleryIndex: 1
-  },
-  {
-    name: 'Hypurr',
-    address: '0x9125E2d6827a00B0F8330D6ef7BEF07730Bac685',
-    pointsPerNFT: 1,
-    galleryIndex: 2
-  },
-  {
-    name: 'Hyperian Genesis',
-    address: '0xB0F82655F249FC6561A94eB370d41bD24A861A9d',
-    pointsPerNFT: 1,
-    galleryIndex: 3
-  },
-  {
-    name: 'Illumeownati by Catbal',
-    address: '0xDdaB956F9EeE629510B4410627cd63C0448A78aB',
-    pointsPerNFT: 1,
-    galleryIndex: 5
-  },
-  {
-    name: 'PiP & Friends',
-    address: '0xbc4a26ba78ce05E8bCbF069Bbb87FB3E1dAC8DF8',
-    pointsPerNFT: 1,
-    galleryIndex: 6
-  },
-  {
-    name: 'Hypers',
-    address: '0x8A3bda085fD13E71FA2851D7a4b4B8af9671c5aB',
-    pointsPerNFT: 1,
-    galleryIndex: 7
-  },
-  {
-    name: 'Mechacats',
-    address: '0xeA8Cc2a7da4E91c559514B8192eF1cfe1497AC74',
-    pointsPerNFT: 1,
-    galleryIndex: 8
-  },
-  {
-    name: 'LQnians',
-    address: '0xfD43e36a9D4002C54a84DAB089a2EdE92ffB5C60',
-    pointsPerNFT: 1,
-    galleryIndex: 9
-  },
-  {
-    name: 'bald bröthers',
-    address: '0x7d87FfB185Fc27Cbee62468A9b5eA00d538b74A6',
-    pointsPerNFT: 1,
-    galleryIndex: 10
-  },
-  {
-    name: 'BAE',
-    address: '0x31ce9E3Fd78B593c2F37f62AE0fa72A23a2472df',
-    pointsPerNFT: 1,
-    galleryIndex: 11
-  },
-  {
-    name: 'Hypo',
-    address: '0x9583b5632372F50e949361df977464D619b2f826',
-    pointsPerNFT: 1,
-    galleryIndex: 12
-  },
-  {
-    name: 'Locals Only by DEMI',
-    address: '0x62FCFAf7573AD8B41a0FBF347AfEb85e06599A75',
-    pointsPerNFT: 1,
-    galleryIndex: 13
-  },
-  {
-    name: 'Odd Otties',
-    address: '0x43A9652E2B3cE8970e8d33d8C34252a59a6596Aa',
-    pointsPerNFT: 1,
-    galleryIndex: 14
-  }
-];
-
-// Hyperliquid RPC endpoint
-const HYPERLIQUID_RPC = 'https://rpc.hyperliquid.xyz/evm';
-
-// ERC-721 ABI for balanceOf function
-const ERC721_ABI = [
-  'function balanceOf(address owner) view returns (uint256)'
-];
-
-let nftPointsEarned = 0;
-
-async function checkNFTBalances() {
-  if (!walletConnected || !walletAddress) {
-    console.log('❌ Wallet not connected');
-    return;
-  }
-  
-  // Check if Ethers.js is loaded
-  if (typeof ethers === 'undefined') {
-    console.error('❌ Ethers.js library not loaded!');
-    showNotification('❌ Web3 library loading error. Please refresh the page.');
-    return;
-  }
-  
-  console.log('🔍 Checking NFT balances for:', walletAddress);
-  console.log('📡 RPC Endpoint:', HYPERLIQUID_RPC);
-  console.log('✅ Ethers.js version:', ethers.version);
-  
-  try {
-    // Create provider for Hyperliquid
-    console.log('⚙️ Creating provider...');
-    const provider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_RPC);
-    
-    // Test connection
-    try {
-      const network = await provider.getNetwork();
-      console.log('✅ Connected to network:', network);
-    } catch (error) {
-      console.error('❌ RPC Connection failed:', error);
-      showNotification('❌ Cannot connect to Hyperliquid RPC. Check your network connection.');
-      return;
-    }
-    
-    let totalNFTs = 0;
-    let totalNFTPoints = 0;
-    
-    // Check each NFT collection
-    for (const collection of NFT_COLLECTIONS) {
-      try {
-        console.log(`📦 Checking ${collection.name}...`);
-        
-        // Create contract instance
-        const contract = new ethers.Contract(
-          collection.address,
-          ERC721_ABI,
-          provider
-        );
-        
-        // Get balance
-        const balance = await contract.balanceOf(walletAddress);
-        const balanceNum = balance.toNumber();
-        
-        console.log(`✅ ${collection.name}: ${balanceNum} NFTs`);
-        
-        // Update UI using galleryIndex
-        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
-        if (nftElement) {
-          if (balanceNum > 0) {
-            nftElement.textContent = `${balanceNum} owned`;
-            nftElement.style.color = '#16a34a'; // Green
-            nftElement.style.fontWeight = '600';
-          } else {
-            nftElement.textContent = '0 owned';
-            nftElement.style.color = '#6b7280'; // Gray
-            nftElement.style.fontWeight = '400';
-          }
-        }
-        
-        // Calculate points
-        const points = balanceNum * collection.pointsPerNFT;
-        totalNFTs += balanceNum;
-        totalNFTPoints += points;
-        
-      } catch (error) {
-        console.error(`❌ Error checking ${collection.name}:`, error.message);
-        
-        // Update UI with error
-        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
-        if (nftElement) {
-          nftElement.textContent = '0 owned';
-          nftElement.style.color = '#6b7280';
-        }
-      }
-    }
-    
-    // Update total NFT points
-    nftPointsEarned = totalNFTPoints;
-    
-    // Update total points (NFT points + quest points + referral points)
-    const questPoints = completedCount; // From quests
-    const referralPoints = 0; // From referrals (if implemented)
-    totalPoints = nftPointsEarned + questPoints + referralPoints;
-    
-    document.getElementById('totalPoints').textContent = totalPoints;
-    
-    console.log(`✅ Total NFTs: ${totalNFTs}, Total Points from NFTs: ${totalNFTPoints} EP`);
-    
-    if (totalNFTs > 0) {
-      showNotification(`🎉 You own ${totalNFTs} NFT${totalNFTs > 1 ? 's' : ''}! +${totalNFTPoints} EP earned!`);
-    } else {
-      showNotification('ℹ️ No NFTs found in your wallet.');
-    }
-    
-  } catch (error) {
-    console.error('❌ Error checking NFT balances:', error);
-    showNotification('❌ Error checking NFT balances. Please try again.');
-  }
-}
-
 </script>
 </body>
 </html>
