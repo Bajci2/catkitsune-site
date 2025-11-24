@@ -827,29 +827,46 @@ function toggleWallet() {
 }
 
 function loginWithTwitter() {
-  // Demo mode - simulate Twitter login
-  const demoUsers = [
-    { name: 'CryptoWhale', username: 'cryptowhale', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=whale' },
-    { name: 'NFT Collector', username: 'nftcollector', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=collector' },
-    { name: 'DeFi Master', username: 'defimaster', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=master' }
-  ];
-  
-  const randomUser = demoUsers[Math.floor(Math.random() * demoUsers.length)];
-  
-  document.getElementById('twitterBtn').style.display = 'none';
-  const av = document.getElementById('twitterAvatar');
-  av.innerHTML = `
-    <img src="${randomUser.avatar}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
-    <span style="font-weight:600;">@${randomUser.username}</span>
-  `;
-  av.style.display = 'flex';
-  
-  sessionStorage.setItem('twitter_user', JSON.stringify(randomUser));
-  showNotification(`🐦 Demo login: @${randomUser.username}`);
-  console.log('✅ Twitter demo login');
+  // Redirect to Twitter OAuth endpoint
+  window.location.href = "https://catkitsune.xyz/api/twitter-login";
 }
 
 async function loadTwitterUser() {
+  // Check for OAuth callback params
+  const urlParams = new URLSearchParams(window.location.search);
+  const name = urlParams.get('name');
+  const username = urlParams.get('username');
+  const avatar = urlParams.get('avatar');
+  
+  if (username && avatar) {
+    // OAuth callback - save user data
+    const decodedAvatar = decodeURIComponent(avatar);
+    const decodedUsername = decodeURIComponent(username);
+    const decodedName = name ? decodeURIComponent(name) : decodedUsername;
+    
+    document.getElementById('twitterBtn').style.display = 'none';
+    const av = document.getElementById('twitterAvatar');
+    av.innerHTML = `
+      <img src="${decodedAvatar}" style="width:30px;height:30px;border-radius:50%;border:2px solid #1da1f2;">
+      <span style="font-weight:600;">@${decodedUsername}</span>
+    `;
+    av.style.display = 'flex';
+    
+    sessionStorage.setItem('twitter_user', JSON.stringify({
+      name: decodedName,
+      username: decodedUsername,
+      avatar: decodedAvatar
+    }));
+    
+    showNotification(`🐦 Logged in as @${decodedUsername}`);
+    console.log('✅ Twitter OAuth success:', decodedUsername);
+    
+    // Clean URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    return;
+  }
+  
+  // Check for saved user
   const savedUser = sessionStorage.getItem('twitter_user');
   if (savedUser) {
     try {
@@ -861,7 +878,7 @@ async function loadTwitterUser() {
         <span style="font-weight:600;">@${user.username}</span>
       `;
       av.style.display = 'flex';
-      console.log('✅ Loaded Twitter user:', user.username);
+      console.log('✅ Loaded saved Twitter user:', user.username);
     } catch (e) {
       console.error('Error loading Twitter user:', e);
     }
