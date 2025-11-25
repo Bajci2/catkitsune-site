@@ -751,6 +751,59 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 </div>
 </div>
 </div>
+
+<div class="card" style="margin-top:20px;">
+<div class="card-title" style="margin-bottom:20px;">
+<span class="dot"></span> 🐦 Latest Twitter Posts
+</div>
+
+<div style="background:linear-gradient(135deg,#e8f5ff,#f0f9ff);border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;">
+<div style="font-size:14px;font-weight:700;color:#1da1f2;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+📢 Share Our Latest Posts & Earn Points!
+</div>
+<div style="font-size:12px;color:#6b7280;margin-bottom:16px;">
+Retweet our latest posts and verify to earn <strong style="color:#22c55e;">+1 EP</strong> for each share!
+</div>
+
+<div id="twitterPosts" style="display:flex;flex-direction:column;gap:12px;">
+<!-- Twitter posts will be loaded here -->
+<div class="twitter-post-card" style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
+<div style="font-size:13px;color:#111827;margin-bottom:12px;line-height:1.5;">
+<strong>📌 Tweet #1</strong><br>
+<span style="color:#6b7280;">Loading latest post...</span>
+</div>
+<div style="display:flex;gap:8px;">
+<a href="https://x.com/GborSzakl1" target="_blank" style="flex:1;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-size:12px;font-weight:600;text-align:center;transition:0.2s;" onmouseover="this.style.background='#1a8cd8'" onmouseout="this.style.background='#1da1f2'">
+🔁 Retweet This
+</a>
+<button onclick="verifyTwitterShare(1)" style="flex:1;padding:8px 16px;background:#22c55e;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">
+✅ I Shared It - Verify
+</button>
+</div>
+</div>
+
+<div class="twitter-post-card" style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
+<div style="font-size:13px;color:#111827;margin-bottom:12px;line-height:1.5;">
+<strong>📌 Tweet #2</strong><br>
+<span style="color:#6b7280;">Loading latest post...</span>
+</div>
+<div style="display:flex;gap:8px;">
+<a href="https://x.com/GborSzakl1" target="_blank" style="flex:1;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-size:12px;font-weight:600;text-align:center;transition:0.2s;" onmouseover="this.style.background='#1a8cd8'" onmouseout="this.style.background='#1da1f2'">
+🔁 Retweet This
+</a>
+<button onclick="verifyTwitterShare(2)" style="flex:1;padding:8px 16px;background:#22c55e;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">
+✅ I Shared It - Verify
+</button>
+</div>
+</div>
+</div>
+
+<div style="margin-top:12px;font-size:11px;color:#6b7280;text-align:center;">
+🔄 Posts refresh automatically every 3 hours
+</div>
+</div>
+</div>
+
 </main>
 </div>
 
@@ -972,6 +1025,33 @@ function showNotification(message) {
   notification.textContent = message;
   document.body.appendChild(notification);
   setTimeout(() => notification.remove(), 3000);
+}
+
+// Twitter Share Verification
+function verifyTwitterShare(tweetNumber) {
+  // Check if already verified
+  const verifyKey = `twitter_share_${tweetNumber}_verified`;
+  if (sessionStorage.getItem(verifyKey)) {
+    showNotification('⚠️ You already verified this tweet!');
+    return;
+  }
+  
+  // TODO: In production, verify with Twitter API
+  // For now, trust-based system
+  
+  // Mark as verified
+  sessionStorage.setItem(verifyKey, 'true');
+  
+  // Award point
+  totalPoints += 1;
+  completedCount += 1;
+  
+  document.getElementById('totalPoints').textContent = totalPoints;
+  document.getElementById('completedQuests').textContent = completedCount;
+  
+  showNotification(`🎉 +1 EP for sharing Tweet #${tweetNumber}!`);
+  
+  console.log(`✅ Twitter share #${tweetNumber} verified`);
 }
 
 // LEADERBOARD
