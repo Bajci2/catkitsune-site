@@ -1206,17 +1206,20 @@ async function checkNFTBalances() {
         const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
         
         if (nftCardContainer && nftElement) {
+          // ALWAYS show the card container
+          nftCardContainer.style.display = 'flex';
+          
           // Update text
           nftElement.textContent = `${balanceNum} owned`;
           
+          const nftCard = nftCardContainer.querySelector('.nft-card');
+          
           if (balanceNum > 0) {
-            // Show NFT card with image
-            nftCardContainer.style.display = 'flex';
+            // HAS NFT → Show image
             nftElement.style.color = '#16a34a';
             nftElement.style.fontWeight = '600';
             
             // Add/update image
-            const nftCard = nftCardContainer.querySelector('.nft-card');
             let img = nftCard.querySelector('.nft-image');
             if (!img) {
               img = document.createElement('img');
@@ -1239,8 +1242,26 @@ async function checkNFTBalances() {
               strong.style.borderRadius = '6px';
             }
           } else {
-            // Hide NFT card if no balance
-            nftCardContainer.style.display = 'none';
+            // NO NFT → Remove image, keep card
+            nftElement.style.color = '#6b7280';
+            nftElement.style.fontWeight = '400';
+            
+            // Remove image if exists
+            const img = nftCard.querySelector('.nft-image');
+            if (img) {
+              img.remove();
+            }
+            
+            // Reset text styling
+            const strong = nftCard.querySelector('strong');
+            if (strong) {
+              strong.style.position = 'relative';
+              strong.style.zIndex = '1';
+              strong.style.textShadow = 'none';
+              strong.style.color = '#111827';
+              strong.style.background = 'none';
+              strong.style.padding = '0';
+            }
           }
         }
         
@@ -1249,10 +1270,13 @@ async function checkNFTBalances() {
       } catch (error) {
         console.error(`❌ ${collection.name}:`, error.message);
         
-        // Hide card on error
+        // Keep card visible even on error
         const nftCardContainer = document.querySelector(`[data-nft-index="${collection.galleryIndex}"]`);
-        if (nftCardContainer) {
-          nftCardContainer.style.display = 'none';
+        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
+        if (nftCardContainer && nftElement) {
+          nftCardContainer.style.display = 'flex';
+          nftElement.textContent = '0 owned';
+          nftElement.style.color = '#6b7280';
         }
       }
     }
@@ -1267,10 +1291,6 @@ async function checkNFTBalances() {
       showNotification(`🎉 ${totalNFTs} NFTs! +${totalNFTPoints} EP`);
     } else {
       showNotification('ℹ️ No NFTs found');
-      // Hide all cards if no NFTs
-      document.querySelectorAll('[data-nft-index]').forEach(card => {
-        card.style.display = 'none';
-      });
     }
     
   } catch (error) {
