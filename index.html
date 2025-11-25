@@ -529,9 +529,6 @@ Share your link and earn <strong style="color:#22c55e;">+1 EP</strong> for each 
 Total referrals: <strong style="color:#22c55e;" id="refCount">0</strong> | 
 Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 </div>
-<button onclick="simulateReferral()" style="margin-top:8px;padding:6px 12px;background:#6a3df5;color:white;border:none;border-radius:6px;font-size:11px;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
-🧪 Simulate Referral (Demo)
-</button>
 </div>
 </div>
 </div>
@@ -961,19 +958,6 @@ function updateReferralStats() {
   
   totalPoints = (nftPointsEarned || 0) + completedCount + refPoints;
   document.getElementById('totalPoints').textContent = totalPoints;
-}
-
-function simulateReferral() {
-  const userId = sessionStorage.getItem('user_ref_id');
-  if (!userId) {
-    showNotification('❌ Connect wallet first!');
-    return;
-  }
-  
-  const currentCount = parseInt(localStorage.getItem(`ref_count_${userId}`) || '0');
-  localStorage.setItem(`ref_count_${userId}`, (currentCount + 1).toString());
-  updateReferralStats();
-  showNotification(`🎉 Simulated referral! +1 EP`);
 }
 
 function showNotification(message) {
