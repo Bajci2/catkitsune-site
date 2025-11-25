@@ -1168,7 +1168,39 @@ const NFT_COLLECTIONS = [
 ];
 
 const HYPERLIQUID_RPC = 'https://rpc.hyperliquid.xyz/evm';
-const ERC721_ABI = ['function balanceOf(address owner) view returns (uint256)'];
+const ERC721_ABI = [
+  'function balanceOf(address owner) view returns (uint256)',
+  'function tokenURI(uint256 tokenId) view returns (string)',
+  'function tokenOfOwnerByIndex(address owner, uint256 index) view returns (uint256)'
+];
+
+// Fetch NFT image from metadata
+async function fetchNFTImage(contract, tokenId) {
+  try {
+    const tokenURI = await contract.tokenURI(tokenId);
+    
+    // Handle IPFS URLs
+    let metadataURL = tokenURI;
+    if (tokenURI.startsWith('ipfs://')) {
+      metadataURL = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
+    }
+    
+    // Fetch metadata
+    const response = await fetch(metadataURL);
+    const metadata = await response.json();
+    
+    // Get image
+    let imageURL = metadata.image || metadata.image_url;
+    if (imageURL && imageURL.startsWith('ipfs://')) {
+      imageURL = imageURL.replace('ipfs://', 'https://ipfs.io/ipfs/');
+    }
+    
+    return imageURL;
+  } catch (error) {
+    console.error('Error fetching NFT image:', error);
+    return null;
+  }
+}
 
 async function checkNFTBalances() {
   if (!walletConnected || !walletAddress) {
@@ -1215,9 +1247,27 @@ async function checkNFTBalances() {
           const nftCard = nftCardContainer.querySelector('.nft-card');
           
           if (balanceNum > 0) {
-            // HAS NFT → Show image
+            // HAS NFT → Try to fetch real image
             nftElement.style.color = '#16a34a';
             nftElement.style.fontWeight = '600';
+            
+            // Try to get first owned token and its image
+            let nftImageURL = collection.image; // Fallback to placeholder
+            
+            try {
+              // Get first owned token ID
+              const tokenId = await contract.tokenOfOwnerByIndex(walletAddress, 0);
+              console.log(`🖼️ Fetching image for token #${tokenId}...`);
+              
+              // Fetch real NFT image
+              const realImage = await fetchNFTImage(contract, tokenId);
+              if (realImage) {
+                nftImageURL = realImage;
+                console.log(`✅ Got real image: ${realImage.substring(0, 50)}...`);
+              }
+            } catch (e) {
+              console.log(`⚠️ Could not fetch real image, using placeholder`);
+            }
             
             // Add/update image
             let img = nftCard.querySelector('.nft-image');
@@ -1227,8 +1277,14 @@ async function checkNFTBalances() {
               img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:10px;position:absolute;top:0;left:0;z-index:0;';
               nftCard.insertBefore(img, nftCard.firstChild);
             }
-            img.src = collection.image;
+            img.src = nftImageURL;
             img.alt = collection.name;
+            
+            // Add error handler for image loading
+            img.onerror = () => {
+              console.log(`❌ Image failed to load, using placeholder`);
+              img.src = collection.image; // Use placeholder on error
+            };
             
             // Ensure text is visible over image
             const strong = nftCard.querySelector('strong');
