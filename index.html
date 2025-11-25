@@ -454,15 +454,16 @@ Login with Twitter
 </div>
 
 <div class="content-grid">
-<div class="card">
+
+<div class="card" style="grid-column:1/-1;">
 <div class="card-title" style="margin-bottom:20px;">
-<span class="dot"></span> Leaderboard
+<span class="dot"></span> 🐦 Latest Twitter Posts
 </div>
 
-<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;margin-bottom:20px;max-width:700px;margin-left:auto;margin-right:auto;">
+<div style="background:white;border:1px solid #e5e7eb;border-radius:12px;padding:16px 20px;margin-bottom:20px;">
 <div style="text-align:center;margin-bottom:12px;">
 <div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:4px;">
-🔥 CatKitSune Leaderboard is NOW LIVE!
+🔥 Share Our Posts & Earn Points!
 </div>
 <div style="font-size:12px;color:#6b7280;font-weight:500;">
 Rewarding active support 🚀
@@ -491,6 +492,80 @@ Share (retweet 🔁) our posts and earn <strong style="color:#22c55e;">+1 EP</st
 Be among the TOP players 👑
 </span>
 </div>
+</div>
+
+<div id="twitterPosts" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;max-width:800px;margin-left:auto;margin-right:auto;">
+<div class="twitter-post-card" style="background:linear-gradient(135deg,#1da1f2,#0d8bd9);border-radius:16px;padding:18px;box-shadow:0 4px 12px rgba(29,161,242,0.2);position:relative;overflow:hidden;">
+<div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,0.1);border-radius:50%;"></div>
+<div style="position:relative;z-index:1;">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:32px;height:32px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+<svg style="width:18px;height:18px;color:#1da1f2;" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+</div>
+<div style="color:white;min-width:0;">
+<div style="font-weight:700;font-size:12px;">@GborSzakl1</div>
+<div style="font-size:9px;opacity:0.8;">Latest Post</div>
+</div>
+</div>
+<div style="color:white;font-size:12px;line-height:1.4;margin-bottom:14px;min-height:36px;">
+Loading latest tweet...
+</div>
+<div style="display:flex;gap:6px;">
+<a href="https://x.com/GborSzakl1" target="_blank" style="flex:1;padding:8px 12px;background:white;color:#1da1f2;text-decoration:none;border-radius:8px;font-size:11px;font-weight:700;text-align:center;transition:0.2s;display:flex;align-items:center;justify-content:center;gap:4px;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+<svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path d="M23.77 15.67a.749.749 0 0 0-1.06 0L17 21.38V3a1 1 0 0 0-2 0v18.38l-5.71-5.71a.75.75 0 0 0-1.06 1.06l7 7a.75.75 0 0 0 1.06 0l7-7a.749.749 0 0 0 0-1.06z"/><path d="M8.5 12.5a.5.5 0 0 1-.5-.5V3.707L6.354 5.354a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8 3.707V12a.5.5 0 0 1-.5.5z"/></svg>
+Retweet
+</a>
+<button onclick="verifyTwitterShare(1)" style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.2);color:white;border:2px solid white;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:0.2s;backdrop-filter:blur(10px);" onmouseover="this.style.background='white';this.style.color='#1da1f2'" onmouseout="this.style.background='rgba(255,255,255,0.2)';this.style.color='white'">
+✅ Verify
+</button>
+</div>
+</div>
+</div>
+
+<div class="twitter-post-card" style="background:linear-gradient(135deg,#1da1f2,#0d8bd9);border-radius:16px;padding:18px;box-shadow:0 4px 12px rgba(29,161,242,0.2);position:relative;overflow:hidden;">
+<div style="position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:rgba(255,255,255,0.1);border-radius:50%;"></div>
+<div style="position:relative;z-index:1;">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+<div style="width:32px;height:32px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+<svg style="width:18px;height:18px;color:#1da1f2;" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+</div>
+<div style="color:white;min-width:0;">
+<div style="font-weight:700;font-size:12px;">@MariannCso1714</div>
+<div style="font-size:9px;opacity:0.8;">Latest Post</div>
+</div>
+</div>
+<div style="color:white;font-size:12px;line-height:1.4;margin-bottom:14px;min-height:36px;">
+Loading latest tweet...
+</div>
+<div style="display:flex;gap:6px;">
+<a href="https://x.com/MariannCso1714" target="_blank" style="flex:1;padding:8px 12px;background:white;color:#1da1f2;text-decoration:none;border-radius:8px;font-size:11px;font-weight:700;text-align:center;transition:0.2s;display:flex;align-items:center;justify-content:center;gap:4px;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(0,0,0,0.15)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='none'">
+<svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path d="M23.77 15.67a.749.749 0 0 0-1.06 0L17 21.38V3a1 1 0 0 0-2 0v18.38l-5.71-5.71a.75.75 0 0 0-1.06 1.06l7 7a.75.75 0 0 0 1.06 0l7-7a.749.749 0 0 0 0-1.06z"/><path d="M8.5 12.5a.5.5 0 0 1-.5-.5V3.707L6.354 5.354a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8 3.707V12a.5.5 0 0 1-.5.5z"/></svg>
+Retweet
+</a>
+<button onclick="verifyTwitterShare(2)" style="flex:1;padding:8px 12px;background:rgba(255,255,255,0.2);color:white;border:2px solid white;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:0.2s;backdrop-filter:blur(10px);" onmouseover="this.style.background='white';this.style.color='#1da1f2'" onmouseout="this.style.background='rgba(255,255,255,0.2)';this.style.color='white'">
+✅ Verify
+</button>
+</div>
+</div>
+</div>
+</div>
+
+<style>
+@media (max-width: 768px) {
+  #twitterPosts {
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>
+
+<div style="margin-top:12px;font-size:11px;color:#6b7280;text-align:center;">
+🔄 Posts refresh automatically every 3 hours
+</div>
+</div>
+
+<div class="card">
+<div class="card-title" style="margin-bottom:20px;">
+<span class="dot"></span> Leaderboard
 </div>
 
 <div style="position:relative;margin-bottom:20px;">
@@ -745,58 +820,6 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
     <strong>Odd Otties</strong>
   </div>
   <span class="nft-count" id="nft-14" style="margin-top:4px;font-size:10px;">0 owned</span>
-</div>
-</div>
-</div>
-
-<div class="card" style="margin-top:20px;">
-<div class="card-title" style="margin-bottom:20px;">
-<span class="dot"></span> 🐦 Latest Twitter Posts
-</div>
-
-<div style="background:linear-gradient(135deg,#e8f5ff,#f0f9ff);border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:16px;">
-<div style="font-size:14px;font-weight:700;color:#1da1f2;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-📢 Share Our Latest Posts & Earn Points!
-</div>
-<div style="font-size:12px;color:#6b7280;margin-bottom:16px;">
-Retweet our latest posts and verify to earn <strong style="color:#22c55e;">+1 EP</strong> for each share!
-</div>
-
-<div id="twitterPosts" style="display:flex;flex-direction:column;gap:12px;">
-<!-- Twitter posts will be loaded here -->
-<div class="twitter-post-card" style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
-<div style="font-size:13px;color:#111827;margin-bottom:12px;line-height:1.5;">
-<strong>📌 Tweet #1</strong><br>
-<span style="color:#6b7280;">Loading latest post...</span>
-</div>
-<div style="display:flex;gap:8px;">
-<a href="https://x.com/GborSzakl1" target="_blank" style="flex:1;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-size:12px;font-weight:600;text-align:center;transition:0.2s;" onmouseover="this.style.background='#1a8cd8'" onmouseout="this.style.background='#1da1f2'">
-🔁 Retweet This
-</a>
-<button onclick="verifyTwitterShare(1)" style="flex:1;padding:8px 16px;background:#22c55e;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">
-✅ I Shared It - Verify
-</button>
-</div>
-</div>
-
-<div class="twitter-post-card" style="background:white;border:1px solid #e5e7eb;border-radius:10px;padding:16px;">
-<div style="font-size:13px;color:#111827;margin-bottom:12px;line-height:1.5;">
-<strong>📌 Tweet #2</strong><br>
-<span style="color:#6b7280;">Loading latest post...</span>
-</div>
-<div style="display:flex;gap:8px;">
-<a href="https://x.com/GborSzakl1" target="_blank" style="flex:1;padding:8px 16px;background:#1da1f2;color:white;text-decoration:none;border-radius:8px;font-size:12px;font-weight:600;text-align:center;transition:0.2s;" onmouseover="this.style.background='#1a8cd8'" onmouseout="this.style.background='#1da1f2'">
-🔁 Retweet This
-</a>
-<button onclick="verifyTwitterShare(2)" style="flex:1;padding:8px 16px;background:#22c55e;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">
-✅ I Shared It - Verify
-</button>
-</div>
-</div>
-</div>
-
-<div style="margin-top:12px;font-size:11px;color:#6b7280;text-align:center;">
-🔄 Posts refresh automatically every 3 hours
 </div>
 </div>
 </div>
