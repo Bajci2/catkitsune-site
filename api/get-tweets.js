@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'GET');
   
   // Twitter Bearer Token
-  const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN || 'AAAAAAAAAAAAAAAAAAAAABPG4AEAAAAAfOpTpGcVYQ59gb0f3L5yuvaJUNE%3D4iY3OxoOjQCjnwHcT7kQQOrfk8eAzgLeQAUJA0BYC6Z7z0ip1P';
+  const BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN || 'AAAAAAAAAAAAAAAAAAAAABPG4AEAAAAAz3ylzxSVQp%2F6Dl4CmPKQbVjF5Q8%3D8SnZFemHe68q4IK05wNcFym6KdNLch7ZbKMSrHSs3iiUnmLolk';
   
   if (!BEARER_TOKEN) {
     return res.status(500).json({ 
