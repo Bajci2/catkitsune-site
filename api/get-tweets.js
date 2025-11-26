@@ -14,8 +14,13 @@ export default async function handler(req, res) {
     // Nitter RSS URLs (trying multiple instances for reliability)
     const nitterInstances = [
       'https://nitter.net/GborSzakl1/rss',
+      'https://nitter.poast.org/GborSzakl1/rss',
       'https://nitter.privacydev.net/GborSzakl1/rss',
-      'https://nitter.poast.org/GborSzakl1/rss'
+      'https://nitter.cz/GborSzakl1/rss',
+      'https://nitter.ktachibana.party/GborSzakl1/rss',
+      'https://nitter.unixfox.eu/GborSzakl1/rss',
+      'https://nitter.it/GborSzakl1/rss',
+      'https://nitter.ca/GborSzakl1/rss'
     ];
     
     let rssData = null;
