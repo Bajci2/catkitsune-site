@@ -85,3 +85,29 @@ export default async function handler(req, res) {
     });
   }
 }
+```
+
+---
+
+## 📋 LÉPÉSEK:
+
+### **1. Menj ide:**
+```
+https://github.com/Bajci2/catkitsune-site/blob/main/api/get-tweets.js
+```
+
+### **2. Kattints: Edit (ceruza ikon)**
+
+### **3. Töröld ki az ÖSSZES régi kódot**
+
+### **4. Másold be a FENTI TELJES kódot**
+
+### **5. Commit changes**
+
+### **6. Várj 2-3 percet** (Vercel deploy)
+
+### **7. Várj még ~10 percet** (Twitter rate limit reset)
+
+### **8. Teszteld:**
+```
+https://catkitsune-site.vercel.app/api/get-tweets
