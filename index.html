@@ -80,10 +80,10 @@
       background: linear-gradient(135deg, #6a3df5, #22c55e);
     }
 
-    main { flex: 1; padding: 0 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    main { flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; }
 
     .top-nav {
-      margin-top: 4px;
+      margin-top: 0;
       display: flex;
       justify-content: center;
       gap: 12px;
@@ -108,8 +108,27 @@
       border-color: #6a3df5;
     }
 
-    .view { display: none; }
-    .view.active { display: block; }
+    .view { 
+      display: none; 
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+    }
+    .view.active { 
+      display: block; 
+      position: relative;
+    }
+
+    .views-container {
+      position: relative;
+      min-height: 400px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 12px 80px;
+    }
 
     .hero-card {
       background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
@@ -443,6 +462,8 @@ Login with Twitter
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂 Airdrop</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙 CKS Token</button>
 </div>
+
+<div class="views-container">
 
 <main class="view active" id="view-quests">
 <div class="hero-card">
@@ -841,329 +862,197 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 
 <!-- ROADMAP PAGE -->
 <main class="view" id="view-roadmap">
-<div class="hero-card">
-<div class="hero-title">🗺️ CatKitSune Roadmap</div>
-<div class="hero-sub">Our journey and future plans</div>
+<div class="card" style="grid-column:1/-1;">
+<div class="card-title" style="margin-bottom:20px;">
+<span class="dot"></span> 🗺️ Roadmap
 </div>
 
-<div class="content-grid">
-<div class="card">
-<div class="card-title"><span class="dot"></span> Past Milestones</div>
-<div style="display:flex;flex-direction:column;gap:16px;margin-top:12px;">
+<!-- Past Milestones -->
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Past Milestones</div>
 
-<div style="padding:16px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:12px;border-left:4px solid #0ea5e9;">
-<div style="font-weight:700;font-size:14px;color:#0369a1;margin-bottom:4px;">✅ Q4 2024</div>
-<div style="font-size:13px;color:#334155;line-height:1.5;">
+<div style="display:flex;flex-direction:column;gap:16px;">
+<div style="padding:20px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:12px;border-left:4px solid #0ea5e9;">
+<div style="font-weight:700;font-size:15px;color:#0369a1;margin-bottom:8px;">✅ Q4 2024</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
 • Project launch<br>
 • Community building<br>
 • Initial partnerships
 </div>
 </div>
 
-<div style="padding:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;border-left:4px solid #22c55e;">
-<div style="font-weight:700;font-size:14px;color:#15803d;margin-bottom:4px;">✅ Q1 2025</div>
-<div style="font-size:13px;color:#334155;line-height:1.5;">
+<div style="padding:20px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;border-left:4px solid #22c55e;">
+<div style="font-weight:700;font-size:15px;color:#15803d;margin-bottom:8px;">✅ Q1 2025</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
 • Website launch<br>
 • Quest system<br>
 • NFT gallery integration
 </div>
 </div>
-
 </div>
 </div>
 
-<div class="card">
-<div class="card-title"><span class="dot"></span> Future Plans</div>
-<div style="display:flex;flex-direction:column;gap:16px;margin-top:12px;">
+<!-- Future Plans -->
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Future Plans</div>
 
-<div style="padding:16px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:12px;border-left:4px solid #a855f7;">
-<div style="font-weight:700;font-size:14px;color:#7c3aed;margin-bottom:4px;">🔄 Q2 2025</div>
-<div style="font-size:13px;color:#334155;line-height:1.5;">
+<div style="display:flex;flex-direction:column;gap:16px;">
+<div style="padding:20px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:12px;border-left:4px solid #a855f7;">
+<div style="font-weight:700;font-size:15px;color:#7c3aed;margin-bottom:8px;">🔄 Q2 2025</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
 • Token launch (CKS)<br>
 • DripTrade integration<br>
 • Enhanced features
 </div>
 </div>
 
-<div style="padding:16px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:12px;border-left:4px solid #f97316;">
-<div style="font-weight:700;font-size:14px;color:#c2410c;margin-bottom:4px;">📅 Q3 2025</div>
-<div style="font-size:13px;color:#334155;line-height:1.5;">
+<div style="padding:20px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:12px;border-left:4px solid #f97316;">
+<div style="font-weight:700;font-size:15px;color:#c2410c;margin-bottom:8px;">📅 Q3 2025</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
 • Airdrop campaign<br>
 • Mobile app launch<br>
 • Additional utilities
 </div>
 </div>
 
-<div style="padding:16px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border-radius:12px;border-left:4px solid #ef4444;">
-<div style="font-weight:700;font-size:14px;color:#b91c1c;margin-bottom:4px;">🚀 Q4 2025</div>
-<div style="font-size:13px;color:#334155;line-height:1.5;">
+<div style="padding:20px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border-radius:12px;border-left:4px solid #ef4444;">
+<div style="font-weight:700;font-size:15px;color:#b91c1c;margin-bottom:8px;">🚀 Q4 2025</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
 • Major partnerships<br>
 • Ecosystem expansion<br>
 • Community governance
 </div>
 </div>
-
 </div>
 </div>
 
-<div class="card">
-<div style="text-align:center;padding:32px 20px;">
+<!-- Stay Tuned -->
+<div style="text-align:center;padding:32px 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;color:white;">
 <div style="font-size:48px;margin-bottom:12px;">🔮</div>
-<div style="font-size:18px;font-weight:700;color:#6a3df5;margin-bottom:8px;">Stay Tuned!</div>
-<div style="font-size:13px;color:#6b7280;line-height:1.6;">
+<div style="font-size:20px;font-weight:700;margin-bottom:8px;">Stay Tuned!</div>
+<div style="font-size:14px;opacity:0.95;line-height:1.6;max-width:600px;margin:0 auto;">
 More details coming soon. Join our community to stay updated on the latest developments!
 </div>
 </div>
-</div>
+
 </div>
 </main>
 
 <!-- AIRDROP PAGE -->
 <main class="view" id="view-airdrop">
-<div class="hero-card">
-<div class="hero-title">🪂 CKS Token Airdrop</div>
-<div class="hero-sub">Earn rewards for your participation</div>
+<div class="card" style="grid-column:1/-1;">
+<div class="card-title" style="margin-bottom:20px;">
+<span class="dot"></span> 🪂 Airdrop
 </div>
 
-<div class="content-grid">
-<div class="card">
-<div style="text-align:center;padding:40px 20px;">
-<div style="font-size:64px;margin-bottom:16px;">🎁</div>
-<div style="font-size:24px;font-weight:800;color:#6a3df5;margin-bottom:12px;">Airdrop Coming Soon!</div>
-<div style="font-size:14px;color:#6b7280;line-height:1.6;max-width:500px;margin:0 auto 24px;">
-Get ready for the CKS token airdrop! Complete quests, hold NFTs, and participate in the community to maximize your rewards.
-</div>
-<div style="display:inline-block;padding:12px 24px;background:linear-gradient(135deg,#6a3df5,#22c55e);color:white;border-radius:12px;font-weight:700;font-size:14px;">
-📅 Details Announced Soon
-</div>
+<!-- Airdrop Info -->
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">How can I participate?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;margin-bottom:12px;">
+• Complete quests and earn points<br>
+• Hold NFTs from supported collections<br>
+• Share our posts on social media<br>
+• Invite friends using your referral link
 </div>
 </div>
 
-<div class="quests-section">
-<div class="card">
-<div class="card-title"><span class="dot"></span> How to Participate</div>
-<div class="mission-list">
-
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">✅</div>
-<div>
-<div class="mission-text-title">Complete Quests</div>
-<div class="mission-text-sub">Earn points by completing tasks</div>
-</div>
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">When will it be?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
+To be announced
 </div>
 </div>
 
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">🖼️</div>
-<div>
-<div class="mission-text-title">Hold NFTs</div>
-<div class="mission-text-sub">Own supported NFT collections</div>
-</div>
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Snapshot info?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
+Details coming soon
 </div>
 </div>
 
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">🐦</div>
-<div>
-<div class="mission-text-title">Share Posts</div>
-<div class="mission-text-sub">Spread the word on social media</div>
-</div>
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Requirements?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
+Active participation in the community
 </div>
 </div>
 
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">👥</div>
-<div>
-<div class="mission-text-title">Invite Friends</div>
-<div class="mission-text-sub">Use your referral link</div>
-</div>
-</div>
-</div>
-
+<!-- Stay Updated -->
+<div style="text-align:center;padding:32px 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;color:white;">
+<div style="font-size:48px;margin-bottom:12px;">📢</div>
+<div style="font-size:20px;font-weight:700;margin-bottom:8px;">Stay Updated!</div>
+<div style="font-size:14px;opacity:0.95;line-height:1.6;max-width:600px;margin:0 auto;">
+Follow us on Twitter for the latest announcements and updates!
 </div>
 </div>
 
-<div class="card">
-<div class="card-title"><span class="dot"></span> Airdrop Details</div>
-<div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
-
-<div style="padding:14px;background:#f9fafb;border-radius:10px;border-left:3px solid #6a3df5;">
-<div style="font-weight:700;font-size:12px;color:#6a3df5;margin-bottom:4px;">SNAPSHOT DATE</div>
-<div style="font-size:13px;color:#6b7280;">To be announced</div>
-</div>
-
-<div style="padding:14px;background:#f9fafb;border-radius:10px;border-left:3px solid #22c55e;">
-<div style="font-weight:700;font-size:12px;color:#22c55e;margin-bottom:4px;">DISTRIBUTION</div>
-<div style="font-size:13px;color:#6b7280;">Based on points & activity</div>
-</div>
-
-<div style="padding:14px;background:#f9fafb;border-radius:10px;border-left:3px solid #f59e0b;">
-<div style="font-weight:700;font-size:12px;color:#f59e0b;margin-bottom:4px;">REQUIREMENTS</div>
-<div style="font-size:13px;color:#6b7280;">Active participation required</div>
-</div>
-
-</div>
-</div>
-</div>
-
-<div class="card">
-<div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:24px;text-align:center;color:white;">
-<div style="font-size:18px;font-weight:700;margin-bottom:8px;">📢 Stay Updated!</div>
-<div style="font-size:13px;opacity:0.9;margin-bottom:16px;">Follow us on Twitter for the latest announcements</div>
-<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
-<a href="https://x.com/GborSzakl1" target="_blank" style="padding:8px 16px;background:rgba(255,255,255,0.2);border-radius:8px;color:white;text-decoration:none;font-weight:600;font-size:12px;backdrop-filter:blur(10px);">@GborSzakl1</a>
-<a href="https://x.com/MariannCso1714" target="_blank" style="padding:8px 16px;background:rgba(255,255,255,0.2);border-radius:8px;color:white;text-decoration:none;font-weight:600;font-size:12px;backdrop-filter:blur(10px);">@MariannCso1714</a>
-</div>
-</div>
-</div>
 </div>
 </main>
 
 <!-- CKS TOKEN PAGE -->
 <main class="view" id="view-token">
-<div class="hero-card">
-<div class="hero-title">🪙 CKS Token</div>
-<div class="hero-sub">The native token of the CatKitSune ecosystem</div>
+<div class="card" style="grid-column:1/-1;">
+<div class="card-title" style="margin-bottom:20px;">
+<span class="dot"></span> 🪙 CKS Token
 </div>
 
-<div class="content-grid">
-<div class="card">
-<div style="text-align:center;padding:32px 20px;">
-<div style="font-size:56px;margin-bottom:16px;">💎</div>
-<div style="font-size:20px;font-weight:800;color:#6a3df5;margin-bottom:8px;">CatKitSune Token (CKS)</div>
-<div style="font-size:13px;color:#6b7280;line-height:1.6;max-width:600px;margin:0 auto;">
-The CKS token powers the entire CatKitSune ecosystem, providing utility, governance, and rewards for our community members.
-</div>
+<!-- Token Info -->
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Token name: CKS?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
+Yes, the token symbol is CKS (CatKitSune)
 </div>
 </div>
 
-<div class="quests-section">
-<div class="card">
-<div class="card-title"><span class="dot"></span> Token Information</div>
-<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px;">
-
-<div style="padding:16px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:10px;text-align:center;">
-<div style="font-size:11px;color:#0369a1;font-weight:600;margin-bottom:4px;">TOKEN NAME</div>
-<div style="font-size:16px;font-weight:700;color:#111827;">CatKitSune</div>
-</div>
-
-<div style="padding:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:10px;text-align:center;">
-<div style="font-size:11px;color:#15803d;font-weight:600;margin-bottom:4px;">SYMBOL</div>
-<div style="font-size:16px;font-weight:700;color:#111827;">CKS</div>
-</div>
-
-<div style="padding:16px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:10px;text-align:center;">
-<div style="font-size:11px;color:#7c3aed;font-weight:600;margin-bottom:4px;">TOTAL SUPPLY</div>
-<div style="font-size:16px;font-weight:700;color:#111827;">TBA</div>
-</div>
-
-<div style="padding:16px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border-radius:10px;text-align:center;">
-<div style="font-size:11px;color:#c2410c;font-weight:600;margin-bottom:4px;">NETWORK</div>
-<div style="font-size:16px;font-weight:700;color:#111827;">Hyperliquid</div>
-</div>
-
-</div>
-
-<div style="margin-top:16px;padding:14px;background:#fef3c7;border-radius:10px;border-left:3px solid #f59e0b;">
-<div style="font-weight:700;font-size:12px;color:#92400e;margin-bottom:4px;">📍 CONTRACT ADDRESS</div>
-<div style="font-size:12px;color:#78350f;font-family:monospace;word-break:break-all;">To be announced</div>
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Total supply?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
+To be announced
 </div>
 </div>
 
-<div class="card">
-<div class="card-title"><span class="dot"></span> Tokenomics</div>
-<div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
-
-<div style="padding:12px;background:#f9fafb;border-radius:8px;display:flex;justify-content:space-between;align-items:center;">
-<div style="font-size:13px;font-weight:600;color:#334155;">Community & Airdrop</div>
-<div style="font-size:14px;font-weight:700;color:#6a3df5;">TBA%</div>
-</div>
-
-<div style="padding:12px;background:#f9fafb;border-radius:8px;display:flex;justify-content:space-between;align-items:center;">
-<div style="font-size:13px;font-weight:600;color:#334155;">Liquidity</div>
-<div style="font-size:14px;font-weight:700;color:#22c55e;">TBA%</div>
-</div>
-
-<div style="padding:12px;background:#f9fafb;border-radius:8px;display:flex;justify-content:space-between;align-items:center;">
-<div style="font-size:13px;font-weight:600;color:#334155;">Team & Development</div>
-<div style="font-size:14px;font-weight:700;color:#f59e0b;">TBA%</div>
-</div>
-
-<div style="padding:12px;background:#f9fafb;border-radius:8px;display:flex;justify-content:space-between;align-items:center;">
-<div style="font-size:13px;font-weight:600;color:#334155;">Marketing & Partnerships</div>
-<div style="font-size:14px;font-weight:700;color:#ef4444;">TBA%</div>
-</div>
-
-</div>
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Tokenomics?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
+• Community & Airdrop: TBA%<br>
+• Liquidity: TBA%<br>
+• Team & Development: TBA%<br>
+• Marketing & Partnerships: TBA%
 </div>
 </div>
 
-<div class="card">
-<div class="card-title"><span class="dot"></span> Utility & Use Cases</div>
-<div class="mission-list">
-
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">🎮</div>
-<div>
-<div class="mission-text-title">Ecosystem Access</div>
-<div class="mission-text-sub">Use CKS for platform features and services</div>
-</div>
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Utility (what can it be used for)?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;">
+• Ecosystem access and platform features<br>
+• Governance and voting rights<br>
+• Staking rewards<br>
+• NFT benefits and exclusive perks
 </div>
 </div>
 
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">🗳️</div>
-<div>
-<div class="mission-text-title">Governance</div>
-<div class="mission-text-sub">Vote on important platform decisions</div>
-</div>
+<div style="margin-bottom:32px;">
+<div style="font-size:16px;font-weight:700;color:#6a3df5;margin-bottom:16px;">Contract address?</div>
+<div style="font-size:13px;color:#334155;line-height:1.6;font-family:monospace;">
+To be announced
 </div>
 </div>
 
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">💰</div>
-<div>
-<div class="mission-text-title">Staking Rewards</div>
-<div class="mission-text-sub">Earn passive income by staking CKS</div>
-</div>
-</div>
-</div>
-
-<div class="mission-item">
-<div class="mission-left">
-<div style="font-size:24px;">🎁</div>
-<div>
-<div class="mission-text-title">NFT Benefits</div>
-<div class="mission-text-sub">Exclusive perks for CKS holders</div>
-</div>
-</div>
-</div>
-
-</div>
-</div>
-
-<div class="card">
-<div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:28px 24px;text-align:center;color:white;">
-<div style="font-size:20px;font-weight:700;margin-bottom:12px;">🚀 Token Launch Soon</div>
-<div style="font-size:14px;opacity:0.95;margin-bottom:20px;line-height:1.6;">
-More detailed information about the CKS token will be announced soon. Stay connected with our community for updates!
-</div>
-<div style="font-size:12px;opacity:0.8;">
+<!-- Token Launch -->
+<div style="text-align:center;padding:32px 20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:16px;color:white;">
+<div style="font-size:48px;margin-bottom:12px;">🚀</div>
+<div style="font-size:20px;font-weight:700;margin-bottom:8px;">Token Launch Soon</div>
+<div style="font-size:14px;opacity:0.95;line-height:1.6;max-width:600px;margin:0 auto;">
 Complete quests now to maximize your airdrop allocation!
 </div>
 </div>
-</div>
+
 </div>
 </main>
 
-</div>
+</div><!-- /views-container -->
+
+</div><!-- /app -->
 
 <script>
 let walletConnected = false;
