@@ -554,10 +554,10 @@ Loading latest tweet...
 </div>
 <!-- Actions -->
 <div style="display:flex;gap:8px;">
-<a href="https://x.com/GborSzakl1" target="_blank" style="flex:1;padding:10px;background:#1da1f2;color:white;text-decoration:none;border-radius:12px;font-size:12px;font-weight:600;text-align:center;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;border:none;" onmouseover="this.style.background='#1a8cd8';this.style.transform='scale(1.03)'" onmouseout="this.style.background='#1da1f2';this.style.transform='scale(1)'">
+<button id="shareBtn1" onclick="handleShare(1)" style="flex:1;padding:10px;background:#1da1f2;color:white;border:none;border-radius:12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
 <span style="font-size:14px;">🔁</span> Share
-</a>
-<button onclick="verifyTwitterShare(1)" style="flex:1;padding:10px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:white;border:none;border-radius:12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:4px;" onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 4px 12px rgba(16,185,129,0.3)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">
+</button>
+<button id="verifyBtn1" onclick="handleVerify(1)" disabled style="flex:1;padding:10px;background:#9ca3af;color:white;border:none;border-radius:12px;font-size:12px;font-weight:600;cursor:not-allowed;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:4px;opacity:0.5;">
 <span style="font-size:14px;">✓</span> Verify
 </button>
 </div>
@@ -585,10 +585,10 @@ Loading latest tweet...
 </div>
 <!-- Actions -->
 <div style="display:flex;gap:8px;">
-<a href="https://x.com/MariannCso1714" target="_blank" style="flex:1;padding:10px;background:#1da1f2;color:white;text-decoration:none;border-radius:12px;font-size:12px;font-weight:600;text-align:center;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;border:none;" onmouseover="this.style.background='#1a8cd8';this.style.transform='scale(1.03)'" onmouseout="this.style.background='#1da1f2';this.style.transform='scale(1)'">
+<button id="shareBtn2" onclick="handleShare(2)" style="flex:1;padding:10px;background:#1da1f2;color:white;border:none;border-radius:12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
 <span style="font-size:14px;">🔁</span> Share
-</a>
-<button onclick="verifyTwitterShare(2)" style="flex:1;padding:10px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:white;border:none;border-radius:12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:4px;" onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 4px 12px rgba(16,185,129,0.3)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">
+</button>
+<button id="verifyBtn2" onclick="handleVerify(2)" disabled style="flex:1;padding:10px;background:#9ca3af;color:white;border:none;border-radius:12px;font-size:12px;font-weight:600;cursor:not-allowed;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:4px;opacity:0.5;">
 <span style="font-size:14px;">✓</span> Verify
 </button>
 </div>
@@ -1661,32 +1661,118 @@ function showNotification(message) {
   setTimeout(() => notification.remove(), 3000);
 }
 
-// Twitter Share Verification
-function verifyTwitterShare(tweetNumber) {
-  // Check if already verified
-  const verifyKey = `twitter_share_${tweetNumber}_verified`;
-  if (sessionStorage.getItem(verifyKey)) {
+// Twitter Share & Verify System
+// MANUAL LINK UPDATE: Change these URLs daily
+const TWITTER_LINKS = {
+  1: 'https://x.com/GborSzakl1/status/CHANGE_THIS_DAILY',
+  2: 'https://x.com/MariannCso1714/status/CHANGE_THIS_DAILY'
+};
+
+function handleShare(tweetNumber) {
+  const shareBtn = document.getElementById(`shareBtn${tweetNumber}`);
+  const verifyBtn = document.getElementById(`verifyBtn${tweetNumber}`);
+  
+  // Open Twitter link
+  window.open(TWITTER_LINKS[tweetNumber], '_blank');
+  
+  // Mark as shared (enable Verify button)
+  sessionStorage.setItem(`twitter_${tweetNumber}_shared`, 'true');
+  
+  // Update Share button to green "Shared"
+  shareBtn.style.background = '#10b981';
+  shareBtn.innerHTML = '<span style="font-size:14px;">✅</span> Shared';
+  shareBtn.disabled = true;
+  shareBtn.style.cursor = 'not-allowed';
+  shareBtn.style.opacity = '0.8';
+  
+  // Enable Verify button
+  verifyBtn.disabled = false;
+  verifyBtn.style.background = 'linear-gradient(135deg,#10b981 0%,#059669 100%)';
+  verifyBtn.style.cursor = 'pointer';
+  verifyBtn.style.opacity = '1';
+  
+  showNotification('🔁 Tweet opened! Now click Verify to earn +1 EP');
+  console.log(`✅ Tweet #${tweetNumber} shared, Verify button enabled`);
+}
+
+function handleVerify(tweetNumber) {
+  const verifyBtn = document.getElementById(`verifyBtn${tweetNumber}`);
+  
+  // Check if already verified for this link
+  const linkHash = TWITTER_LINKS[tweetNumber];
+  const verifyKey = `twitter_verified_${linkHash}`;
+  
+  if (localStorage.getItem(verifyKey)) {
     showNotification('⚠️ You already verified this tweet!');
     return;
   }
   
-  // TODO: In production, verify with Twitter API
-  // For now, trust-based system
+  // Check if shared first
+  if (!sessionStorage.getItem(`twitter_${tweetNumber}_shared`)) {
+    showNotification('⚠️ Click Share first!');
+    return;
+  }
   
-  // Mark as verified
-  sessionStorage.setItem(verifyKey, 'true');
-  
-  // Award point
+  // Award +1 EP
   totalPoints += 1;
   completedCount += 1;
   
   document.getElementById('totalPoints').textContent = totalPoints;
   document.getElementById('completedQuests').textContent = completedCount;
   
-  showNotification(`🎉 +1 EP for sharing Tweet #${tweetNumber}!`);
+  // Mark as verified (link-based, not tweet number)
+  localStorage.setItem(verifyKey, 'true');
   
-  console.log(`✅ Twitter share #${tweetNumber} verified`);
+  // Update Verify button to green "Verified"
+  verifyBtn.innerHTML = '<span style="font-size:14px;">✅</span> Verified';
+  verifyBtn.disabled = true;
+  verifyBtn.style.cursor = 'not-allowed';
+  verifyBtn.style.opacity = '0.8';
+  
+  showNotification(`🎉 +1 EP earned! Thanks for sharing Tweet #${tweetNumber}!`);
+  console.log(`✅ Tweet #${tweetNumber} verified, +1 EP awarded`);
 }
+
+// Check button states on page load
+function checkTwitterButtonStates() {
+  [1, 2].forEach(tweetNumber => {
+    const linkHash = TWITTER_LINKS[tweetNumber];
+    const verifyKey = `twitter_verified_${linkHash}`;
+    const shareBtn = document.getElementById(`shareBtn${tweetNumber}`);
+    const verifyBtn = document.getElementById(`verifyBtn${tweetNumber}`);
+    
+    if (!shareBtn || !verifyBtn) return;
+    
+    // Check if already verified this link
+    if (localStorage.getItem(verifyKey)) {
+      // Already verified - both buttons green and disabled
+      shareBtn.style.background = '#10b981';
+      shareBtn.innerHTML = '<span style="font-size:14px;">✅</span> Shared';
+      shareBtn.disabled = true;
+      shareBtn.style.cursor = 'not-allowed';
+      shareBtn.style.opacity = '0.8';
+      
+      verifyBtn.style.background = '#10b981';
+      verifyBtn.innerHTML = '<span style="font-size:14px;">✅</span> Verified';
+      verifyBtn.disabled = true;
+      verifyBtn.style.cursor = 'not-allowed';
+      verifyBtn.style.opacity = '0.8';
+    } else if (sessionStorage.getItem(`twitter_${tweetNumber}_shared`)) {
+      // Shared but not verified yet - Share green, Verify active
+      shareBtn.style.background = '#10b981';
+      shareBtn.innerHTML = '<span style="font-size:14px;">✅</span> Shared';
+      shareBtn.disabled = true;
+      shareBtn.style.cursor = 'not-allowed';
+      shareBtn.style.opacity = '0.8';
+      
+      verifyBtn.disabled = false;
+      verifyBtn.style.background = 'linear-gradient(135deg,#10b981 0%,#059669 100%)';
+      verifyBtn.style.cursor = 'pointer';
+      verifyBtn.style.opacity = '1';
+    }
+  });
+}
+
 
 // LEADERBOARD
 const baseNames = [
@@ -2164,6 +2250,7 @@ window.onload = function() {
   generateQuestsLeaderboard();
   checkReferralCode();
   initTwitterLoader(); // Initialize Twitter loader
+  checkTwitterButtonStates(); // Check Twitter Share/Verify button states
   
   const savedWallet = sessionStorage.getItem('wallet_address');
   if (savedWallet && typeof window.ethereum !== 'undefined') {
