@@ -83,15 +83,11 @@
     main { flex: 1; padding: 0 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
 
     .top-nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #faf8ff;
-      padding: 16px 0;
+      margin-top: 20px;
+      margin-bottom: 20px;
       display: flex;
       justify-content: center;
       gap: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .top-nav-btn {
@@ -473,14 +469,6 @@ Login with Twitter
 </div>
 </header>
 
-<div class="top-nav">
-<button class="top-nav-btn active" onclick="showView(event, 'quests')">🎮</button>
-<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
-<button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
-<button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
-<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
-</div>
-
 <div class="views-container">
 
 <main class="view active" id="view-quests">
@@ -493,6 +481,14 @@ Login with Twitter
 <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="completedQuests">0</div></div>
 <div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">#TBD</div></div>
 </div>
+</div>
+
+<div class="top-nav">
+<button class="top-nav-btn active" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
+<button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
+<button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -884,6 +880,14 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 <div class="hero-sub">Our journey and future plans</div>
 </div>
 
+<div class="top-nav">
+<button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn active" onclick="showView(event, 'roadmap')">🗺️</button>
+<button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
+<button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
+</div>
+
 <div class="content-grid">
 <div class="card">
 <div class="card-title"><span class="dot"></span> Past Milestones</div>
@@ -961,6 +965,14 @@ More details coming soon. Join our community to stay updated on the latest devel
 <div class="hero-card">
 <div class="hero-title">🪂 CKS Token Airdrop</div>
 <div class="hero-sub">Earn rewards for your participation</div>
+</div>
+
+<div class="top-nav">
+<button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
+<button class="top-nav-btn active" onclick="showView(event, 'airdrop')">🪂</button>
+<button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -1066,6 +1078,14 @@ Get ready for the CKS token airdrop! Complete quests, hold NFTs, and participate
 <div class="hero-card">
 <div class="hero-title">🪙 CKS Token</div>
 <div class="hero-sub">The native token of the CatKitSune ecosystem</div>
+</div>
+
+<div class="top-nav">
+<button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
+<button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
+<button class="top-nav-btn active" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -1206,6 +1226,14 @@ Complete quests now to maximize your airdrop allocation!
 <div class="hero-card">
 <div class="hero-title">💎 NFT Staking</div>
 <div class="hero-sub">Stake your CatKitSune NFTs and earn rewards</div>
+</div>
+
+<div class="top-nav">
+<button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
+<button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
+<button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn active" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -1418,24 +1446,10 @@ let completedCount = 0;
 let nftPointsEarned = 0;
 
 function showView(event, viewName) {
-  console.log('🔄 Switching to view:', viewName);
-  
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
-  
-  const targetView = document.getElementById('view-' + viewName);
-  console.log('🎯 Target view:', targetView);
-  
-  if (targetView) {
-    targetView.classList.add('active');
-    console.log('✅ View activated:', viewName);
-  } else {
-    console.error('❌ View not found:', 'view-' + viewName);
-  }
-  
-  if (event && event.target) {
-    event.target.classList.add('active');
-  }
+  document.getElementById('view-' + viewName).classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
   
   // Scroll to top when switching views
   window.scrollTo({ top: 0, behavior: 'smooth' });
