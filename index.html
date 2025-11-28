@@ -1478,6 +1478,8 @@ async function connectWallet() {
     walletConnected = true;
     updateWalletButton();
     updateReferralLink();
+    loadUserPoints(); // Load saved points for this wallet
+    checkTwitterButtonStates(); // Update Twitter button states
     showNotification('✅ Wallet connected!');
     
     console.log('✅ Wallet connected:', walletAddress);
@@ -1594,6 +1596,8 @@ function completeQuest(element, points) {
   document.getElementById('totalPoints').textContent = totalPoints;
   document.getElementById('completedQuests').textContent = completedCount;
   
+  saveUserPoints(); // Save points to localStorage
+  
   showNotification(`+${points} EP earned! 🎉`);
 }
 
@@ -1669,6 +1673,12 @@ const TWITTER_LINKS = {
 };
 
 function handleShare(tweetNumber) {
+  // Check if wallet is connected
+  if (!walletConnected || !walletAddress) {
+    showNotification('⚠️ Please connect your wallet first!');
+    return;
+  }
+  
   const shareBtn = document.getElementById(`shareBtn${tweetNumber}`);
   const verifyBtn = document.getElementById(`verifyBtn${tweetNumber}`);
   
@@ -1696,11 +1706,17 @@ function handleShare(tweetNumber) {
 }
 
 function handleVerify(tweetNumber) {
+  // Check if wallet is connected
+  if (!walletConnected || !walletAddress) {
+    showNotification('⚠️ Please connect your wallet first!');
+    return;
+  }
+  
   const verifyBtn = document.getElementById(`verifyBtn${tweetNumber}`);
   
-  // Check if already verified for this link
+  // Check if already verified for this link (wallet-specific)
   const linkHash = TWITTER_LINKS[tweetNumber];
-  const verifyKey = `twitter_verified_${linkHash}`;
+  const verifyKey = `twitter_verified_${walletAddress}_${linkHash}`;
   
   if (localStorage.getItem(verifyKey)) {
     showNotification('⚠️ You already verified this tweet!');
@@ -1720,7 +1736,10 @@ function handleVerify(tweetNumber) {
   document.getElementById('totalPoints').textContent = totalPoints;
   document.getElementById('completedQuests').textContent = completedCount;
   
-  // Mark as verified (link-based, not tweet number)
+  // Save points to localStorage (wallet-specific)
+  saveUserPoints();
+  
+  // Mark as verified (link-based + wallet-specific)
   localStorage.setItem(verifyKey, 'true');
   
   // Update Verify button to green "Verified"
@@ -1730,35 +1749,91 @@ function handleVerify(tweetNumber) {
   verifyBtn.style.opacity = '0.8';
   
   showNotification(`🎉 +1 EP earned! Thanks for sharing Tweet #${tweetNumber}!`);
-  console.log(`✅ Tweet #${tweetNumber} verified, +1 EP awarded`);
+  console.log(`✅ Tweet #${tweetNumber} verified, +1 EP awarded to ${walletAddress}`);
+}
+
+// Save user points to localStorage (wallet-specific)
+function saveUserPoints() {
+  if (!walletAddress) return;
+  
+  const userDataKey = `user_points_${walletAddress}`;
+  const userData = {
+    address: walletAddress,
+    totalPoints: totalPoints,
+    completedQuests: completedCount,
+    lastUpdated: Date.now()
+  };
+  
+  localStorage.setItem(userDataKey, JSON.stringify(userData));
+  console.log(`💾 Points saved for ${walletAddress}: ${totalPoints} EP`);
+}
+
+// Load user points from localStorage (wallet-specific)
+function loadUserPoints() {
+  if (!walletAddress) return;
+  
+  const userDataKey = `user_points_${walletAddress}`;
+  const savedData = localStorage.getItem(userDataKey);
+  
+  if (savedData) {
+    try {
+      const userData = JSON.parse(savedData);
+      totalPoints = userData.totalPoints || 0;
+      completedCount = userData.completedQuests || 0;
+      
+      document.getElementById('totalPoints').textContent = totalPoints;
+      document.getElementById('completedQuests').textContent = completedCount;
+      
+      console.log(`📂 Points loaded for ${walletAddress}: ${totalPoints} EP`);
+    } catch (e) {
+      console.error('Error loading user points:', e);
+    }
+  }
 }
 
 // Check button states on page load
 function checkTwitterButtonStates() {
   [1, 2].forEach(tweetNumber => {
     const linkHash = TWITTER_LINKS[tweetNumber];
-    const verifyKey = `twitter_verified_${linkHash}`;
     const shareBtn = document.getElementById(`shareBtn${tweetNumber}`);
     const verifyBtn = document.getElementById(`verifyBtn${tweetNumber}`);
     
     if (!shareBtn || !verifyBtn) return;
     
-    // Check if already verified this link
-    if (localStorage.getItem(verifyKey)) {
-      // Already verified - both buttons green and disabled
-      shareBtn.style.background = '#10b981';
-      shareBtn.innerHTML = '<span style="font-size:14px;">✅</span> Shared';
-      shareBtn.disabled = true;
-      shareBtn.style.cursor = 'not-allowed';
-      shareBtn.style.opacity = '0.8';
+    // If wallet is connected, check wallet-specific verification
+    if (walletConnected && walletAddress) {
+      const verifyKey = `twitter_verified_${walletAddress}_${linkHash}`;
       
-      verifyBtn.style.background = '#10b981';
-      verifyBtn.innerHTML = '<span style="font-size:14px;">✅</span> Verified';
-      verifyBtn.disabled = true;
-      verifyBtn.style.cursor = 'not-allowed';
-      verifyBtn.style.opacity = '0.8';
-    } else if (sessionStorage.getItem(`twitter_${tweetNumber}_shared`)) {
-      // Shared but not verified yet - Share green, Verify active
+      // Check if already verified this link
+      if (localStorage.getItem(verifyKey)) {
+        // Already verified - both buttons green and disabled
+        shareBtn.style.background = '#10b981';
+        shareBtn.innerHTML = '<span style="font-size:14px;">✅</span> Shared';
+        shareBtn.disabled = true;
+        shareBtn.style.cursor = 'not-allowed';
+        shareBtn.style.opacity = '0.8';
+        
+        verifyBtn.style.background = '#10b981';
+        verifyBtn.innerHTML = '<span style="font-size:14px;">✅</span> Verified';
+        verifyBtn.disabled = true;
+        verifyBtn.style.cursor = 'not-allowed';
+        verifyBtn.style.opacity = '0.8';
+      } else if (sessionStorage.getItem(`twitter_${tweetNumber}_shared`)) {
+        // Shared but not verified yet - Share green, Verify active
+        shareBtn.style.background = '#10b981';
+        shareBtn.innerHTML = '<span style="font-size:14px;">✅</span> Shared';
+        shareBtn.disabled = true;
+        shareBtn.style.cursor = 'not-allowed';
+        shareBtn.style.opacity = '0.8';
+        
+        verifyBtn.disabled = false;
+        verifyBtn.style.background = 'linear-gradient(135deg,#10b981 0%,#059669 100%)';
+        verifyBtn.style.cursor = 'pointer';
+        verifyBtn.style.opacity = '1';
+      }
+    }
+  });
+}
       shareBtn.style.background = '#10b981';
       shareBtn.innerHTML = '<span style="font-size:14px;">✅</span> Shared';
       shareBtn.disabled = true;
