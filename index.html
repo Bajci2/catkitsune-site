@@ -108,24 +108,24 @@
       border-color: #6a3df5;
     }
 
-    .view { 
-     display: none;
-  width: 100%;
-  position: relative;
-  top: auto;
+  .view { 
+  display: none;
+  position: absolute;
+  top: 0;
   left: 0;
   right: 0;
-    }
-    .view.active { 
-      display: block;
-      position: relative;
-    }
+  width: 100%;
+}
+.view.active { 
+  display: block;
+  position: relative;
+}
 
-    .views-container {
-      position: relative;
-      min-height: 400px;
-      width: 100%;
-    }
+.views-container {
+  position: relative;
+  min-height: 400px;
+  width: 100%;
+}
 
     .hero-card {
       background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
