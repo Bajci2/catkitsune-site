@@ -441,7 +441,8 @@
 
     #view-roadmap,
     #view-airdrop,
-    #view-token {
+    #view-token,
+    #view-staking {
       margin-top: 0 !important;
       padding-top: 0 !important;
     }
@@ -487,6 +488,7 @@ Login with Twitter
 <button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -884,6 +886,7 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 <button class="top-nav-btn active" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -970,6 +973,7 @@ More details coming soon. Join our community to stay updated on the latest devel
 <button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn active" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -1082,6 +1086,7 @@ Get ready for the CKS token airdrop! Complete quests, hold NFTs, and participate
 <button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn active" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
 <div class="content-grid">
@@ -1214,6 +1219,206 @@ Complete quests now to maximize your airdrop allocation!
 </div>
 </div>
 </div>
+</div>
+</main>
+
+<!-- NFT STAKING PAGE -->
+<main class="view" id="view-staking">
+<div class="hero-card">
+<div class="hero-title">💎 NFT Staking</div>
+<div class="hero-sub">Stake your CatKitSune NFTs and earn rewards</div>
+</div>
+
+<div class="top-nav">
+<button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
+<button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
+<button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
+<button class="top-nav-btn active" onclick="showView(event, 'staking')">💎</button>
+</div>
+
+<div class="content-grid">
+
+<!-- Staking Stats -->
+<div class="card">
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+<div style="text-align:center;padding:16px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:12px;">
+<div style="font-size:11px;color:#0369a1;font-weight:600;margin-bottom:4px;">STAKED NFTs</div>
+<div style="font-size:24px;font-weight:700;color:#111827;" id="totalStaked">0</div>
+</div>
+<div style="text-align:center;padding:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;">
+<div style="font-size:11px;color:#15803d;font-weight:600;margin-bottom:4px;">DAILY REWARDS</div>
+<div style="font-size:24px;font-weight:700;color:#111827;" id="dailyRewards">0 CKS</div>
+</div>
+<div style="text-align:center;padding:16px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:12px;">
+<div style="font-size:11px;color:#7c3aed;font-weight:600;margin-bottom:4px;">PENDING REWARDS</div>
+<div style="font-size:24px;font-weight:700;color:#111827;" id="pendingRewards">0 CKS</div>
+</div>
+</div>
+</div>
+
+<!-- CatKitSune Series 1 -->
+<div class="card">
+<div class="card-title"><span class="dot"></span> CatKitSune Series 1</div>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px;">
+<div class="nft-stake-slot" data-series="1" data-slot="1">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="1" data-slot="2">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="1" data-slot="3">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="1" data-slot="4">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="1" data-slot="5">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+</div>
+<div style="margin-top:12px;padding:12px;background:#fef3c7;border-radius:10px;border-left:3px solid #f59e0b;font-size:12px;color:#78350f;">
+<strong>💰 Rewards:</strong> 10 CKS per NFT per day
+</div>
+</div>
+
+<!-- CatKitSune Series 2 -->
+<div class="card">
+<div class="card-title"><span class="dot"></span> CatKitSune Series 2</div>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px;">
+<div class="nft-stake-slot" data-series="2" data-slot="1">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="2" data-slot="2">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="2" data-slot="3">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="2" data-slot="4">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="2" data-slot="5">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+</div>
+<div style="margin-top:12px;padding:12px;background:#e0f2fe;border-radius:10px;border-left:3px solid #0ea5e9;font-size:12px;color:#0c4a6e;">
+<strong>💰 Rewards:</strong> 15 CKS per NFT per day
+</div>
+</div>
+
+<!-- CatKitSune Series 3 -->
+<div class="card">
+<div class="card-title"><span class="dot"></span> CatKitSune Series 3</div>
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px;">
+<div class="nft-stake-slot" data-series="3" data-slot="1">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="3" data-slot="2">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="3" data-slot="3">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="3" data-slot="4">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+<div class="nft-stake-slot" data-series="3" data-slot="5">
+<div style="width:100%;height:120px;border:2px dashed #d4d4d8;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f9fafb;cursor:pointer;transition:all 0.3s;" onmouseover="this.style.borderColor='#6a3df5';this.style.background='#f6ecff'" onmouseout="this.style.borderColor='#d4d4d8';this.style.background='#f9fafb'">
+<div style="text-align:center;">
+<div style="font-size:32px;margin-bottom:4px;">📥</div>
+<div style="font-size:10px;color:#6b7280;font-weight:600;">Empty Slot</div>
+</div>
+</div>
+</div>
+</div>
+<div style="margin-top:12px;padding:12px;background:#f3e8ff;border-radius:10px;border-left:3px solid #a855f7;font-size:12px;color:#581c87;">
+<strong>💰 Rewards:</strong> 20 CKS per NFT per day
+</div>
+</div>
+
+<!-- Claim Rewards Button -->
+<div class="card">
+<div style="text-align:center;padding:24px;">
+<button style="padding:14px 32px;background:linear-gradient(135deg,#6a3df5,#22c55e);color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;box-shadow:0 4px 12px rgba(106,61,245,0.3);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 20px rgba(106,61,245,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(106,61,245,0.3)'">
+🎁 Claim All Rewards
+</button>
+<div style="margin-top:12px;font-size:12px;color:#6b7280;">
+Connect your wallet to stake NFTs and earn rewards
+</div>
+</div>
+</div>
+
 </div>
 </main>
 
