@@ -477,7 +477,7 @@ Login with Twitter
 <div class="hero-sub">Join the community and reach the highest level!</div>
 <div class="stats-row">
 <div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value" id="totalPoints">0</div></div>
-<div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">11</div></div>
+<div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">10</div></div>
 <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="completedQuests">0</div></div>
 <div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">#TBD</div></div>
 </div>
@@ -630,29 +630,6 @@ Loading latest tweet...
 </div>
 </div>
 
-<div style="margin-top:20px;background:linear-gradient(135deg,#f6ecff,#e8f5e9);border:1px solid #e5e7eb;border-radius:12px;padding:20px;">
-<div style="font-size:14px;font-weight:700;color:#6a3df5;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
-🔗 Your Referral Link
-</div>
-<div style="position:relative;">
-<input type="text" id="referralLink" readonly value="https://catkitsune.com/?ref=1" style="width:100%;padding:12px 80px 12px 12px;border-radius:10px;border:1px solid #d4d4ff;font-size:13px;outline:none;background:white;font-family:monospace;transition:all 0.3s ease;" onclick="this.select()" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#d4d4ff';this.style.boxShadow='none'">
-<button onclick="copyReferralLink()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);padding:6px 16px;background:#6a3df5;color:white;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;" onmouseover="this.style.background='#5a2dd5'" onmouseout="this.style.background='#6a3df5'">
-Copy
-</button>
-</div>
-<div style="margin-top:10px;font-size:12px;color:#6b7280;">
-Share your link and earn <strong style="color:#22c55e;">+1 EP</strong> for each referral!
-</div>
-<div id="referralStats" style="margin-top:12px;padding:10px;background:white;border-radius:8px;font-size:12px;display:none;">
-<strong style="color:#6a3df5;">📊 Referral Stats:</strong>
-<div style="margin-top:6px;color:#6b7280;">
-Total referrals: <strong style="color:#22c55e;" id="refCount">0</strong> | 
-Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
-</div>
-</div>
-</div>
-</div>
-
 <div class="quests-section">
 <div class="card">
 <div class="card-title"><span class="dot"></span> Quests</div>
@@ -719,16 +696,6 @@ Points earned: <strong style="color:#6a3df5;" id="refPoints">0 EP</strong>
 </div>
 </div>
 <div class="mission-points">+300 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 1)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Referral Runner</div>
-<div class="mission-text-sub">Refer 1 new user.</div>
-</div>
-</div>
-<div class="mission-points">+1 EP</div>
 </div>
 <div class="mission-item" onclick="completeQuest(this, 300)">
 <div class="mission-left">
@@ -1477,7 +1444,6 @@ async function connectWallet() {
     walletAddress = accounts[0];
     walletConnected = true;
     updateWalletButton();
-    updateReferralLink();
     loadUserPoints(); // Load saved points for this wallet
     loadNFTData(); // Load saved NFT data immediately
     checkTwitterButtonStates(); // Update Twitter button states
@@ -1602,6 +1568,8 @@ function completeQuest(element, points) {
   showNotification(`+${points} EP earned! 🎉`);
 }
 
+// Referral system removed - not needed
+/*
 function copyReferralLink() {
   const input = document.getElementById('referralLink');
   input.select();
@@ -1669,6 +1637,7 @@ function updateReferralStats() {
   // totalPoints = completedCount + refPoints;
   // document.getElementById('totalPoints').textContent = totalPoints;
 }
+*/
 
 function showNotification(message) {
   const notification = document.createElement('div');
@@ -2420,7 +2389,7 @@ window.onload = function() {
   console.log('🚀 CatKitSune loading...');
   loadTwitterUser();
   generateQuestsLeaderboard();
-  checkReferralCode();
+  // checkReferralCode(); // Referral system removed
   initTwitterLoader(); // Initialize Twitter loader
   checkTwitterButtonStates(); // Check Twitter Share/Verify button states
   
@@ -2429,8 +2398,8 @@ window.onload = function() {
     walletAddress = savedWallet;
     walletConnected = true;
     updateWalletButton();
-    updateReferralLink();
-    updateReferralStats();
+    // updateReferralLink(); // Referral system removed
+    // updateReferralStats(); // Referral system removed
     loadNFTData(); // Load saved NFT data on page load
   }
   
