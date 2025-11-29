@@ -1647,8 +1647,9 @@ function updateReferralStats() {
   document.getElementById('refCount').textContent = refCount;
   document.getElementById('refPoints').textContent = refPoints + ' EP';
   
-  totalPoints = (nftPointsEarned || 0) + completedCount + refPoints;
-  document.getElementById('totalPoints').textContent = totalPoints;
+  // Don't include NFT points anymore
+  // totalPoints = completedCount + refPoints;
+  // document.getElementById('totalPoints').textContent = totalPoints;
 }
 
 function showNotification(message) {
@@ -2170,7 +2171,8 @@ async function checkNFTBalances() {
         }
         
         totalNFTs += balanceNum;
-        totalNFTPoints += balanceNum * collection.pointsPerNFT;
+        // NFTs don't earn points anymore
+        // totalNFTPoints += balanceNum * collection.pointsPerNFT;
       } catch (error) {
         console.error(`❌ ${collection.name}:`, error.message);
         
@@ -2185,14 +2187,11 @@ async function checkNFTBalances() {
       }
     }
     
-    nftPointsEarned = totalNFTPoints;
-    totalPoints = nftPointsEarned + completedCount;
-    document.getElementById('totalPoints').textContent = totalPoints;
-    
-    console.log(`✅ Total: ${totalNFTs} NFTs = ${totalNFTPoints} EP`);
+    // NFTs don't earn points anymore - just for display
+    console.log(`✅ Total: ${totalNFTs} NFTs found (no EP awarded)`);
     
     if (totalNFTs > 0) {
-      showNotification(`🎉 ${totalNFTs} NFTs! +${totalNFTPoints} EP`);
+      showNotification(`🎉 ${totalNFTs} NFTs found!`);
     } else {
       showNotification('ℹ️ No NFTs found');
     }
