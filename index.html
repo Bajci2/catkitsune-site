@@ -1401,6 +1401,9 @@ let totalPoints = 0;
 let completedCount = 0;
 let nftPointsEarned = 0;
 
+// ⚠️ QUEST SYSTEM - Set to false until quests go live
+const questsLive = false;
+
 function showView(event, viewName) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -1539,6 +1542,12 @@ async function loadTwitterUser() {
 }
 
 function completeQuest(element, points) {
+  // ⚠️ Check if quests are live
+  if (!questsLive) {
+    showNotification('⚠️ Quests are in testing phase - no points earned yet');
+    return;
+  }
+  
   const checkbox = element.querySelector('.mission-check');
   if (checkbox.classList.contains('completed')) return;
   
