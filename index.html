@@ -1627,7 +1627,7 @@ function updateReferralLink() {
       }
     }
     
-    document.getElementById('referralLink').value = `https://catkitsune.com/?ref=${userId}`;
+    document.getElementById('referralLink').value = `${window.location.origin}${window.location.pathname}?ref=${userId}`;
     document.getElementById('referralStats').style.display = 'block';
     updateReferralStats();
   }
