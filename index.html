@@ -1612,14 +1612,21 @@ function copyReferralLink() {
 
 function updateReferralLink() {
   if (walletAddress) {
-    let userId = sessionStorage.getItem('user_ref_id');
+    // Use wallet address as unique ID for referral (wallet-specific)
+    const userRefKey = `user_ref_id_${walletAddress}`;
+    let userId = localStorage.getItem(userRefKey);
+    
     if (!userId) {
-      userId = Math.floor(Math.random() * 9999) + 1;
-      sessionStorage.setItem('user_ref_id', userId);
+      // Generate unique ID based on wallet address hash
+      const hash = walletAddress.substring(2, 10); // Use part of wallet address
+      userId = parseInt(hash, 16) % 99999 + 1; // Convert to number
+      localStorage.setItem(userRefKey, userId.toString());
+      
       if (!localStorage.getItem(`ref_count_${userId}`)) {
         localStorage.setItem(`ref_count_${userId}`, '0');
       }
     }
+    
     document.getElementById('referralLink').value = `https://catkitsune.com/?ref=${userId}`;
     document.getElementById('referralStats').style.display = 'block';
     updateReferralStats();
@@ -1630,16 +1637,26 @@ function checkReferralCode() {
   const urlParams = new URLSearchParams(window.location.search);
   const refCode = urlParams.get('ref');
   
-  if (refCode && !sessionStorage.getItem('referred_by')) {
-    sessionStorage.setItem('referred_by', refCode);
+  if (refCode && !localStorage.getItem('referred_by')) {
+    localStorage.setItem('referred_by', refCode);
     const currentCount = parseInt(localStorage.getItem(`ref_count_${refCode}`) || '0');
     localStorage.setItem(`ref_count_${refCode}`, (currentCount + 1).toString());
     showNotification(`🎉 Referred by user #${refCode}!`);
+    
+    // Award +1 EP for referral
+    totalPoints += 1;
+    completedCount += 1;
+    document.getElementById('totalPoints').textContent = totalPoints;
+    document.getElementById('completedQuests').textContent = completedCount;
+    saveUserPoints();
   }
 }
 
 function updateReferralStats() {
-  const userId = sessionStorage.getItem('user_ref_id');
+  if (!walletAddress) return;
+  
+  const userRefKey = `user_ref_id_${walletAddress}`;
+  const userId = localStorage.getItem(userRefKey);
   if (!userId) return;
   
   const refCount = parseInt(localStorage.getItem(`ref_count_${userId}`) || '0');
