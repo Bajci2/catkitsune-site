@@ -5,6 +5,11 @@
 <title>CatKitSune – Quests & Swap</title>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1394,6 +1399,38 @@ Connect your wallet to stake NFTs and earn rewards
 </div><!-- /app -->
 
 <script>
+// ==========================================
+// FIREBASE CONFIGURATION
+// ==========================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBm9YORem_caRx_FInbPJwqP7BSs9I",
+  authDomain: "catkitsune-49fda.firebaseapp.com",
+  databaseURL: "https://catkitsune-49fda-default-rtdb.firebaseio.com",
+  projectId: "catkitsune-49fda",
+  storageBucket: "catkitsune-49fda.appspot.com",
+  messagingSenderId: "458357499767",
+  appId: "1:458357499767:web:b74a26aae203b0a1a24a5"
+};
+
+// Initialize Firebase
+let firebaseApp;
+let database;
+let firebaseEnabled = false;
+
+try {
+  firebaseApp = firebase.initializeApp(firebaseConfig);
+  database = firebase.database();
+  firebaseEnabled = true;
+  console.log('🔥 Firebase initialized successfully!');
+} catch (error) {
+  console.warn('⚠️ Firebase initialization error:', error);
+  firebaseEnabled = false;
+}
+
+// ==========================================
+// END FIREBASE CONFIGURATION
+// ==========================================
+
 let walletConnected = false;
 let walletAddress = '';
 let totalPoints = 0;
@@ -1749,15 +1786,64 @@ function saveUserPoints() {
     lastUpdated: Date.now()
   };
   
+  // Save to localStorage (local backup)
   localStorage.setItem(userDataKey, JSON.stringify(userData));
-  console.log(`💾 Points saved for ${walletAddress}: ${totalPoints} EP`);
+  console.log(`💾 Points saved locally for ${walletAddress}: ${totalPoints} EP`);
+  
+  // Save to Firebase (real-time sync)
+  if (firebaseEnabled && database) {
+    const userRef = database.ref('users/' + walletAddress);
+    userRef.set({
+      address: walletAddress,
+      points: totalPoints,
+      completedQuests: completedCount,
+      lastUpdated: Date.now()
+    }).then(() => {
+      console.log(`🔥 Points synced to Firebase: ${totalPoints} EP`);
+    }).catch((error) => {
+      console.error('❌ Firebase sync error:', error);
+    });
+  }
 }
 
 // Load user points from localStorage (wallet-specific)
-function loadUserPoints() {
+async function loadUserPoints() {
   if (!walletAddress) return;
   
   const userDataKey = `user_points_${walletAddress}`;
+  
+  // Try loading from Firebase first
+  if (firebaseEnabled && database) {
+    try {
+      const userRef = database.ref('users/' + walletAddress);
+      const snapshot = await userRef.once('value');
+      
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        totalPoints = userData.points || 0;
+        completedCount = userData.completedQuests || 0;
+        
+        document.getElementById('totalPoints').textContent = totalPoints;
+        document.getElementById('completedQuests').textContent = completedCount;
+        
+        console.log(`🔥 Points loaded from Firebase: ${totalPoints} EP`);
+        
+        // Also save to localStorage as backup
+        localStorage.setItem(userDataKey, JSON.stringify({
+          address: walletAddress,
+          totalPoints: totalPoints,
+          completedQuests: completedCount,
+          lastUpdated: Date.now()
+        }));
+        
+        return;
+      }
+    } catch (error) {
+      console.error('❌ Firebase load error:', error);
+    }
+  }
+  
+  // Fallback: Load from localStorage
   const savedData = localStorage.getItem(userDataKey);
   
   if (savedData) {
@@ -1769,7 +1855,7 @@ function loadUserPoints() {
       document.getElementById('totalPoints').textContent = totalPoints;
       document.getElementById('completedQuests').textContent = completedCount;
       
-      console.log(`📂 Points loaded for ${walletAddress}: ${totalPoints} EP`);
+      console.log(`📂 Points loaded from localStorage: ${totalPoints} EP`);
     } catch (e) {
       console.error('Error loading user points:', e);
     }
@@ -1821,30 +1907,91 @@ function checkTwitterButtonStates() {
 }
 
 
-// LEADERBOARD
-const baseNames = [
-  "Emma Johnson", "Liam Smith", "Olivia Williams", "Noah Brown", "Ava Jones",
-  "Ethan Garcia", "Sophia Martinez", "Mason Rodriguez", "Isabella Lee", "Lucas Anderson",
-  "Mia Taylor", "Oliver Thomas", "Charlotte Moore", "Elijah Jackson", "Amelia White",
-  "James Harris", "Harper Clark", "Benjamin Lewis", "Evelyn Walker", "Logan Hall",
-  "Abigail Allen", "Alexander Young", "Emily King", "Michael Wright", "Elizabeth Lopez",
-  "Daniel Hill", "Sofia Scott", "Matthew Green", "Avery Adams", "Henry Baker"
-];
+// LEADERBOARD - Real-time Firebase Integration
+let leaderboardData = [];
+let filteredQuestsData = [];
 
-function generateRandomPlayers() {
-  const players = [];
-  for (let i = 0; i < 500; i++) {
-    const name = baseNames[i % baseNames.length] + (i >= 30 ? ` ${Math.floor(i/30)}` : '');
-    const randomAddress = '0x' + Math.random().toString(16).substring(2, 15);
-    const points = Math.floor(Math.random() * 50000) + 20000;
-    const avatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
-    players.push({ name, address: randomAddress, points, avatar });
+// Load leaderboard from Firebase
+async function loadLeaderboardFromFirebase() {
+  if (!firebaseEnabled || !database) {
+    console.warn('⚠️ Firebase not enabled, using empty leaderboard');
+    leaderboardData = [];
+    filteredQuestsData = [];
+    generateQuestsLeaderboard();
+    return;
   }
-  return players.sort((a, b) => b.points - a.points);
+  
+  try {
+    const usersRef = database.ref('users');
+    const snapshot = await usersRef.once('value');
+    
+    if (snapshot.exists()) {
+      const users = snapshot.val();
+      leaderboardData = [];
+      
+      // Convert Firebase object to array
+      Object.keys(users).forEach(walletAddr => {
+        const user = users[walletAddr];
+        leaderboardData.push({
+          name: walletAddr.substring(0, 6) + '...' + walletAddr.substring(walletAddr.length - 4),
+          address: walletAddr,
+          points: user.points || 0,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${walletAddr}`
+        });
+      });
+      
+      // Sort by points
+      leaderboardData.sort((a, b) => b.points - a.points);
+      filteredQuestsData = [...leaderboardData];
+      
+      console.log(`🔥 Loaded ${leaderboardData.length} users from Firebase`);
+    } else {
+      console.log('📊 No users in Firebase yet');
+      leaderboardData = [];
+      filteredQuestsData = [];
+    }
+    
+    generateQuestsLeaderboard();
+    
+  } catch (error) {
+    console.error('❌ Error loading leaderboard from Firebase:', error);
+    leaderboardData = [];
+    filteredQuestsData = [];
+    generateQuestsLeaderboard();
+  }
 }
 
-const leaderboardData = generateRandomPlayers();
-let filteredQuestsData = [...leaderboardData];
+// Listen for real-time updates to leaderboard
+function setupLeaderboardListener() {
+  if (!firebaseEnabled || !database) return;
+  
+  const usersRef = database.ref('users');
+  
+  // Listen for any changes
+  usersRef.on('value', (snapshot) => {
+    if (snapshot.exists()) {
+      const users = snapshot.val();
+      leaderboardData = [];
+      
+      Object.keys(users).forEach(walletAddr => {
+        const user = users[walletAddr];
+        leaderboardData.push({
+          name: walletAddr.substring(0, 6) + '...' + walletAddr.substring(walletAddr.length - 4),
+          address: walletAddr,
+          points: user.points || 0,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${walletAddr}`
+        });
+      });
+      
+      leaderboardData.sort((a, b) => b.points - a.points);
+      filteredQuestsData = [...leaderboardData];
+      
+      generateQuestsLeaderboard();
+      
+      console.log('🔄 Leaderboard updated in real-time');
+    }
+  });
+}
 
 function generateQuestsLeaderboard() {
   const container = document.getElementById('questsLeaderboardRows');
@@ -1857,6 +2004,17 @@ function generateQuestsLeaderboard() {
   filteredQuestsData.sort((a, b) => b.points - a.points);
   
   console.log('✅ Generating leaderboard:', filteredQuestsData.length, 'players');
+  
+  if (filteredQuestsData.length === 0) {
+    container.innerHTML = `
+      <div style="padding:40px 20px;text-align:center;color:#6b7280;">
+        <div style="font-size:48px;margin-bottom:12px;">📊</div>
+        <div style="font-size:16px;font-weight:600;margin-bottom:8px;">No players yet!</div>
+        <div style="font-size:14px;">Be the first to earn points and appear on the leaderboard!</div>
+      </div>
+    `;
+    return;
+  }
   
   container.innerHTML = filteredQuestsData.map((player, index) => {
     const rank = index + 1;
@@ -2385,7 +2543,15 @@ function initTwitterLoader() {
 window.onload = function() {
   console.log('🚀 CatKitSune loading...');
   loadTwitterUser();
-  generateQuestsLeaderboard();
+  
+  // Load leaderboard from Firebase
+  if (firebaseEnabled) {
+    loadLeaderboardFromFirebase();
+    setupLeaderboardListener(); // Real-time updates
+  } else {
+    generateQuestsLeaderboard(); // Show empty state
+  }
+  
   // checkReferralCode(); // Referral system removed
   initTwitterLoader(); // Initialize Twitter loader
   checkTwitterButtonStates(); // Check Twitter Share/Verify button states
@@ -2397,6 +2563,7 @@ window.onload = function() {
     updateWalletButton();
     // updateReferralLink(); // Referral system removed
     // updateReferralStats(); // Referral system removed
+    loadUserPoints(); // Load saved points (async)
     loadNFTData(); // Load saved NFT data on page load
   }
   
