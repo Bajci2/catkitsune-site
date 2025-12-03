@@ -14,11 +14,11 @@
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg-main: #f6ecff;
+      --bg-main: #f0fdf9;
       --bg-card: #ffffff;
-      --primary: #6a3df5;
-      --primary-soft: #e2d6ff;
-      --accent-green: #28c76f;
+      --primary: #14b8a6;
+      --primary-soft: #ccfbf1;
+      --accent-green: #10b981;
       --border: #e5e7eb;
       --text-main: #111827;
       --text-muted: #6b7280;
@@ -56,7 +56,7 @@
       width: 24px;
       height: 24px;
       display: inline-block;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="65" cy="50" rx="23" ry="33" fill="%238b5cf6"/><ellipse cx="135" cy="50" rx="23" ry="33" fill="%238b5cf6"/><ellipse cx="35" cy="80" rx="20" ry="30" fill="%238b5cf6" transform="rotate(-25 35 80)"/><ellipse cx="165" cy="80" rx="20" ry="30" fill="%238b5cf6" transform="rotate(25 165 80)"/><ellipse cx="100" cy="130" rx="55" ry="50" fill="%238b5cf6"/></svg>');
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="65" cy="50" rx="23" ry="33" fill="%2314b8a6"/><ellipse cx="135" cy="50" rx="23" ry="33" fill="%2314b8a6"/><ellipse cx="35" cy="80" rx="20" ry="30" fill="%2314b8a6" transform="rotate(-25 35 80)"/><ellipse cx="165" cy="80" rx="20" ry="30" fill="%2314b8a6" transform="rotate(25 165 80)"/><ellipse cx="100" cy="130" rx="55" ry="50" fill="%2314b8a6"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -82,7 +82,7 @@
 
     .avatar {
       width: 26px; height: 26px; border-radius: 50%;
-      background: linear-gradient(135deg, #6a3df5, #22c55e);
+      background: linear-gradient(135deg, #14b8a6, #10b981);
     }
 
     main { flex: 1; padding: 0 12px 80px; max-width: 1200px; margin: 0 auto; width: 100%; }
@@ -108,9 +108,9 @@
     .top-nav-btn:hover { background: #f3f4f6; }
 
     .top-nav-btn.active {
-      background: #6a3df5;
+      background: #14b8a6;
       color: white;
-      border-color: #6a3df5;
+      border-color: #14b8a6;
     }
 
 .view {
@@ -127,10 +127,10 @@
 }
 
     .hero-card {
-      background: linear-gradient(180deg, #f6ecff 0%, #efe3ff 100%);
-      border-radius: 20px;
+      background: linear-gradient(180deg, #f0fdf9 0%, #ccfbf1 100%);
+      border-radius: 24px;
       padding: 16px 14px 14px;
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       margin-bottom: 0;
       text-align: center;
       transition: all 0.3s ease;
@@ -145,7 +145,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(16, 185, 129, 0.1));
       opacity: 0;
       transition: opacity 0.3s ease;
       z-index: 0;
@@ -161,7 +161,7 @@
     }
 
     .hero-card:hover {
-      box-shadow: 0 12px 40px rgba(106, 61, 245, 0.2);
+      box-shadow: 0 12px 40px rgba(20, 184, 166, 0.2);
       transform: translateY(-2px);
     }
 
@@ -176,7 +176,7 @@
 
     .stat-card {
       background: #fff;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 8px 6px;
       border: 1px solid var(--primary-soft);
       transition: all 0.3s ease;
@@ -192,7 +192,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(16, 185, 129, 0.1));
       opacity: 0;
       transition: opacity 0.3s ease;
       z-index: 0;
@@ -209,7 +209,7 @@
 
     .stat-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(106, 61, 245, 0.15);
+      box-shadow: 0 6px 16px rgba(20, 184, 166, 0.15);
       border-color: var(--primary);
       background: white;
     }
@@ -231,9 +231,9 @@
 
     .card {
       background: var(--bg-card);
-      border-radius: var(--radius-xl);
+      border-radius: 24px;
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       padding: 18px 16px;
       transition: all 0.3s ease;
       position: relative;
@@ -247,7 +247,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(106, 61, 245, 0.05), rgba(34, 197, 94, 0.05));
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(16, 185, 129, 0.05));
       opacity: 0;
       transition: opacity 0.3s ease;
       z-index: 0;
@@ -264,7 +264,7 @@
     }
 
     .card:hover {
-      box-shadow: 0 12px 40px rgba(106, 61, 245, 0.15);
+      box-shadow: 0 12px 40px rgba(20, 184, 166, 0.15);
       transform: translateY(-2px);
       border-color: var(--primary-soft);
     }
@@ -1698,8 +1698,8 @@ function showNotification(message) {
 // Twitter Share & Verify System
 // MANUAL LINK UPDATE: Change these URLs daily
 const TWITTER_LINKS = {
-  1: 'https://x.com/GborSzakl1/status/1996184909321277468',
-  2: 'https://x.com/GborSzakl1/status/1996230207078822273'
+  1: 'https://x.com/GborSzakl1/status/1994780642819625253',
+  2: 'https://x.com/GborSzakl1/status/1994735343430438912'
 };
 
 function handleShare(tweetNumber) {
