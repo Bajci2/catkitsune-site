@@ -269,6 +269,16 @@
       border-color: var(--primary-soft);
     }
 
+    /* Roadmap phase animations */
+    .card div[style*="background:linear-gradient"] {
+      transition: all 0.3s ease;
+    }
+    
+    .card div[style*="background:linear-gradient"]:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
     .card-title {
       font-size: 14px; font-weight: 700; margin-bottom: 12px;
       display: flex; align-items: center; gap: 8px;
@@ -861,70 +871,174 @@ Loading latest tweet...
 <button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
+<div style="background:linear-gradient(135deg,#fef3c7,#fde68a);padding:20px;border-radius:16px;margin-bottom:24px;border:2px solid #fbbf24;">
+<div style="font-size:18px;font-weight:800;color:#92400e;margin-bottom:8px;text-align:center;">⚠️ Important: No Fixed Timeline</div>
+<div style="font-size:13px;color:#78350f;line-height:1.6;text-align:center;">
+This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at your own pace.<br>
+Complete prerequisites to unlock next stages.
+</div>
+</div>
+
 <div class="content-grid">
+
+<!-- PHASE 1: NFT Series System -->
 <div class="card">
-<div class="card-title"><span class="dot"></span> Completed Milestones</div>
-<div style="display:flex;flex-direction:column;gap:16px;margin-top:12px;">
+<div class="card-title"><span class="dot"></span> Phase 1: 🎨 NFT Series System</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
 
-<div style="padding:20px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:12px;border-left:4px solid #0ea5e9;">
-<div style="font-weight:700;font-size:15px;color:#0369a1;margin-bottom:8px;">✅ Q4 2024 – Foundation Laid (Completed)</div>
-<div style="font-size:13px;color:#334155;line-height:1.6;">
-• Series 1 NFT mint on <a href="https://drip.trade/" target="_blank" style="color:#0284c7;font-weight:600;">DripTrade</a><br>
-• Project launch<br>
-• Community building<br>
-• Website development (v1)<br>
-• Leaderboard system design<br>
-• Quest system foundation preparation
+<div style="padding:16px;background:linear-gradient(135deg,#f0fdf9,#ccfbf1);border-radius:12px;border-left:4px solid #14b8a6;">
+<div style="font-weight:700;font-size:14px;color:#115e59;margin-bottom:6px;">1️⃣ Series 1 NFT – Entry Level</div>
+<div style="font-size:12px;color:#334155;line-height:1.6;">
+<strong>Requirement:</strong> None<br>
+<strong>Unlock:</strong> Series 2 minting access<br>
+<strong>Mint on:</strong> <a href="https://drip.trade/" target="_blank" style="color:#14b8a6;font-weight:600;">DripTrade</a>
 </div>
 </div>
 
-<div style="padding:20px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;border-left:4px solid #22c55e;">
-<div style="font-weight:700;font-size:15px;color:#15803d;margin-bottom:8px;">✅ Q1 2025 – Ecosystem Launch (Completed)</div>
-<div style="font-size:13px;color:#334155;line-height:1.6;">
-• Series 2 NFT mint on <a href="https://drip.trade/" target="_blank" style="color:#16a34a;font-weight:600;">DripTrade</a><br>
-• Full website launch (Quests + Leaderboard)<br>
-• NFT gallery integration<br>
-• Twitter API integration (post loading, point collection)<br>
-• Airdrop system design (EP points + activity)<br>
-• Staking system basic structure created
+<div style="padding:16px;background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:12px;border-left:4px solid #f59e0b;">
+<div style="font-weight:700;font-size:14px;color:#92400e;margin-bottom:6px;">2️⃣ Series 2 NFT – Advanced Level</div>
+<div style="font-size:12px;color:#334155;line-height:1.6;">
+<strong>Requirement:</strong> Own Series 1 NFT<br>
+<strong>Unlock:</strong> Series 3 minting access<br>
+<strong>Mint on:</strong> <a href="https://drip.trade/" target="_blank" style="color:#f59e0b;font-weight:600;">DripTrade</a>
+</div>
+</div>
+
+<div style="padding:16px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:12px;border-left:4px solid #a855f7;">
+<div style="font-weight:700;font-size:14px;color:#6b21a8;margin-bottom:6px;">3️⃣ Series 3 NFT – Premium Level + Token Rewards</div>
+<div style="font-size:12px;color:#334155;line-height:1.6;">
+<strong>Requirement:</strong> Own Series 1 + Series 2 NFTs<br>
+<strong>Benefits:</strong><br>
+• Token rewards<br>
+• Extra airdrop eligibility<br>
+<strong>Mint on:</strong> <a href="https://drip.trade/" target="_blank" style="color:#a855f7;font-weight:600;">DripTrade</a>
 </div>
 </div>
 
 </div>
 </div>
 
+<!-- PHASE 2: EP Points System -->
 <div class="card">
-<div class="card-title"><span class="dot"></span> Future Plans</div>
-<div style="display:flex;flex-direction:column;gap:16px;margin-top:12px;">
+<div class="card-title"><span class="dot"></span> Phase 2: ⭐ EP Points System</div>
+<div style="font-size:12px;color:#6b7280;margin-bottom:12px;">Earn points through active participation:</div>
+<div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
 
-<div style="padding:20px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:12px;border-left:4px solid #a855f7;">
-<div style="font-weight:700;font-size:15px;color:#7c3aed;margin-bottom:8px;">🟪 Q2 2025 – Expansion Phase (In Progress)</div>
-<div style="font-size:13px;color:#334155;line-height:1.6;">
-• Series 3 NFT mint → Mint on <a href="https://drip.trade/" target="_blank" style="color:#9333ea;font-weight:600;">DripTrade</a><br>
-• CKS token launch (CatKitSune Token)<br>
-• Tokenomics publication<br>
-• Staking system launch (EP → CKS conversion)<br>
-• Snapshot preparation for CKS airdrop<br>
-• Airdrop campaign launch (based on EP points + NFT holdings)<br>
-• Full NFT-staking interface activation:<br>
-<span style="margin-left:12px;">→ Series 1 staking</span><br>
-<span style="margin-left:12px;">→ Series 2 staking (unlocked after full set)</span><br>
-<span style="margin-left:12px;">→ Series 3 staking</span>
-</div>
+<div style="padding:12px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;">
+<div style="font-weight:600;font-size:13px;color:#111827;margin-bottom:4px;">🔗 1. Wallet Connection</div>
+<div style="font-size:12px;color:#6b7280;">Connect MetaMask wallet (required)</div>
 </div>
 
+<div style="padding:12px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;">
+<div style="font-weight:600;font-size:13px;color:#111827;margin-bottom:4px;">🐦 2. Twitter Verification</div>
+<div style="font-size:12px;color:#6b7280;">Connect and verify your Twitter account</div>
+</div>
+
+<div style="padding:12px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;">
+<div style="font-weight:600;font-size:13px;color:#111827;margin-bottom:4px;">🔗 3. Share & Verify</div>
+<div style="font-size:12px;color:#6b7280;">Share links and earn points from activity</div>
+</div>
+
+<div style="padding:12px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;">
+<div style="font-weight:600;font-size:13px;color:#111827;margin-bottom:4px;">🎨 4. Mint Activity</div>
+<div style="font-size:12px;color:#6b7280;">Each NFT mint generates points</div>
+</div>
+
+<div style="padding:12px;background:#f9fafb;border-radius:10px;border:1px solid #e5e7eb;">
+<div style="font-weight:600;font-size:13px;color:#111827;margin-bottom:4px;">🔒 5. Staking Boost</div>
+<div style="font-size:12px;color:#6b7280;">Future staking system provides point multipliers</div>
+</div>
+
+<div style="margin-top:8px;padding:14px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:10px;border:1px solid #3b82f6;">
+<div style="font-weight:700;font-size:13px;color:#1e40af;margin-bottom:4px;">💎 EP Point Benefits:</div>
+<div style="font-size:12px;color:#1e3a8a;">
+• Airdrop eligibility<br>
+• Staking multiplier<br>
+• Snapshot priority
 </div>
 </div>
 
+</div>
+</div>
+
+<!-- PHASE 3: Staking System -->
 <div class="card">
-<div style="text-align:center;padding:32px 20px;">
-<div style="font-size:48px;margin-bottom:12px;">🔮</div>
-<div style="font-size:20px;font-weight:700;color:#6a3df5;margin-bottom:8px;">Stay tuned!</div>
-<div style="font-size:14px;color:#6b7280;line-height:1.6;max-width:600px;margin:0 auto;">
-More details coming soon. Join our community to stay updated with the latest developments!
+<div class="card-title"><span class="dot"></span> Phase 3: 🔒 Three-Tier Staking System</div>
+<div style="font-size:12px;color:#6b7280;margin-bottom:12px;">Staking tiers aligned with NFT series:</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
+
+<div style="padding:16px;background:linear-gradient(135deg,#fef2f2,#fee2e2);border-radius:12px;border-left:4px solid #ef4444;">
+<div style="font-weight:700;font-size:14px;color:#991b1b;margin-bottom:6px;">🥉 Series 1 Staking</div>
+<div style="font-size:12px;color:#334155;">Base level staking rewards</div>
+</div>
+
+<div style="padding:16px;background:linear-gradient(135deg,#fffbeb,#fef3c7);border-radius:12px;border-left:4px solid #f59e0b;">
+<div style="font-weight:700;font-size:14px;color:#92400e;margin-bottom:6px;">🥈 Series 2 Staking</div>
+<div style="font-size:12px;color:#334155;">Enhanced multipliers and rewards</div>
+</div>
+
+<div style="padding:16px;background:linear-gradient(135deg,#fefce8,#fef9c3);border-radius:12px;border-left:4px solid #eab308;">
+<div style="font-weight:700;font-size:14px;color:#713f12;margin-bottom:6px;">🥇 Series 3 Staking – Token Reward Focus</div>
+<div style="font-size:12px;color:#334155;line-height:1.6;">
+<strong>Premium benefits:</strong><br>
+• Token rewards<br>
+• Extra boosts<br>
+• Airdrop bonus
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- PHASE 4: Token Launch -->
+<div class="card">
+<div class="card-title"><span class="dot"></span> Phase 4: 🪙 CKS Token Launch</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
+
+<div style="padding:16px;background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border-radius:12px;border-left:4px solid #0ea5e9;">
+<div style="font-weight:700;font-size:14px;color:#0c4a6e;margin-bottom:6px;">📜 Tokenomics Release</div>
+<div style="font-size:12px;color:#334155;">Complete documentation on token distribution and utility</div>
+</div>
+
+<div style="padding:16px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-radius:12px;border-left:4px solid #22c55e;">
+<div style="font-weight:700;font-size:14px;color:#14532d;margin-bottom:6px;">🚀 CKS Token Launch</div>
+<div style="font-size:12px;color:#334155;">Official token goes live</div>
+</div>
+
+<div style="padding:16px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:12px;border-left:4px solid #a855f7;">
+<div style="font-weight:700;font-size:14px;color:#6b21a8;margin-bottom:6px;">💎 EP → CKS Conversion</div>
+<div style="font-size:12px;color:#334155;">Earned points convert to token rewards</div>
+</div>
+
+</div>
+</div>
+
+<!-- PHASE 5: Airdrop -->
+<div class="card" style="border:2px solid #14b8a6;background:linear-gradient(135deg,#f0fdf9,#ccfbf1);">
+<div class="card-title" style="color:#115e59;"><span class="dot" style="background:#14b8a6;"></span> Phase 5: 🎁 Airdrop Distribution</div>
+<div style="margin-top:16px;">
+
+<div style="padding:20px;background:white;border-radius:12px;border:2px dashed #14b8a6;">
+<div style="font-weight:700;font-size:15px;color:#115e59;margin-bottom:12px;text-align:center;">✅ Eligibility Requirements</div>
+<div style="font-size:13px;color:#334155;line-height:1.8;">
+<div style="padding:10px;background:#f0fdf9;border-radius:8px;margin-bottom:8px;">
+✅ <strong>Own all three NFT series</strong> (Series 1 + 2 + 3)
+</div>
+<div style="padding:10px;background:#f0fdf9;border-radius:8px;">
+✅ <strong>Active in EP Points system</strong>
 </div>
 </div>
 </div>
+
+<div style="margin-top:16px;padding:16px;background:#fef3c7;border-radius:10px;border:1px solid #fbbf24;text-align:center;">
+<div style="font-size:12px;color:#92400e;line-height:1.6;">
+⚠️ <strong>Important:</strong> Only users who complete the full NFT journey and remain active will qualify for airdrops
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 </main>
 
