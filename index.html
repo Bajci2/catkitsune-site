@@ -11,6 +11,37 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+<!-- 🔥 MINT TAB STYLING - RED VERSION -->
+<style>
+.top-nav-btn.mint-tab {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: white !important;
+  border: 1px solid #ef4444 !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+  transition: all 0.3s ease;
+}
+
+.top-nav-btn.mint-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+@keyframes subtle-pulse-red {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+  }
+  50% {
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.45);
+  }
+}
+
+.top-nav-btn.mint-tab {
+  animation: subtle-pulse-red 2s ease-in-out infinite;
+}
+</style>
+
 <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -500,6 +531,7 @@ Login with Twitter
 
 <div class="top-nav">
 <button class="top-nav-btn active" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn mint-tab" onclick="window.location.href='/launch'">🔥</button>
 <button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
@@ -865,6 +897,7 @@ Loading latest tweet...
 
 <div class="top-nav">
 <button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn mint-tab" onclick="window.location.href='/launch'">🔥</button>
 <button class="top-nav-btn active" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
@@ -1057,6 +1090,7 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 
 <div class="top-nav">
 <button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn mint-tab" onclick="window.location.href='/launch'">🔥</button>
 <button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn active" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
@@ -1170,6 +1204,7 @@ Get ready for the CKS token airdrop! Complete quests, hold NFTs, and participate
 
 <div class="top-nav">
 <button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn mint-tab" onclick="window.location.href='/launch'">🔥</button>
 <button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn active" onclick="showView(event, 'token')">🪙</button>
@@ -1318,6 +1353,7 @@ Complete quests now to maximize your airdrop allocation!
 
 <div class="top-nav">
 <button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
+<button class="top-nav-btn mint-tab" onclick="window.location.href='/launch'">🔥</button>
 <button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'airdrop')">🪂</button>
 <button class="top-nav-btn" onclick="showView(event, 'token')">🪙</button>
