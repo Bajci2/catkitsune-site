@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CatKitSune - Mint NFT</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
 <style>
 * {
   box-sizing: border-box;
@@ -87,9 +93,100 @@ header {
   box-shadow: 0 8px 20px rgba(20, 184, 166, 0.3);
 }
 
+/* Supply Tracker Banner */
+.supply-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 16px 24px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 8px 24px rgba(102, 126, 234, 0.25); }
+  50% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.45); }
+}
+
+.supply-info {
+  flex: 1;
+}
+
+.supply-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.supply-count {
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.supply-progress {
+  flex: 1;
+  margin: 0 24px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #22c55e);
+  border-radius: 999px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+}
+
+.progress-text {
+  font-size: 12px;
+  color: white;
+  margin-top: 6px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.supply-status {
+  text-align: right;
+}
+
+.status-badge {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  display: inline-block;
+}
+
+.status-badge.sold-out {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
 /* Main Content */
 .mint-section {
-  margin-top: 40px;
+  margin-top: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
@@ -377,6 +474,16 @@ header {
     position: relative;
     top: 0;
   }
+  
+  .supply-banner {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .supply-progress {
+    margin: 0;
+    width: 100%;
+  }
 }
 
 @media (max-width: 640px) {
@@ -399,6 +506,10 @@ header {
   .nft-grid-container {
     gap: 8px;
     padding: 8px;
+  }
+  
+  .supply-count {
+    font-size: 24px;
   }
 }
 
@@ -424,15 +535,35 @@ header {
 <!-- Header -->
 <header>
   <div class="header-content">
-    <a href="/" class="logo">
+    <a href="/index.html" class="logo">
       🐱 CatKitSune
     </a>
-    <a href="/" class="back-btn">← Back to Home</a>
+    <a href="/index.html" class="back-btn">← Back to Home</a>
   </div>
 </header>
 
 <!-- Main Content -->
 <div class="container">
+  
+  <!-- Supply Tracker Banner -->
+  <div class="supply-banner" id="supplyBanner">
+    <div class="supply-info">
+      <div class="supply-label">Available to Mint</div>
+      <div class="supply-count" id="remainingSupply">---</div>
+    </div>
+    
+    <div class="supply-progress">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+      </div>
+      <div class="progress-text" id="progressText">Loading...</div>
+    </div>
+    
+    <div class="supply-status">
+      <div class="status-badge" id="statusBadge">🔥 Minting Live</div>
+    </div>
+  </div>
+  
   <div class="mint-section">
     
     <!-- NFT Preview -->
@@ -458,7 +589,7 @@ header {
         
         <div class="nft-stats">
           <div class="stat">
-            <div class="stat-label">Supply</div>
+            <div class="stat-label">Total Supply</div>
             <div class="stat-value">300</div>
           </div>
           <div class="stat">
@@ -520,6 +651,43 @@ header {
 </div>
 
 <script>
+// ==========================================
+// FIREBASE CONFIGURATION
+// ==========================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBm9YORem_caRx_FInbPJwqP7BSs9I",
+  authDomain: "catkitsune-49fda.firebaseapp.com",
+  databaseURL: "https://catkitsune-49fda-default-rtdb.firebaseio.com",
+  projectId: "catkitsune-49fda",
+  storageBucket: "catkitsune-49fda.appspot.com",
+  messagingSenderId: "458357499767",
+  appId: "1:458357499767:web:b74a26aae203b0a1a24a5"
+};
+
+// Initialize Firebase
+let firebaseApp;
+let database;
+let firebaseEnabled = false;
+
+try {
+  firebaseApp = firebase.initializeApp(firebaseConfig);
+  database = firebase.database();
+  firebaseEnabled = true;
+  console.log('🔥 Firebase initialized successfully!');
+} catch (error) {
+  console.warn('⚠️ Firebase initialization error:', error);
+  firebaseEnabled = false;
+}
+
+// ==========================================
+// SUPPLY TRACKER CONFIGURATION
+// ==========================================
+const TOTAL_SUPPLY = 300;
+const IPFS_BASE = "https://gateway.lighthouse.storage/ipfs/bafybeihnvbxm2izyuxhzbo2wzhycvmhtrlu7iodxwdt5yrgkmhyrqyfihy/";
+
+let currentSupply = TOTAL_SUPPLY; // Remaining supply
+let mintedCount = 0; // Minted count
+
 // Configuration
 const PRICE_PER_NFT = 0.5;
 const MAX_PER_TX = 10;
@@ -527,16 +695,138 @@ let quantity = 1;
 let isConnected = false;
 let userAddress = '';
 
+// Initialize supply from Firebase
+async function initializeSupply() {
+  if (!firebaseEnabled || !database) {
+    console.warn('⚠️ Firebase not enabled, using default supply');
+    updateSupplyDisplay();
+    return;
+  }
+  
+  try {
+    const supplyRef = database.ref('nft_supply');
+    const snapshot = await supplyRef.once('value');
+    
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      mintedCount = data.minted || 0;
+      currentSupply = TOTAL_SUPPLY - mintedCount;
+      
+      console.log(`📊 Supply loaded: ${currentSupply} / ${TOTAL_SUPPLY} remaining`);
+    } else {
+      // Initialize if doesn't exist
+      await supplyRef.set({
+        total: TOTAL_SUPPLY,
+        minted: 0,
+        remaining: TOTAL_SUPPLY
+      });
+      console.log('📊 Supply initialized in Firebase');
+    }
+    
+    updateSupplyDisplay();
+    
+    // Listen for real-time updates
+    supplyRef.on('value', (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        mintedCount = data.minted || 0;
+        currentSupply = TOTAL_SUPPLY - mintedCount;
+        updateSupplyDisplay();
+        console.log('🔄 Supply updated:', currentSupply, 'remaining');
+      }
+    });
+    
+  } catch (error) {
+    console.error('❌ Error initializing supply:', error);
+    updateSupplyDisplay();
+  }
+}
+
+// Update supply display
+function updateSupplyDisplay() {
+  const remainingEl = document.getElementById('remainingSupply');
+  const progressFillEl = document.getElementById('progressFill');
+  const progressTextEl = document.getElementById('progressText');
+  const statusBadgeEl = document.getElementById('statusBadge');
+  const mintButton = document.getElementById('mintButton');
+  
+  if (!remainingEl) return;
+  
+  // Update remaining count
+  remainingEl.textContent = currentSupply + ' / ' + TOTAL_SUPPLY;
+  
+  // Calculate percentage
+  const percentage = ((TOTAL_SUPPLY - currentSupply) / TOTAL_SUPPLY) * 100;
+  
+  // Update progress bar
+  progressFillEl.style.width = percentage + '%';
+  progressTextEl.textContent = mintedCount + ' minted • ' + currentSupply + ' remaining';
+  
+  // Check if sold out
+  if (currentSupply <= 0) {
+    statusBadgeEl.textContent = '🔴 SOLD OUT';
+    statusBadgeEl.classList.add('sold-out');
+    
+    // Disable minting
+    mintButton.disabled = true;
+    mintButton.textContent = '❌ Sold Out';
+    
+    // Update banner color to red
+    const banner = document.getElementById('supplyBanner');
+    banner.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+    
+    showStatus('❌ All NFTs have been minted!', 'error');
+  } else if (currentSupply <= 50) {
+    // Low supply warning
+    statusBadgeEl.textContent = '⚠️ Almost Gone!';
+    statusBadgeEl.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+  } else {
+    statusBadgeEl.textContent = '🔥 Minting Live';
+  }
+}
+
+// Increment minted count (called after successful mint)
+async function incrementMintedCount(amount) {
+  if (!firebaseEnabled || !database) {
+    console.warn('⚠️ Firebase not enabled, cannot update supply');
+    return;
+  }
+  
+  try {
+    const supplyRef = database.ref('nft_supply');
+    const snapshot = await supplyRef.once('value');
+    
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const newMinted = (data.minted || 0) + amount;
+      const newRemaining = TOTAL_SUPPLY - newMinted;
+      
+      await supplyRef.update({
+        minted: newMinted,
+        remaining: newRemaining
+      });
+      
+      console.log(`✅ Supply updated: ${amount} NFT(s) minted`);
+    }
+  } catch (error) {
+    console.error('❌ Error updating supply:', error);
+  }
+}
+
 // Quantity Controls
 function updateQuantityDisplay() {
   document.getElementById('quantityDisplay').textContent = quantity;
   document.getElementById('totalPrice').textContent = (quantity * PRICE_PER_NFT).toFixed(1) + ' HYPE';
   document.getElementById('decreaseBtn').disabled = quantity <= 1;
-  document.getElementById('increaseBtn').disabled = quantity >= MAX_PER_TX;
+  
+  // Don't allow minting more than available
+  const maxQuantity = Math.min(MAX_PER_TX, currentSupply);
+  document.getElementById('increaseBtn').disabled = quantity >= maxQuantity;
 }
 
 function increaseQuantity() {
-  if (quantity < MAX_PER_TX) {
+  const maxQuantity = Math.min(MAX_PER_TX, currentSupply);
+  if (quantity < maxQuantity) {
     quantity++;
     updateQuantityDisplay();
   }
@@ -601,6 +891,20 @@ async function connectWallet() {
 
 // Mint Function
 async function handleMint() {
+  // Check if sold out
+  if (currentSupply <= 0) {
+    showStatus('❌ Sold out! All NFTs have been minted.', 'error');
+    return;
+  }
+  
+  // Check if trying to mint more than available
+  if (quantity > currentSupply) {
+    showStatus(`⚠️ Only ${currentSupply} NFT${currentSupply > 1 ? 's' : ''} remaining!`, 'error');
+    quantity = currentSupply;
+    updateQuantityDisplay();
+    return;
+  }
+  
   // Step 1: Connect wallet if not connected
   if (!isConnected) {
     await connectWallet();
@@ -614,11 +918,25 @@ async function handleMint() {
     document.getElementById('mintButton').innerHTML = '<span class="loading"></span> Minting...';
     
     // TODO: Replace with actual contract interaction
+    // Example contract call:
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const signer = provider.getSigner();
+    // const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+    // const tx = await contract.mint(quantity, { value: ethers.utils.parseEther((quantity * PRICE_PER_NFT).toString()) });
+    // await tx.wait();
+    
     // For now, simulate minting process
     await new Promise(resolve => setTimeout(resolve, 2000));
     
+    // IMPORTANT: Update supply after successful mint
+    await incrementMintedCount(quantity);
+    
     showStatus('✅ Successfully minted ' + quantity + ' NFT' + (quantity > 1 ? 's' : '') + '!', 'success');
     document.getElementById('mintButton').textContent = '🎉 Mint Another';
+    
+    // Reset quantity
+    quantity = 1;
+    updateQuantityDisplay();
     
   } catch (error) {
     console.error('Mint error:', error);
@@ -645,8 +963,12 @@ if (typeof window.ethereum !== 'undefined') {
   });
 }
 
-// Initialize
-updateQuantityDisplay();
+// Initialize on page load
+window.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 Initializing mint page...');
+  updateQuantityDisplay();
+  initializeSupply();
+});
 </script>
 
 </body>
