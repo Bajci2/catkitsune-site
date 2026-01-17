@@ -58,31 +58,47 @@
         .status-banner {
             background: linear-gradient(135deg, #7b68ee 0%, #9370db 100%);
             color: white;
-            padding: 20px;
+            padding: 20px 30px;
             border-radius: 15px;
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .status-info {
-            font-size: 1.2em;
+        .banner-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .banner-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-bottom: 5px;
         }
 
         .status-number {
-            font-size: 2em;
+            font-size: 2.5em;
             font-weight: bold;
+            line-height: 1;
+        }
+
+        .banner-center {
+            flex: 1;
+            margin: 0 40px;
         }
 
         .progress-bar {
-            flex: 1;
-            margin: 0 30px;
-            height: 10px;
+            height: 8px;
             background: rgba(255,255,255,0.3);
             border-radius: 5px;
             overflow: hidden;
+            margin-bottom: 8px;
         }
 
         .progress-fill {
@@ -92,13 +108,20 @@
             transition: width 0.5s ease;
         }
 
+        .progress-text {
+            font-size: 0.85em;
+            text-align: center;
+            opacity: 0.9;
+        }
+
         .status-badge {
             background: rgba(255,255,255,0.2);
             padding: 10px 20px;
             border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            white-space: nowrap;
         }
 
         .container {
@@ -150,12 +173,14 @@
             font-size: 1.5em;
             color: #00bcd4;
             margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .nft-description {
             color: #666;
             line-height: 1.6;
             margin-bottom: 20px;
+            font-size: 0.95em;
         }
 
         .nft-stats {
@@ -170,12 +195,12 @@
 
         .stat-label {
             color: #999;
-            font-size: 0.9em;
+            font-size: 0.85em;
             margin-bottom: 5px;
         }
 
         .stat-value {
-            font-size: 1.5em;
+            font-size: 1.4em;
             font-weight: bold;
             color: #00bcd4;
         }
@@ -183,23 +208,24 @@
         .mint-panel {
             background: white;
             border-radius: 15px;
-            padding: 30px;
+            padding: 40px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
         }
 
         .mint-title {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             font-size: 1.8em;
             margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .mint-subtitle {
             color: #666;
             margin-bottom: 30px;
+            text-align: center;
         }
 
         .quantity-section {
@@ -208,25 +234,26 @@
 
         .section-label {
             color: #666;
-            font-size: 0.9em;
+            font-size: 0.85em;
             margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .quantity-selector {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 30px;
             background: #f5f5f5;
             padding: 20px;
             border-radius: 10px;
         }
 
         .quantity-btn {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border: 2px solid #00bcd4;
             background: white;
             color: #00bcd4;
@@ -234,6 +261,9 @@
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .quantity-btn:hover {
@@ -252,8 +282,8 @@
         .price-box {
             background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 20px 25px;
+            border-radius: 12px;
             margin: 20px 0;
             display: flex;
             justify-content: space-between;
@@ -262,7 +292,8 @@
 
         .price-label {
             font-size: 0.9em;
-            opacity: 0.9;
+            opacity: 0.95;
+            margin-bottom: 5px;
         }
 
         .price-amount {
@@ -273,10 +304,10 @@
         .connect-btn {
             background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
             color: white;
-            padding: 20px;
+            padding: 18px;
             border: none;
             border-radius: 50px;
-            font-size: 1.2em;
+            font-size: 1.1em;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -331,6 +362,16 @@
             .container {
                 grid-template-columns: 1fr;
             }
+
+            .banner-top {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .banner-center {
+                width: 100%;
+                margin: 15px 0;
+            }
         }
 
         @media (max-width: 600px) {
@@ -341,16 +382,6 @@
             .header {
                 flex-direction: column;
                 gap: 15px;
-            }
-
-            .status-banner {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .progress-bar {
-                margin: 15px 0;
-                width: 100%;
             }
         }
     </style>
@@ -364,51 +395,37 @@
     </div>
 
     <div class="status-banner">
-        <div class="status-info">
-            <div style="opacity: 0.8; font-size: 0.8em;">Available to Mint</div>
-            <div class="status-number"><span id="mintedCount">300</span> / <span id="totalSupply">300</span></div>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressBar"></div>
-        </div>
-        <div class="status-text" style="font-size: 0.9em; opacity: 0.9;">
-            <span id="mintedText">0 minted</span> • <span id="remainingText">300 remaining</span>
-        </div>
-        <div class="status-badge">
-            ⭐ Coming Soon
+        <div class="banner-top">
+            <div class="banner-left">
+                <div class="status-label">Available to Mint</div>
+                <div class="status-number"><span id="available">300</span> / <span id="totalSupply">300</span></div>
+            </div>
+            <div class="banner-center">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="mintedCount">0</span> minted • <span id="remainingCount">300</span> remaining
+                </div>
+            </div>
+            <div class="status-badge">
+                ⭐ Coming Soon
+            </div>
         </div>
     </div>
 
     <div class="container">
         <div class="nft-showcase">
             <div class="nft-grid">
-                <div class="nft-item">
-                    <img src="1.png" alt="NFT 1">
-                </div>
-                <div class="nft-item">
-                    <img src="2.png" alt="NFT 2">
-                </div>
-                <div class="nft-item">
-                    <img src="3.png" alt="NFT 3">
-                </div>
-                <div class="nft-item">
-                    <img src="4.png" alt="NFT 4">
-                </div>
-                <div class="nft-item">
-                    <img src="5.png" alt="NFT 5">
-                </div>
-                <div class="nft-item">
-                    <img src="6.png" alt="NFT 6">
-                </div>
-                <div class="nft-item">
-                    <img src="7.png" alt="NFT 7">
-                </div>
-                <div class="nft-item">
-                    <img src="8.png" alt="NFT 8">
-                </div>
-                <div class="nft-item">
-                    <img src="9.png" alt="NFT 9">
-                </div>
+                <div class="nft-item"><img src="1.png" alt="CatKitSune #1"></div>
+                <div class="nft-item"><img src="2.png" alt="CatKitSune #2"></div>
+                <div class="nft-item"><img src="3.png" alt="CatKitSune #3"></div>
+                <div class="nft-item"><img src="4.png" alt="CatKitSune #4"></div>
+                <div class="nft-item"><img src="5.png" alt="CatKitSune #5"></div>
+                <div class="nft-item"><img src="6.png" alt="CatKitSune #6"></div>
+                <div class="nft-item"><img src="7.png" alt="CatKitSune #7"></div>
+                <div class="nft-item"><img src="8.png" alt="CatKitSune #8"></div>
+                <div class="nft-item"><img src="9.png" alt="CatKitSune #9"></div>
             </div>
 
             <div class="nft-info">
@@ -440,37 +457,36 @@
             <p class="mint-subtitle">Select quantity and connect your wallet to mint</p>
 
             <div class="quantity-section">
-                <div class="section-label">Quantity</div>
+                <div class="section-label">QUANTITY</div>
                 <div class="quantity-selector">
-                    <button class="quantity-btn" id="decreaseBtn">-</button>
+                    <button class="quantity-btn" id="decreaseBtn">−</button>
                     <div class="quantity-display" id="quantity">1</div>
                     <button class="quantity-btn" id="increaseBtn">+</button>
                 </div>
             </div>
 
-            <div class="section-label">Total Price</div>
+            <div class="section-label">TOTAL PRICE</div>
             <div class="price-box">
-                <div class="price-label">You will pay</div>
-                <div class="price-amount"><span id="totalPrice">0.5</span> HYPE 💎</div>
+                <div>
+                    <div class="price-label">You will pay</div>
+                    <div class="price-amount"><span id="totalPrice">0.5</span> HYPE</div>
+                </div>
+                <div style="font-size: 3em;">💎</div>
             </div>
 
-            <div id="walletSection">
-                <button class="connect-btn" id="connectBtn">Connect Wallet to Mint</button>
-                <div id="walletInfo" style="display: none;"></div>
-            </div>
-
+            <button class="connect-btn" id="connectBtn">Connect Wallet to Mint</button>
+            <div id="walletInfo" style="display: none;"></div>
             <div id="statusMessage"></div>
         </div>
     </div>
 
     <script type="module">
-        // 🧪 TEST MODE - Változtasd "LIVE"-ra az éles indításhoz!
-        const MODE = "TEST"; // TEST | LIVE
+        // 🧪 TEST MODE
+        const MODE = "TEST";
         
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
         import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-database.js';
 
-        // Firebase konfiguráció
         const firebaseConfig = {
             apiKey: "AIzaSyCn99m_Ylo5In_eram3HHol-AV9d2MdnNs",
             authDomain: "catkitsune-d2acc.firebaseapp.com",
@@ -485,63 +501,46 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Smart contract / Wallet konfiguráció
-        const TREASURY_ADDRESS = "0x73C4e88f22c53a02791C64D647C4E0ee011b86C5"; // TE CÍMED
+        const TREASURY_ADDRESS = "0x73C4e88f22c53a02791C64D647C4E0ee011b86C5";
         const PRICE_PER_NFT = 0.5;
         const MAX_SUPPLY = 300;
-        const HYPERLIQUID_CHAIN_ID = "0x3e6"; // 998 (Testnet)
+        const HYPERLIQUID_CHAIN_ID = "0x3e6";
 
         let currentAccount = null;
         let quantity = 1;
 
-        console.log("🚀 CatKitSune Minting App inicializálva");
-        console.log("🧪 MODE:", MODE);
-        console.log("💰 Treasury Address:", TREASURY_ADDRESS);
+        console.log("🚀 MODE:", MODE);
+        console.log("💰 Treasury:", TREASURY_ADDRESS);
 
-        // Firebase listener
         const availableRef = ref(database, 'nft/available');
         onValue(availableRef, (snapshot) => {
             const available = snapshot.val() || MAX_SUPPLY;
             const minted = MAX_SUPPLY - available;
             
-            document.getElementById('mintedCount').textContent = available;
+            document.getElementById('available').textContent = available;
             document.getElementById('totalSupply').textContent = MAX_SUPPLY;
-            document.getElementById('mintedText').textContent = minted + " minted";
-            document.getElementById('remainingText').textContent = available + " remaining";
-            
-            const progress = (minted / MAX_SUPPLY) * 100;
-            document.getElementById('progressBar').style.width = progress + '%';
-            
-            console.log("📊 Minted:", minted, "/ Available:", available);
+            document.getElementById('mintedCount').textContent = minted;
+            document.getElementById('remainingCount').textContent = available;
+            document.getElementById('progressBar').style.width = (minted / MAX_SUPPLY * 100) + '%';
         });
 
-        // Hálózat ellenőrzése
         async function checkNetwork() {
             try {
                 const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                console.log("🌐 Chain ID:", chainId);
-                
                 if (chainId !== HYPERLIQUID_CHAIN_ID) {
-                    showStatus('⚠️ Kérlek váltsd át a hálózatot Hyperliquid-re!', 'error');
+                    showStatus('⚠️ Switch to Hyperliquid network!', 'error');
                     try {
                         await window.ethereum.request({
                             method: 'wallet_switchEthereumChain',
                             params: [{ chainId: HYPERLIQUID_CHAIN_ID }],
                         });
                         return true;
-                    } catch (switchError) {
-                        console.error("❌ Hálózat váltási hiba:", switchError);
-                        return false;
-                    }
+                    } catch { return false; }
                 }
                 return true;
-            } catch (error) {
-                console.error("❌ Hálózat ellenőrzési hiba:", error);
-                return false;
-            }
+            } catch { return false; }
         }
 
-        // Quantity selector
         document.getElementById('decreaseBtn').addEventListener('click', () => {
             if (quantity > 1) {
                 quantity--;
@@ -561,121 +560,71 @@
             document.getElementById('totalPrice').textContent = (PRICE_PER_NFT * quantity).toFixed(1);
         }
 
-        // Connect Wallet
         document.getElementById('connectBtn').addEventListener('click', async () => {
-            console.log("🔌 Connect Wallet gomb megnyomva");
-            
             if (typeof window.ethereum === 'undefined') {
-                showStatus('Kérlek telepítsd a MetaMask-ot!', 'error');
+                showStatus('Please install MetaMask!', 'error');
                 return;
             }
 
             try {
-                const networkOk = await checkNetwork();
-                if (!networkOk && MODE === "LIVE") {
-                    return;
-                }
+                if (!currentAccount) {
+                    const networkOk = await checkNetwork();
+                    if (!networkOk && MODE === "LIVE") return;
 
-                const accounts = await window.ethereum.request({
-                    method: 'eth_requestAccounts'
-                });
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    currentAccount = accounts[0];
 
-                currentAccount = accounts[0];
-                console.log("✅ Wallet csatlakoztatva:", currentAccount);
+                    if (MODE === "TEST") {
+                        alert("🧪 TEST MODE!\n\n✅ Wallet: " + currentAccount + "\n\n⚠️ No real transactions!\n💰 Treasury: " + TREASURY_ADDRESS);
+                        document.getElementById('walletInfo').innerHTML = `<div class="wallet-info">Connected: ${currentAccount}</div>`;
+                        document.getElementById('walletInfo').style.display = 'block';
+                        document.getElementById('connectBtn').textContent = 'Mint NFT';
+                        showStatus('🧪 TEST MODE: Connected', 'loading');
+                        return;
+                    }
 
-                // TEST MODE
-                if (MODE === "TEST") {
-                    alert(
-                        "🧪 TEST MODE AKTÍV!\n\n" +
-                        "✅ Wallet: " + currentAccount + "\n\n" +
-                        "⚠️ Tranzakciók NEM kerülnek elküldésre!\n" +
-                        "💰 Célcím: " + TREASURY_ADDRESS
-                    );
-                    
-                    document.getElementById('walletInfo').innerHTML = 
-                        `<div class="wallet-info">Connected: ${currentAccount}</div>`;
+                    document.getElementById('walletInfo').innerHTML = `<div class="wallet-info">Connected: ${currentAccount}</div>`;
                     document.getElementById('walletInfo').style.display = 'block';
                     document.getElementById('connectBtn').textContent = 'Mint NFT';
-                    document.getElementById('connectBtn').onclick = mintNFT;
-                    showStatus('🧪 TEST MODE: Wallet connected', 'loading');
-                    return;
+                    showStatus('Connected!', 'success');
+                } else {
+                    mintNFT();
                 }
-
-                // LIVE MODE
-                document.getElementById('walletInfo').innerHTML = 
-                    `<div class="wallet-info">Connected: ${currentAccount}</div>`;
-                document.getElementById('walletInfo').style.display = 'block';
-                document.getElementById('connectBtn').textContent = 'Mint NFT';
-                document.getElementById('connectBtn').onclick = mintNFT;
-                showStatus('Wallet sikeresen csatlakoztatva!', 'success');
             } catch (error) {
-                console.error("❌ Wallet hiba:", error);
-                showStatus('Wallet csatlakoztatás sikertelen: ' + error.message, 'error');
+                showStatus('Connection failed: ' + error.message, 'error');
             }
         });
 
-        // Mint NFT
         async function mintNFT() {
-            console.log("🎨 Mint NFT gomb megnyomva");
-            
-            if (!currentAccount) {
-                showStatus('Először csatlakoztasd a wallet-ot!', 'error');
-                return;
-            }
+            if (!currentAccount) return;
 
-            // TEST MODE
             if (MODE === "TEST") {
-                console.log("🧪 TEST MODE: Mint szimuláció");
-                console.log("  - Mennyiség:", quantity);
-                console.log("  - Ár:", (PRICE_PER_NFT * quantity).toFixed(1), "HYPE");
-                console.log("  - Célcím:", TREASURY_ADDRESS);
-                
-                alert(
-                    "🧪 TEST MODE:\n" +
-                    "Tranzakció NEM került elküldésre!\n\n" +
-                    "📊 RÉSZLETEK:\n" +
-                    "• Mennyiség: " + quantity + " NFT\n" +
-                    "• Ár: " + (PRICE_PER_NFT * quantity).toFixed(1) + " HYPE\n" +
-                    "• Célcím: " + TREASURY_ADDRESS + "\n\n" +
-                    "✅ Minden rendben működik!"
-                );
-                
-                showStatus('🧪 TEST MODE: Tranzakció szimulálva!', 'success');
+                alert("🧪 TEST MODE:\n\n• Quantity: " + quantity + " NFT\n• Price: " + (PRICE_PER_NFT * quantity).toFixed(1) + " HYPE\n• To: " + TREASURY_ADDRESS + "\n\n✅ Working!");
+                showStatus('🧪 TEST: Transaction simulated!', 'success');
                 return;
             }
 
-            // LIVE MODE
             try {
-                showStatus('Tranzakció feldolgozása...', 'loading');
-
+                showStatus('Processing...', 'loading');
                 const networkOk = await checkNetwork();
-                if (!networkOk) {
-                    showStatus('Rossz hálózat!', 'error');
-                    return;
-                }
+                if (!networkOk) { showStatus('Wrong network!', 'error'); return; }
 
                 const totalPrice = (PRICE_PER_NFT * quantity).toFixed(18);
                 const valueInHex = '0x' + (BigInt(Math.floor(parseFloat(totalPrice) * 1e18))).toString(16);
 
-                const transactionParameters = {
-                    to: TREASURY_ADDRESS,
-                    from: currentAccount,
-                    value: valueInHex,
-                };
-
                 const txHash = await window.ethereum.request({
                     method: 'eth_sendTransaction',
-                    params: [transactionParameters],
+                    params: [{
+                        to: TREASURY_ADDRESS,
+                        from: currentAccount,
+                        value: valueInHex,
+                    }],
                 });
 
-                console.log("✅ TX:", txHash);
-                showStatus('✅ Sikeres! TX: ' + txHash.substring(0, 10) + '...', 'success');
-                
-                alert("✅ SIKERES MINTING!\n\nTX: " + txHash);
-
+                showStatus('✅ Success! TX: ' + txHash.substring(0, 10) + '...', 'success');
+                alert("✅ MINTING SUCCESS!\n\nTX: " + txHash);
             } catch (error) {
-                console.error("❌ Minting hiba:", error);
-                showStatus('❌ Hiba: ' + error.message, 'error');
+                showStatus('❌ Error: ' + error.message, 'error');
             }
         }
 
