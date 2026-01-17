@@ -224,7 +224,6 @@
     </div>
 
     <script type="module">
-        // 🧪 TEST MODE - Változtasd "LIVE"-ra az éles indításhoz!
         const MODE = "TEST"; // TEST | LIVE
         
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
@@ -245,118 +244,55 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Smart contract / Wallet konfiguráció
-        const TREASURY_ADDRESS = "0x73C4e88f22c53a02791C64D647C4E0ee011b86C5"; // TE CÍMED - ahol a pénz gyűlik
+        // Smart contract konfiguráció
+        const CONTRACT_ADDRESS = "0x..."; // IDE KERÜL A CONTRACT CÍM
         const PRICE_PER_NFT = "0.5"; // HYPE
         const MAX_SUPPLY = 300;
-        const HYPERLIQUID_CHAIN_ID = "0x3e6"; // 998 decimálisan (Testnet)
-        // const HYPERLIQUID_CHAIN_ID = "0x101b9"; // 66001 decimálisan (Mainnet) - használd majd élesben!
 
         let currentAccount = null;
         let quantity = 1;
         const PRICE = 0.5;
-
-        console.log("🚀 CatKitSune Minting App inicializálva");
-        console.log("🧪 MODE:", MODE);
-        console.log("💰 Treasury Address:", TREASURY_ADDRESS);
 
         // Firebase listener - elérhető NFT-k száma
         const availableRef = ref(database, 'nft/available');
         onValue(availableRef, (snapshot) => {
             const available = snapshot.val() || MAX_SUPPLY;
             document.getElementById('available').textContent = available;
-            console.log("📊 Elérhető NFT-k:", available);
         });
-
-        // Hálózat ellenőrzése
-        async function checkNetwork() {
-            try {
-                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                console.log("🌐 Jelenlegi hálózat Chain ID:", chainId, "(", parseInt(chainId, 16), "decimálisan)");
-                
-                if (chainId !== HYPERLIQUID_CHAIN_ID) {
-                    console.warn("⚠️ Rossz hálózat! Várt:", HYPERLIQUID_CHAIN_ID, "Jelenlegi:", chainId);
-                    showStatus('⚠️ Kérlek váltsd át a hálózatot Hyperliquid-re!', 'error');
-                    
-                    // Próbáld meg automatikusan váltani
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: HYPERLIQUID_CHAIN_ID }],
-                        });
-                        console.log("✅ Hálózat sikeresen átváltva!");
-                        return true;
-                    } catch (switchError) {
-                        console.error("❌ Hálózat váltási hiba:", switchError);
-                        // Ha nincs hozzáadva a hálózat
-                        if (switchError.code === 4902) {
-                            showStatus('Hyperliquid hálózat hozzáadása szükséges a MetaMask-ban!', 'error');
-                        }
-                    }
-                    return false;
-                }
-                console.log("✅ Helyes hálózaton vagy!");
-                return true;
-            } catch (error) {
-                console.error("❌ Hálózat ellenőrzési hiba:", error);
-                return false;
-            }
-        }
 
         // Wallet csatlakoztatás
         document.getElementById('connectWallet').addEventListener('click', async () => {
-            console.log("🔌 Connect Wallet gomb megnyomva");
-            
             if (typeof window.ethereum === 'undefined') {
-                console.error("❌ MetaMask nem található!");
-                showStatus('Kérlek telepítsd a MetaMask-ot!', 'error');
+                showStatus('Please install MetaMask!', 'error');
                 return;
             }
 
             try {
-                // Először ellenőrizzük a hálózatot
-                const networkOk = await checkNetwork();
-                if (!networkOk && MODE === "LIVE") {
-                    console.warn("⚠️ LIVE módban helyes hálózat szükséges!");
-                    return; // LIVE módban kötelező a helyes hálózat
-                }
-
-                console.log("📞 Wallet csatlakozás kérése...");
                 const accounts = await window.ethereum.request({
                     method: 'eth_requestAccounts'
                 });
 
-                currentAccount = accounts[0];
-                console.log("✅ Wallet csatlakoztatva:", currentAccount);
-
                 // TEST MODE ellenőrzés
                 if (MODE === "TEST") {
-                    console.log("🧪 TEST MODE AKTÍV - Tranzakciók nem kerülnek elküldésre!");
-                    alert(
-                        "🧪 TEST MODE AKTÍV!\n\n" +
-                        "✅ Wallet csatlakoztatva:\n" + currentAccount + "\n\n" +
-                        "⚠️ Tranzakciók NEM kerülnek elküldésre!\n" +
-                        "💰 Pénz célcíme: " + TREASURY_ADDRESS
-                    );
-                    
+                    console.log("🧪 TEST MODE: Wallet csatlakoztatva:", accounts[0]);
+                    alert("🧪 TEST MODE: Wallet sikeresen csatlakoztatva!\n\nCím: " + accounts[0] + "\n\n⚠️ Tranzakciók NEM kerülnek elküldésre!");
+                    currentAccount = accounts[0];
                     document.getElementById('walletAddress').textContent = currentAccount;
                     document.getElementById('walletInfo').style.display = 'block';
                     document.getElementById('connectWallet').style.display = 'none';
                     document.getElementById('mintSection').style.display = 'block';
-                    showStatus('🧪 TEST MODE: Wallet connected - Nincs valódi tranzakció', 'loading');
+                    showStatus('TEST MODE: Wallet connected - No real transactions will be sent', 'loading');
                     return;
                 }
 
-                // LIVE MODE
-                console.log("🔴 LIVE MODE - Valódi tranzakciók!");
+                currentAccount = accounts[0];
                 document.getElementById('walletAddress').textContent = currentAccount;
                 document.getElementById('walletInfo').style.display = 'block';
                 document.getElementById('connectWallet').style.display = 'none';
                 document.getElementById('mintSection').style.display = 'block';
-                showStatus('Wallet sikeresen csatlakoztatva!', 'success');
+                showStatus('Wallet connected successfully!', 'success');
             } catch (error) {
-                console.error("❌ Wallet csatlakoztatási hiba:", error);
-                showStatus('Wallet csatlakoztatás sikertelen: ' + error.message, 'error');
+                showStatus('Failed to connect wallet: ' + error.message, 'error');
             }
         });
 
@@ -365,7 +301,6 @@
             if (quantity > 1) {
                 quantity--;
                 updateQuantityDisplay();
-                console.log("➖ Mennyiség csökkentve:", quantity);
             }
         });
 
@@ -374,7 +309,6 @@
             if (quantity < Math.min(10, available)) {
                 quantity++;
                 updateQuantityDisplay();
-                console.log("➕ Mennyiség növelve:", quantity);
             }
         });
 
@@ -385,65 +319,33 @@
 
         // Minting
         document.getElementById('mintBtn').addEventListener('click', async () => {
-            console.log("🎨 Mint gomb megnyomva");
-            
             if (!currentAccount) {
-                console.error("❌ Nincs csatlakoztatott wallet!");
-                showStatus('Először csatlakoztasd a wallet-ot!', 'error');
+                showStatus('Please connect your wallet first!', 'error');
                 return;
             }
 
             // TEST MODE ellenőrzés
             if (MODE === "TEST") {
-                console.log("🧪 TEST MODE: Mint szimuláció");
-                console.log("📊 Részletek:");
-                console.log("  - Mennyiség:", quantity, "NFT");
-                console.log("  - Ár:", (PRICE * quantity).toFixed(1), "HYPE");
-                console.log("  - Célcím:", TREASURY_ADDRESS);
-                console.log("  - Felhasználó:", currentAccount);
-                
-                alert(
-                    "🧪 TEST MODE:\n" +
-                    "Tranzakció NEM került elküldésre!\n\n" +
-                    "📊 RÉSZLETEK:\n" +
-                    "• Mennyiség: " + quantity + " NFT\n" +
-                    "• Ár: " + (PRICE * quantity).toFixed(1) + " HYPE\n" +
-                    "• Célcím: " + TREASURY_ADDRESS + "\n\n" +
-                    "✅ Minden rendben működik!\n" +
-                    "⚠️ Éles módban (LIVE) ez valódi tranzakció lenne."
-                );
-                
-                showStatus('🧪 TEST MODE: Tranzakció szimulálva!', 'success');
+                console.log("🧪 TEST MODE: Mint gomb megnyomva");
+                console.log("Mennyiség:", quantity);
+                console.log("Össz ár:", (PRICE * quantity).toFixed(1), "HYPE");
+                alert("🧪 TEST MODE: Tranzakció NEM került elküldésre!\n\nMennyiség: " + quantity + "\nÖssz ár: " + (PRICE * quantity).toFixed(1) + " HYPE\n\n✅ Wallet működik!\n⚠️ Éles módban ez valódi tranzakció lenne.");
+                showStatus('TEST MODE: Transaction simulated successfully!', 'success');
                 return;
             }
 
-            // LIVE MODE - Valódi tranzakció
-            console.log("🔴 LIVE MODE: Valódi tranzakció küldése!");
             try {
-                showStatus('Tranzakció feldolgozása...', 'loading');
+                showStatus('Processing mint...', 'loading');
 
-                // Ellenőrizzük újra a hálózatot
-                const networkOk = await checkNetwork();
-                if (!networkOk) {
-                    console.error("❌ Rossz hálózat!");
-                    showStatus('Rossz hálózat! Váltsd Hyperliquid-re!', 'error');
-                    return;
-                }
+                const totalPrice = (PRICE * quantity).toString();
+                const valueInWei = window.ethereum.utils.toWei(totalPrice, 'ether');
 
-                const totalPrice = (PRICE * quantity).toFixed(18);
-                const valueInHex = '0x' + (BigInt(Math.floor(parseFloat(totalPrice) * 1e18))).toString(16);
-
-                console.log("💸 Tranzakció küldése:");
-                console.log("  - To:", TREASURY_ADDRESS);
-                console.log("  - From:", currentAccount);
-                console.log("  - Value:", valueInHex, "(", totalPrice, "HYPE)");
-                console.log("  - Quantity:", quantity);
-
-                // Egyszerű HYPE küldés a treasury címre
+                // Smart contract hívás
                 const transactionParameters = {
-                    to: TREASURY_ADDRESS,
+                    to: CONTRACT_ADDRESS,
                     from: currentAccount,
-                    value: valueInHex,
+                    value: valueInWei,
+                    data: '0x' // Ide kerül a contract function call
                 };
 
                 const txHash = await window.ethereum.request({
@@ -451,19 +353,9 @@
                     params: [transactionParameters],
                 });
 
-                console.log("✅ Tranzakció elküldve! Hash:", txHash);
-                showStatus('✅ Sikeres! TX: ' + txHash.substring(0, 10) + '...', 'success');
-                
-                alert(
-                    "✅ SIKERES MINTING!\n\n" +
-                    "Tranzakció hash:\n" + txHash + "\n\n" +
-                    "⚠️ Az NFT-t manuálisan kell kiküldeni!\n" +
-                    "Mennyiség: " + quantity + " NFT"
-                );
-
+                showStatus('Minting successful! Transaction: ' + txHash, 'success');
             } catch (error) {
-                console.error("❌ Minting hiba:", error);
-                showStatus('❌ Hiba: ' + error.message, 'error');
+                showStatus('Minting failed: ' + error.message, 'error');
             }
         });
 
@@ -472,10 +364,7 @@
             statusDiv.textContent = message;
             statusDiv.className = 'status-message ' + type;
             statusDiv.style.display = 'block';
-            console.log("📢 Status:", type, "-", message);
         }
-
-        console.log("✅ Script betöltve és inicializálva!");
     </script>
 </body>
 </html>
