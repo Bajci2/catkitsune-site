@@ -970,6 +970,35 @@ window.addEventListener('DOMContentLoaded', () => {
   initializeSupply();
 });
 </script>
+<!-- ===== REAL MINT (PREPARED, DISABLED) =====
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.10.0/dist/ethers.umd.min.js"></script>
+<script>
+  const MODE = "TEST"; // TEST | LIVE
+
+  const CONTRACT_ADDRESS =
+    MODE === "TEST"
+      ? "0xTEST_CONTRACT_ADDRESS"
+      : "0xLIVE_CONTRACT_ADDRESS";
+
+  const ABI = [
+    "function mint(uint256 quantity) external payable"
+  ];
+
+  async function realMint(quantity) {
+    if (!window.ethereum) throw new Error("MetaMask not found");
+
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = await provider.getSigner();
+
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+    const value = ethers.parseEther((0.5 * quantity).toString());
+    const tx = await contract.mint(quantity, { value });
+    await tx.wait();
+  }
+</script>
+===== /REAL MINT ===== -->
 
 </body>
 </html>
