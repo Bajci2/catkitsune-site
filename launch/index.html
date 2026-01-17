@@ -256,20 +256,26 @@
         let quantity = 1;
         const PRICE = 0.5;
 
+        console.log("🚀 CatKitSune Minting App inicializálva");
+        console.log("🧪 MODE:", MODE);
+        console.log("💰 Treasury Address:", TREASURY_ADDRESS);
+
         // Firebase listener - elérhető NFT-k száma
         const availableRef = ref(database, 'nft/available');
         onValue(availableRef, (snapshot) => {
             const available = snapshot.val() || MAX_SUPPLY;
             document.getElementById('available').textContent = available;
+            console.log("📊 Elérhető NFT-k:", available);
         });
 
         // Hálózat ellenőrzése
         async function checkNetwork() {
             try {
                 const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                console.log("Jelenlegi hálózat Chain ID:", chainId);
+                console.log("🌐 Jelenlegi hálózat Chain ID:", chainId, "(", parseInt(chainId, 16), "decimálisan)");
                 
                 if (chainId !== HYPERLIQUID_CHAIN_ID) {
+                    console.warn("⚠️ Rossz hálózat! Várt:", HYPERLIQUID_CHAIN_ID, "Jelenlegi:", chainId);
                     showStatus('⚠️ Kérlek váltsd át a hálózatot Hyperliquid-re!', 'error');
                     
                     // Próbáld meg automatikusan váltani
@@ -278,24 +284,31 @@
                             method: 'wallet_switchEthereumChain',
                             params: [{ chainId: HYPERLIQUID_CHAIN_ID }],
                         });
+                        console.log("✅ Hálózat sikeresen átváltva!");
+                        return true;
                     } catch (switchError) {
-                        // Ha nincs hozzáadva a hálózat, add hozzá
+                        console.error("❌ Hálózat váltási hiba:", switchError);
+                        // Ha nincs hozzáadva a hálózat
                         if (switchError.code === 4902) {
-                            showStatus('Hyperliquid hálózat hozzáadása szükséges!', 'error');
+                            showStatus('Hyperliquid hálózat hozzáadása szükséges a MetaMask-ban!', 'error');
                         }
                     }
                     return false;
                 }
+                console.log("✅ Helyes hálózaton vagy!");
                 return true;
             } catch (error) {
-                console.error("Hálózat ellenőrzési hiba:", error);
+                console.error("❌ Hálózat ellenőrzési hiba:", error);
                 return false;
             }
         }
 
         // Wallet csatlakoztatás
         document.getElementById('connectWallet').addEventListener('click', async () => {
+            console.log("🔌 Connect Wallet gomb megnyomva");
+            
             if (typeof window.ethereum === 'undefined') {
+                console.error("❌ MetaMask nem található!");
                 showStatus('Kérlek telepítsd a MetaMask-ot!', 'error');
                 return;
             }
@@ -304,19 +317,27 @@
                 // Először ellenőrizzük a hálózatot
                 const networkOk = await checkNetwork();
                 if (!networkOk && MODE === "LIVE") {
+                    console.warn("⚠️ LIVE módban helyes hálózat szükséges!");
                     return; // LIVE módban kötelező a helyes hálózat
                 }
 
+                console.log("📞 Wallet csatlakozás kérése...");
                 const accounts = await window.ethereum.request({
                     method: 'eth_requestAccounts'
                 });
 
                 currentAccount = accounts[0];
+                console.log("✅ Wallet csatlakoztatva:", currentAccount);
 
                 // TEST MODE ellenőrzés
                 if (MODE === "TEST") {
-                    console.log("🧪 TEST MODE: Wallet csatlakoztatva:", currentAccount);
-                    alert("🧪 TEST MODE AKTÍV!\n\n✅ Wallet csatlakoztatva:\n" + currentAccount + "\n\n⚠️ Tranzakciók NEM kerülnek elküldésre!\n💰 Pénz célcíme: " + TREASURY_ADDRESS);
+                    console.log("🧪 TEST MODE AKTÍV - Tranzakciók nem kerülnek elküldésre!");
+                    alert(
+                        "🧪 TEST MODE AKTÍV!\n\n" +
+                        "✅ Wallet csatlakoztatva:\n" + currentAccount + "\n\n" +
+                        "⚠️ Tranzakciók NEM kerülnek elküldésre!\n" +
+                        "💰 Pénz célcíme: " + TREASURY_ADDRESS
+                    );
                     
                     document.getElementById('walletAddress').textContent = currentAccount;
                     document.getElementById('walletInfo').style.display = 'block';
@@ -327,14 +348,15 @@
                 }
 
                 // LIVE MODE
+                console.log("🔴 LIVE MODE - Valódi tranzakciók!");
                 document.getElementById('walletAddress').textContent = currentAccount;
                 document.getElementById('walletInfo').style.display = 'block';
                 document.getElementById('connectWallet').style.display = 'none';
                 document.getElementById('mintSection').style.display = 'block';
                 showStatus('Wallet sikeresen csatlakoztatva!', 'success');
             } catch (error) {
+                console.error("❌ Wallet csatlakoztatási hiba:", error);
                 showStatus('Wallet csatlakoztatás sikertelen: ' + error.message, 'error');
-                console.error(error);
             }
         });
 
@@ -343,6 +365,7 @@
             if (quantity > 1) {
                 quantity--;
                 updateQuantityDisplay();
+                console.log("➖ Mennyiség csökkentve:", quantity);
             }
         });
 
@@ -351,6 +374,7 @@
             if (quantity < Math.min(10, available)) {
                 quantity++;
                 updateQuantityDisplay();
+                console.log("➕ Mennyiség növelve:", quantity);
             }
         });
 
@@ -361,17 +385,22 @@
 
         // Minting
         document.getElementById('mintBtn').addEventListener('click', async () => {
+            console.log("🎨 Mint gomb megnyomva");
+            
             if (!currentAccount) {
+                console.error("❌ Nincs csatlakoztatott wallet!");
                 showStatus('Először csatlakoztasd a wallet-ot!', 'error');
                 return;
             }
 
             // TEST MODE ellenőrzés
             if (MODE === "TEST") {
-                console.log("🧪 TEST MODE: Mint gomb megnyomva");
-                console.log("Mennyiség:", quantity);
-                console.log("Össz ár:", (PRICE * quantity).toFixed(1), "HYPE");
-                console.log("Célcím:", TREASURY_ADDRESS);
+                console.log("🧪 TEST MODE: Mint szimuláció");
+                console.log("📊 Részletek:");
+                console.log("  - Mennyiség:", quantity, "NFT");
+                console.log("  - Ár:", (PRICE * quantity).toFixed(1), "HYPE");
+                console.log("  - Célcím:", TREASURY_ADDRESS);
+                console.log("  - Felhasználó:", currentAccount);
                 
                 alert(
                     "🧪 TEST MODE:\n" +
@@ -389,12 +418,14 @@
             }
 
             // LIVE MODE - Valódi tranzakció
+            console.log("🔴 LIVE MODE: Valódi tranzakció küldése!");
             try {
                 showStatus('Tranzakció feldolgozása...', 'loading');
 
                 // Ellenőrizzük újra a hálózatot
                 const networkOk = await checkNetwork();
                 if (!networkOk) {
+                    console.error("❌ Rossz hálózat!");
                     showStatus('Rossz hálózat! Váltsd Hyperliquid-re!', 'error');
                     return;
                 }
@@ -402,11 +433,11 @@
                 const totalPrice = (PRICE * quantity).toFixed(18);
                 const valueInHex = '0x' + (BigInt(Math.floor(parseFloat(totalPrice) * 1e18))).toString(16);
 
-                console.log("Tranzakció küldése:", {
-                    to: TREASURY_ADDRESS,
-                    value: valueInHex,
-                    quantity: quantity
-                });
+                console.log("💸 Tranzakció küldése:");
+                console.log("  - To:", TREASURY_ADDRESS);
+                console.log("  - From:", currentAccount);
+                console.log("  - Value:", valueInHex, "(", totalPrice, "HYPE)");
+                console.log("  - Quantity:", quantity);
 
                 // Egyszerű HYPE küldés a treasury címre
                 const transactionParameters = {
@@ -420,7 +451,7 @@
                     params: [transactionParameters],
                 });
 
-                console.log("Tranzakció elküldve:", txHash);
+                console.log("✅ Tranzakció elküldve! Hash:", txHash);
                 showStatus('✅ Sikeres! TX: ' + txHash.substring(0, 10) + '...', 'success');
                 
                 alert(
@@ -431,7 +462,7 @@
                 );
 
             } catch (error) {
-                console.error("Minting hiba:", error);
+                console.error("❌ Minting hiba:", error);
                 showStatus('❌ Hiba: ' + error.message, 'error');
             }
         });
@@ -441,7 +472,10 @@
             statusDiv.textContent = message;
             statusDiv.className = 'status-message ' + type;
             statusDiv.style.display = 'block';
+            console.log("📢 Status:", type, "-", message);
         }
+
+        console.log("✅ Script betöltve és inicializálva!");
     </script>
 </body>
 </html>
