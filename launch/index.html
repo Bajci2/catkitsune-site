@@ -652,6 +652,17 @@ header {
 
 <script>
 // ==========================================
+// 🧪 TEST MODE CONFIGURATION
+// ==========================================
+const MODE = "TEST"; // TEST | LIVE - Change to LIVE for production
+const TREASURY_ADDRESS = "0x73C4e88f22c53a02791C64D647C4E0ee011b86C5"; // YOUR WALLET
+const HYPERLIQUID_CHAIN_ID = "0x3e6"; // 998 (Testnet)
+
+console.log("🚀 CatKitSune Minting App");
+console.log("🧪 MODE:", MODE);
+console.log("💰 Treasury:", TREASURY_ADDRESS);
+
+// ==========================================
 // FIREBASE CONFIGURATION
 // ==========================================
 const firebaseConfig = {
@@ -852,6 +863,30 @@ function showStatus(message, type) {
   }
 }
 
+// Network Check
+async function checkNetwork() {
+  try {
+    const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+    console.log("🌐 Chain ID:", chainId);
+    
+    if (chainId !== HYPERLIQUID_CHAIN_ID) {
+      showStatus('⚠️ Please switch to Hyperliquid network!', 'error');
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: HYPERLIQUID_CHAIN_ID }],
+        });
+        return true;
+      } catch {
+        return false;
+      }
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // Wallet Connection
 async function connectWallet() {
   if (typeof window.ethereum === 'undefined') {
@@ -861,6 +896,12 @@ async function connectWallet() {
   }
   
   try {
+    // Check network first
+    const networkOk = await checkNetwork();
+    if (!networkOk && MODE === "LIVE") {
+      return false;
+    }
+
     const accounts = await window.ethereum.request({ 
       method: 'eth_requestAccounts' 
     });
@@ -872,8 +913,26 @@ async function connectWallet() {
     
     userAddress = accounts[0];
     isConnected = true;
+
+    // TEST MODE Alert
+    if (MODE === "TEST") {
+      alert(
+        "🧪 TEST MODE ACTIVE!\n\n" +
+        "✅ Wallet: " + userAddress + "\n\n" +
+        "⚠️ No real transactions will be sent!\n" +
+        "💰 Treasury: " + TREASURY_ADDRESS
+      );
+      
+      document.getElementById('mintButton').textContent = '🚀 Mint ' + quantity + ' NFT' + (quantity > 1 ? 's' : '');
+      document.getElementById('walletAddress').textContent = 
+        userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+      document.getElementById('walletInfo').style.display = 'block';
+      
+      showStatus('🧪 TEST MODE: Wallet connected - No real transactions', 'info');
+      return true;
+    }
     
-    // Update UI
+    // LIVE MODE
     document.getElementById('mintButton').textContent = '🚀 Mint ' + quantity + ' NFT' + (quantity > 1 ? 's' : '');
     document.getElementById('walletAddress').textContent = 
       userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
@@ -911,28 +970,65 @@ async function handleMint() {
     return;
   }
   
-  // Step 2: Mint NFT
+  // TEST MODE - Simulate minting
+  if (MODE === "TEST") {
+    console.log("🧪 TEST MODE: Mint simulation");
+    console.log("  - Quantity:", quantity);
+    console.log("  - Price:", (PRICE_PER_NFT * quantity).toFixed(1), "HYPE");
+    console.log("  - To:", TREASURY_ADDRESS);
+    
+    alert(
+      "🧪 TEST MODE:\n" +
+      "Transaction NOT sent!\n\n" +
+      "📊 DETAILS:\n" +
+      "• Quantity: " + quantity + " NFT\n" +
+      "• Price: " + (PRICE_PER_NFT * quantity).toFixed(1) + " HYPE\n" +
+      "• To: " + TREASURY_ADDRESS + "\n\n" +
+      "✅ Everything works!"
+    );
+    
+    showStatus('🧪 TEST MODE: Transaction simulated successfully!', 'success');
+    return;
+  }
+  
+  // LIVE MODE - Step 2: Mint NFT
   try {
     showStatus('Preparing to mint...', 'info');
     document.getElementById('mintButton').disabled = true;
     document.getElementById('mintButton').innerHTML = '<span class="loading"></span> Minting...';
     
-    // TODO: Replace with actual contract interaction
-    // Example contract call:
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);
-    // const signer = provider.getSigner();
-    // const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-    // const tx = await contract.mint(quantity, { value: ethers.utils.parseEther((quantity * PRICE_PER_NFT).toString()) });
-    // await tx.wait();
-    
-    // For now, simulate minting process
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Check network again
+    const networkOk = await checkNetwork();
+    if (!networkOk) {
+      showStatus('Wrong network!', 'error');
+      document.getElementById('mintButton').disabled = false;
+      document.getElementById('mintButton').textContent = '🚀 Mint ' + quantity + ' NFT' + (quantity > 1 ? 's' : '');
+      return;
+    }
+
+    // Calculate price
+    const totalPrice = (PRICE_PER_NFT * quantity).toFixed(18);
+    const valueInHex = '0x' + (BigInt(Math.floor(parseFloat(totalPrice) * 1e18))).toString(16);
+
+    // Send transaction
+    const txHash = await window.ethereum.request({
+      method: 'eth_sendTransaction',
+      params: [{
+        to: TREASURY_ADDRESS,
+        from: userAddress,
+        value: valueInHex,
+      }],
+    });
+
+    console.log("✅ TX:", txHash);
     
     // IMPORTANT: Update supply after successful mint
     await incrementMintedCount(quantity);
     
     showStatus('✅ Successfully minted ' + quantity + ' NFT' + (quantity > 1 ? 's' : '') + '!', 'success');
     document.getElementById('mintButton').textContent = '🎉 Mint Another';
+    
+    alert("✅ MINTING SUCCESS!\n\nTX: " + txHash);
     
     // Reset quantity
     quantity = 1;
