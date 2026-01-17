@@ -366,10 +366,13 @@
     <div class="status-banner">
         <div class="status-info">
             <div style="opacity: 0.8; font-size: 0.8em;">Available to Mint</div>
-            <div class="status-number"><span id="mintedCount">0</span> / <span id="totalSupply">300</span></div>
+            <div class="status-number"><span id="mintedCount">300</span> / <span id="totalSupply">300</span></div>
         </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <div class="status-text" style="font-size: 0.9em; opacity: 0.9;">
+            <span id="mintedText">0 minted</span> • <span id="remainingText">300 remaining</span>
         </div>
         <div class="status-badge">
             ⭐ Coming Soon
@@ -500,8 +503,11 @@
         onValue(availableRef, (snapshot) => {
             const available = snapshot.val() || MAX_SUPPLY;
             const minted = MAX_SUPPLY - available;
-            document.getElementById('mintedCount').textContent = minted;
+            
+            document.getElementById('mintedCount').textContent = available;
             document.getElementById('totalSupply').textContent = MAX_SUPPLY;
+            document.getElementById('mintedText').textContent = minted + " minted";
+            document.getElementById('remainingText').textContent = available + " remaining";
             
             const progress = (minted / MAX_SUPPLY) * 100;
             document.getElementById('progressBar').style.width = progress + '%';
