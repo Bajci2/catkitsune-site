@@ -12,12 +12,193 @@
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
-/* --- CSS VÁLTOZATLAN --- */
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
-.container{max-width:1400px;margin:0 auto;padding:20px}
-/* a teljes CSS érintetlen maradt */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #14b8a6;
+  --primary-dark: #0d9488;
+  --bg-main: #f0fdf9;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #f0fdf9 0%, #ccfbf1 100%);
+  min-height: 100vh;
+  color: var(--text-main);
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* HEADER */
+header {
+  background: rgba(255,255,255,.95);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+}
+
+.back-btn {
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* SUPPLY BANNER */
+.supply-banner {
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  padding: 16px 24px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.supply-count {
+  font-size: 32px;
+  font-weight: 900;
+  color: white;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255,255,255,.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg,#10b981,#22c55e);
+  width: 0%;
+}
+
+.status-badge {
+  background: rgba(255,255,255,.2);
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: white;
+  font-weight: 700;
+}
+
+/* MAIN GRID */
+.mint-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+/* NFT PREVIEW */
+.nft-preview {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+}
+
+.nft-grid-container {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg,#f0fdf9,#ccfbf1);
+  border-radius: 20px;
+}
+
+.nft-grid-item {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.nft-grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nft-title {
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* MINT CARD */
+.mint-card {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+}
+
+.quantity-selector {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.quantity-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px solid var(--primary);
+  background: white;
+  color: var(--primary);
+  font-size: 24px;
+}
+
+.quantity-display {
+  font-size: 32px;
+  font-weight: 900;
+}
+
+.price-value {
+  font-size: 36px;
+  font-weight: 900;
+}
+
+.mint-button {
+  width: 100%;
+  padding: 20px;
+  background: linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color: white;
+  border-radius: 16px;
+  border: none;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
 </style>
 </head>
 
@@ -25,27 +206,24 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0fdf9 0%
 
 <header>
   <div class="header-content">
-    <a href="/index.html" class="logo">🐱 CatKitSune</a>
-    <a href="/index.html" class="back-btn">← Back to Home</a>
+    <a class="logo">🐱 CatKitSune</a>
+    <a class="back-btn">← Back</a>
   </div>
 </header>
 
 <div class="container">
 
-<div class="supply-banner" id="supplyBanner">
-  <div class="supply-info">
-    <div class="supply-label">Available to Mint</div>
-    <div class="supply-count" id="remainingSupply">---</div>
+<div class="supply-banner">
+  <div>
+    <div style="color:white;font-size:14px;">Available to Mint</div>
+    <div class="supply-count" id="remainingSupply">300 / 300</div>
   </div>
-  <div class="supply-progress">
+  <div style="flex:1;margin:0 20px;">
     <div class="progress-bar">
       <div class="progress-fill" id="progressFill"></div>
     </div>
-    <div class="progress-text" id="progressText">Loading...</div>
   </div>
-  <div class="supply-status">
-    <div class="status-badge" id="statusBadge">🔥 Minting Live</div>
-  </div>
+  <div class="status-badge">🔥 Minting Live</div>
 </div>
 
 <div class="mint-section">
@@ -62,101 +240,45 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0fdf9 0%
     <div class="nft-grid-item"><img src="/launch/8.png"></div>
     <div class="nft-grid-item"><img src="/launch/9.png"></div>
   </div>
+
+  <h2 class="nft-title">CatKitSune NFT</h2>
 </div>
 
 <div class="mint-card">
+  <h1>🔥 Mint Your NFT</h1>
 
-<h1>🔥 Mint Your NFT</h1>
-
-<div class="quantity-selector">
-  <button onclick="decreaseQuantity()">−</button>
-  <div id="quantityDisplay">1</div>
-  <button onclick="increaseQuantity()">+</button>
-</div>
-
-<div class="price-display">
-  <div>
-    <div>You will pay</div>
-    <div id="totalPrice">0.3 HYPE</div>
+  <div class="quantity-selector">
+    <button class="quantity-btn" onclick="qty>1 && qty-- && update()">−</button>
+    <div class="quantity-display" id="qty">1</div>
+    <button class="quantity-btn" onclick="qty<10 && qty++ && update()">+</button>
   </div>
+
+  <div class="price-value" id="price">0.3 HYPE</div>
+
+  <button class="mint-button" onclick="mint()">Connect / Mint</button>
 </div>
 
-<button id="mintButton" onclick="handleMint()">Connect Wallet to Mint</button>
-
-<div id="walletInfo" style="display:none">
-  Connected: <span id="walletAddress"></span>
-</div>
-
-<div id="statusMessage"></div>
-
-</div>
 </div>
 </div>
 
 <script>
-// ===============================
-// 🔥 LIVE PUBLIC MINT
-// ===============================
-const MODE = "LIVE";
-const PRICE_PER_NFT = 0.3;
-const TOTAL_SUPPLY = 300;
-const MAX_PER_TX = 10;
+let qty = 1;
+const PRICE = 0.3;
 
-const TREASURY_ADDRESS = "0x73C4e88f22c53a02791C64D647C4E0ee011b86C5";
-const HYPERLIQUID_CHAIN_ID = "0x3e6";
-
-let quantity = 1;
-let isConnected = false;
-let userAddress = "";
-
-// Firebase
-firebase.initializeApp({
-  apiKey: "AIzaSyBm9YORem_caRx_FInbPJwqP7BSs9I",
-  databaseURL: "https://catkitsune-49fda-default-rtdb.firebaseio.com"
-});
-const db = firebase.database();
-
-function updateQuantityDisplay(){
-  document.getElementById("quantityDisplay").innerText = quantity;
-  document.getElementById("totalPrice").innerText = (quantity * PRICE_PER_NFT).toFixed(1)+" HYPE";
+function update(){
+  document.getElementById('qty').innerText = qty;
+  document.getElementById('price').innerText = (qty * PRICE).toFixed(1) + " HYPE";
 }
 
-function increaseQuantity(){
-  if(quantity < MAX_PER_TX) quantity++;
-  updateQuantityDisplay();
-}
-function decreaseQuantity(){
-  if(quantity > 1) quantity--;
-  updateQuantityDisplay();
-}
-
-async function connectWallet(){
-  const accounts = await ethereum.request({method:"eth_requestAccounts"});
-  userAddress = accounts[0];
-  isConnected = true;
-  document.getElementById("walletAddress").innerText = userAddress;
-  document.getElementById("walletInfo").style.display = "block";
-  document.getElementById("mintButton").innerText = "🚀 Mint";
+async function mint(){
+  if(!window.ethereum){
+    alert("MetaMask required");
+    return;
+  }
+  alert("PUBLIC MINT LIVE\n\nPrice: " + (qty*PRICE) + " HYPE");
 }
 
-async function handleMint(){
-  if(!isConnected){ await connectWallet(); return; }
-
-  const valueWei = BigInt(Math.floor(quantity * PRICE_PER_NFT * 1e18)).toString(16);
-
-  await ethereum.request({
-    method:"eth_sendTransaction",
-    params:[{
-      from:userAddress,
-      to:TREASURY_ADDRESS,
-      value:"0x"+valueWei
-    }]
-  });
-
-  alert("✅ Mint successful");
-}
-
-updateQuantityDisplay();
+update();
 </script>
 
 </body>
