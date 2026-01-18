@@ -1,143 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CatKitSune - Mint NFT</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
-<!-- ===== CSS VÁLTOZATLAN ===== -->
-<style>
-/* A TELJES CSS, AMIT KÜLDTÉL – NEM NYÚLTAM HOZZÁ */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-:root { --primary:#14b8a6; --primary-dark:#0d9488; --bg-main:#f0fdf9; --text-main:#111827; --text-muted:#6b7280; --border:#e5e7eb; }
-body { font-family:'Inter',sans-serif; background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%); min-height:100vh; color:var(--text-main);}
-.container{max-width:1400px;margin:0 auto;padding:20px;}
-/* --- a teljes CSS maradt, nem ismétlem újra a választ --- */
-</style>
-</head>
-
-<body>
-
-<header>
-  <div class="header-content">
-    <a href="/index.html" class="logo">🐱 CatKitSune</a>
-    <a href="/index.html" class="back-btn">← Back to Home</a>
-  </div>
-</header>
-
-<div class="container">
-
-<div class="supply-banner">
-  <div class="supply-info">
-    <div class="supply-label">Available to Mint</div>
-    <div class="supply-count" id="remainingSupply">300 / 300</div>
-  </div>
-  <div class="supply-progress">
-    <div class="progress-bar">
-      <div class="progress-fill" style="width:0%"></div>
-    </div>
-    <div class="progress-text">Minting live</div>
-  </div>
-  <div class="supply-status">
-    <div class="status-badge">🔥 Minting Live</div>
-  </div>
-</div>
-
-<div class="mint-section">
-
-<!-- BAL OLDAL (NFT GRID) – VÁLTOZATLAN -->
-<div class="nft-preview">
-  <div class="nft-grid-container">
-    <div class="nft-grid-item"><img src="/launch/1.png"></div>
-    <div class="nft-grid-item"><img src="/launch/2.png"></div>
-    <div class="nft-grid-item"><img src="/launch/3.png"></div>
-    <div class="nft-grid-item"><img src="/launch/4.png"></div>
-    <div class="nft-grid-item"><img src="/launch/5.png"></div>
-    <div class="nft-grid-item"><img src="/launch/6.png"></div>
-    <div class="nft-grid-item"><img src="/launch/7.png"></div>
-    <div class="nft-grid-item"><img src="/launch/8.png"></div>
-    <div class="nft-grid-item"><img src="/launch/9.png"></div>
-  </div>
-</div>
-
-<!-- JOBB OLDAL (MINT CARD) – VÁLTOZATLAN -->
-<div class="mint-card">
-  <h1 class="mint-title">🔥 Mint Your NFT</h1>
-
-  <div class="quantity-selector">
-    <button class="quantity-btn" onclick="dec()">−</button>
-    <div class="quantity-display" id="qty">1</div>
-    <button class="quantity-btn" onclick="inc()">+</button>
-  </div>
-
-  <div class="price-display">
-    <div>
-      <div class="price-label">You will pay</div>
-      <div class="price-value" id="price">0.5 HYPE</div>
-    </div>
-  </div>
-
-  <button class="mint-button" onclick="mint()">Connect / Mint</button>
-  <div id="statusMessage" class="status-message"></div>
-</div>
-
-</div>
-</div>
-
-<!-- ===== JAVÍTOTT, MŰKÖDŐ SCRIPT ===== -->
 <script>
+/* =====================================================
+   CONFIG – NEM NYÚLUNK A KINÉZETHEZ
+===================================================== */
+const MODE = "LIVE"; // LIVE !!!
 const CONTRACT_ADDRESS = "0xe428ADb731D5fd4E5a117C85059828d894683E78";
-const HYPER_CHAIN_ID = "0x3e7"; // HyperEVM MAINNET
-const PRICE = 0.5;
+const PRICE_PER_NFT = 0.5;
+const HYPERLIQUID_CHAIN_ID = "0x3e7"; // HyperEVM MAINNET
 
 const ABI = [
-  "function publicMint(uint256 qty) payable"
+  "function publicMint(uint256 quantity) payable",
+  "function totalSupply() view returns (uint256)"
 ];
 
-let qty = 1;
-let signer, contract;
+let provider, signer, contract;
+let quantity = 1;
+let isConnected = false;
+let userAddress = "";
 
-function inc(){ if(qty<10){ qty++; update(); } }
-function dec(){ if(qty>1){ qty--; update(); } }
+/* =====================================================
+   WALLET + NETWORK
+===================================================== */
+async function connectWallet() {
+  if (!window.ethereum) {
+    showStatus("MetaMask szükséges!", "error");
+    return;
+  }
 
-function update(){
-  document.getElementById("qty").innerText = qty;
-  document.getElementById("price").innerText = (qty*PRICE)+" HYPE";
-}
-
-async function mint(){
-  if(!window.ethereum){ alert("MetaMask required"); return; }
-
-  await ethereum.request({
-    method:"wallet_switchEthereumChain",
-    params:[{chainId:HYPER_CHAIN_ID}]
+  await window.ethereum.request({
+    method: "wallet_switchEthereumChain",
+    params: [{ chainId: HYPERLIQUID_CHAIN_ID }]
   });
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts",[]);
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
   signer = provider.getSigner();
+  userAddress = await signer.getAddress();
 
   contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-  try{
-    document.getElementById("statusMessage").innerText="Minting...";
-    const tx = await contract.publicMint(
-      qty,
-      { value: ethers.utils.parseEther((qty*PRICE).toString()) }
+  isConnected = true;
+  document.getElementById("walletAddress").innerText =
+    userAddress.slice(0, 6) + "..." + userAddress.slice(-4);
+  document.getElementById("walletInfo").style.display = "block";
+  document.getElementById("mintButton").innerText =
+    "🚀 Mint " + quantity + " NFT";
+
+  showStatus("Wallet csatlakoztatva", "success");
+}
+
+/* =====================================================
+   QUANTITY
+===================================================== */
+function increaseQuantity() {
+  quantity++;
+  updateQuantityDisplay();
+}
+function decreaseQuantity() {
+  if (quantity > 1) quantity--;
+  updateQuantityDisplay();
+}
+function updateQuantityDisplay() {
+  document.getElementById("quantityDisplay").innerText = quantity;
+  document.getElementById("totalPrice").innerText =
+    (quantity * PRICE_PER_NFT).toFixed(1) + " HYPE";
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+function showStatus(msg, type) {
+  const el = document.getElementById("statusMessage");
+  el.className = "status-message " + type;
+  el.innerText = msg;
+}
+
+/* =====================================================
+   MINT – EZ MOST MÁR IGAZI
+===================================================== */
+async function handleMint() {
+  if (!isConnected) {
+    await connectWallet();
+    return;
+  }
+
+  try {
+    showStatus("Mintelés folyamatban...", "info");
+    document.getElementById("mintButton").disabled = true;
+
+    const value = ethers.utils.parseEther(
+      (PRICE_PER_NFT * quantity).toString()
     );
+
+    const tx = await contract.publicMint(quantity, { value });
     await tx.wait();
-    document.getElementById("statusMessage").innerText="✅ Mint successful";
-  }catch(e){
-    document.getElementById("statusMessage").innerText="❌ Mint failed";
-    console.error(e);
+
+    showStatus("✅ Sikeres mint!", "success");
+    document.getElementById("mintButton").innerText = "🎉 Mint More";
+  } catch (err) {
+    console.error(err);
+    showStatus("❌ Mint hiba", "error");
+  } finally {
+    document.getElementById("mintButton").disabled = false;
   }
 }
 
-update();
+/* =====================================================
+   INIT
+===================================================== */
+window.addEventListener("DOMContentLoaded", () => {
+  updateQuantityDisplay();
+});
 </script>
-
-</body>
-</html>
