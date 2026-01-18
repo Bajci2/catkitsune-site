@@ -1,219 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>CatKitSune – Mint</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CatKitSune - Mint NFT</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
-/* ==== RÉGI KINÉZET – VÁLTOZTATÁS NÉLKÜL ==== */
+/* ====== KINÉZET: VÁLTOZTATÁS NÉLKÜL ====== */
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:Inter,sans-serif;
-  background:linear-gradient(135deg,#f0fdf9,#ccfbf1);
-  color:#111827;
-}
+:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
 .container{max-width:1400px;margin:0 auto;padding:20px}
-header{
-  background:#fff;
-  border-bottom:1px solid #e5e7eb;
-  padding:16px 0;
-}
-.header-content{
-  max-width:1400px;
-  margin:0 auto;
-  padding:0 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.logo{
-  font-size:24px;
-  font-weight:900;
-  color:#14b8a6;
-  text-decoration:none;
-}
-.back-btn{
-  background:#14b8a6;
-  color:#fff;
-  padding:10px 20px;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:600;
-}
-.supply-banner{
-  margin:30px 0;
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  color:#fff;
-  padding:20px;
-  border-radius:16px;
-}
-.mint-section{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
-}
-.nft-preview,.mint-card{
-  background:#fff;
-  border-radius:24px;
-  padding:32px;
-  box-shadow:0 10px 40px rgba(0,0,0,.1)
-}
-.nft-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-.nft-grid img{
-  width:100%;
-  border-radius:12px;
-}
-.quantity{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:20px;
-  margin:20px 0;
-}
-.quantity button{
-  width:48px;
-  height:48px;
-  border-radius:12px;
-  border:2px solid #14b8a6;
-  background:#fff;
-  font-size:24px;
-  cursor:pointer;
-}
-.mint-btn{
-  width:100%;
-  padding:18px;
-  background:#14b8a6;
-  color:#fff;
-  border:none;
-  border-radius:16px;
-  font-size:18px;
-  font-weight:700;
-  cursor:pointer;
-}
-.status{margin-top:15px;font-weight:600;text-align:center}
-@media(max-width:900px){
-  .mint-section{grid-template-columns:1fr}
-}
+header{background:rgba(255,255,255,.95);border-bottom:1px solid var(--border);padding:16px 0}
+.header-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.back-btn{padding:10px 20px;background:var(--primary);color:white;border-radius:12px;font-weight:600;text-decoration:none}
+
+.supply-banner{background:linear-gradient(135deg,#667eea,#764ba2);padding:16px 24px;border-radius:16px;margin-bottom:40px;color:white}
+.mint-section{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.nft-preview,.mint-card{background:white;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.1)}
+.nft-grid-container{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.nft-grid-item img{width:100%;border-radius:12px}
+.quantity-selector{display:flex;gap:20px;justify-content:center}
+.quantity-btn{width:48px;height:48px;border-radius:12px;border:2px solid var(--primary);background:white;color:var(--primary);font-size:24px}
+.price-display{padding:24px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:16px;color:white;margin-bottom:20px}
+.mint-button{width:100%;padding:20px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border:none;border-radius:16px;color:white;font-size:18px;font-weight:700}
+.wallet-info{text-align:center;margin-top:10px;font-size:14px}
 </style>
 </head>
 
 <body>
-
 <header>
   <div class="header-content">
     <a class="logo">🐱 CatKitSune</a>
-    <a href="/" class="back-btn">← Back</a>
+    <a class="back-btn">← Back to Home</a>
   </div>
 </header>
 
 <div class="container">
-
-<div class="supply-banner">
-  <div id="supplyText">Loading supply...</div>
-</div>
-
-<div class="mint-section">
-
-<div class="nft-preview">
-  <div class="nft-grid">
-    <img src="/launch/1.png">
-    <img src="/launch/2.png">
-    <img src="/launch/3.png">
-    <img src="/launch/4.png">
-    <img src="/launch/5.png">
-    <img src="/launch/6.png">
-    <img src="/launch/7.png">
-    <img src="/launch/8.png">
-    <img src="/launch/9.png">
-  </div>
-</div>
-
-<div class="mint-card">
-  <h2>🔥 Mint Your NFT</h2>
-
-  <div class="quantity">
-    <button onclick="dec()">−</button>
-    <div id="qty">1</div>
-    <button onclick="inc()">+</button>
+  <div class="supply-banner">
+    <b>Available to Mint:</b> 300 / 300
   </div>
 
-  <div><b>Total:</b> <span id="price">0.3 HYPE</span></div>
+  <div class="mint-section">
+    <div class="nft-preview">
+      <div class="nft-grid-container">
+        <img src="/launch/1.png"><img src="/launch/2.png"><img src="/launch/3.png">
+        <img src="/launch/4.png"><img src="/launch/5.png"><img src="/launch/6.png">
+        <img src="/launch/7.png"><img src="/launch/8.png"><img src="/launch/9.png">
+      </div>
+      <h2>CatKitSune NFT</h2>
+      <p>Total supply: 300 • Price: 0.3 HYPE</p>
+    </div>
 
-  <button class="mint-btn" onclick="mint()">Connect / Mint</button>
+    <div class="mint-card">
+      <h2>🔥 Mint Your NFT</h2>
 
-  <div class="status" id="status"></div>
-</div>
+      <div class="quantity-selector">
+        <button class="quantity-btn" onclick="dec()">−</button>
+        <div id="qty">1</div>
+        <button class="quantity-btn" onclick="inc()">+</button>
+      </div>
 
-</div>
+      <div class="price-display">
+        You will pay: <b><span id="price">0.3</span> HYPE</b>
+      </div>
+
+      <button id="mintBtn" class="mint-button" onclick="mint()">Connect / Mint</button>
+
+      <div class="wallet-info" id="walletInfo"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-/* ==== KONFIG ==== */
-const CONTRACT = "0xe428ADb731D5fd4E5a117C85059828d894683E78";
-const CHAIN_ID = "0x3e7";
+/* ====== KONFIG ====== */
+const CONTRACT_ADDRESS = "0xe428ADb731D5fd4E5a117C85059828d894683E78";
+const CHAIN_ID = "0x3e7"; // HyperEVM MAINNET
 const PRICE = 0.3;
-const MAX = 300;
 
 const ABI = [
- "function publicMint(uint256 qty) payable",
- "function totalMinted() view returns(uint256)"
+  "function publicMint(uint256 quantity) payable"
 ];
 
 let qty = 1;
 let provider, signer, contract;
 
-/* ==== UI ==== */
+/* ====== UI ====== */
 function inc(){qty++;update()}
 function dec(){if(qty>1)qty--;update()}
 function update(){
-  document.getElementById("qty").innerText=qty;
-  document.getElementById("price").innerText=(qty*PRICE).toFixed(1)+" HYPE";
+  document.getElementById("qty").innerText = qty;
+  document.getElementById("price").innerText = (qty*PRICE).toFixed(1);
 }
+update();
 
-/* ==== SUPPLY ==== */
-async function loadSupply(){
-  const rpc=new ethers.providers.JsonRpcProvider("https://rpc.hyperliquid.xyz");
-  const c=new ethers.Contract(CONTRACT,ABI,rpc);
-  const minted=await c.totalMinted();
-  document.getElementById("supplyText").innerText=
-    `${MAX-minted} / ${MAX} available`;
-}
-
-/* ==== MINT ==== */
+/* ====== MINT ====== */
 async function mint(){
-  if(!window.ethereum)return alert("MetaMask required");
+  if(!window.ethereum) return alert("MetaMask required");
 
-  provider=new ethers.providers.Web3Provider(window.ethereum);
-  await provider.send("eth_requestAccounts",[]);
   await window.ethereum.request({
     method:"wallet_switchEthereumChain",
     params:[{chainId:CHAIN_ID}]
   });
 
-  signer=provider.getSigner();
-  contract=new ethers.Contract(CONTRACT,ABI,signer);
+  provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts",[]);
+  signer = provider.getSigner();
+  contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-  document.getElementById("status").innerText="Minting...";
-  const tx=await contract.publicMint(qty,{
-    value:ethers.utils.parseEther((qty*PRICE).toString())
-  });
-  await tx.wait();
+  document.getElementById("walletInfo").innerText = "Wallet connected";
 
-  document.getElementById("status").innerText="✅ Mint successful";
-  loadSupply();
+  const value = ethers.utils.parseEther((qty*PRICE).toString());
+
+  try{
+    document.getElementById("mintBtn").innerText="Minting...";
+    const tx = await contract.publicMint(qty,{value});
+    await tx.wait();
+    document.getElementById("mintBtn").innerText="Mint Another";
+  }catch(e){
+    console.error(e);
+    document.getElementById("mintBtn").innerText="Mint failed";
+  }
 }
-
-update();
-loadSupply();
 </script>
-
 </body>
 </html>
