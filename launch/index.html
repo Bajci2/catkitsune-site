@@ -12,32 +12,25 @@
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
-/* ---- A KINÉZETHEZ NEM NYÚLTAM ---- */
+/* ---- KINÉZET VÁLTOZATLAN ---- */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
 body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
 .container{max-width:1400px;margin:0 auto;padding:20px}
-/* HEADER */
 header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
 .header-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
 .logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
 .back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none;font-weight:600}
-
-/* SUPPLY */
 .supply-banner{background:linear-gradient(135deg,#667eea,#764ba2);padding:16px 24px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:40px}
 .supply-count{font-size:32px;font-weight:900;color:#fff}
 .progress-bar{height:12px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#22c55e)}
 .progress-text{color:#fff;font-size:12px;text-align:center}
 .status-badge{background:rgba(255,255,255,.2);padding:8px 16px;border-radius:999px;color:#fff;font-weight:700}
-
-/* GRID */
 .mint-section{display:grid;grid-template-columns:1fr 1fr;gap:40px}
 .nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.1)}
 .nft-grid-container{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .nft-grid-item img{width:100%;border-radius:12px}
-
-/* BUTTON */
 .mint-button{width:100%;padding:20px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:16px;font-size:18px;font-weight:700;cursor:pointer}
 .quantity-selector{display:flex;gap:20px;justify-content:center}
 .quantity-btn{width:48px;height:48px;border-radius:12px;border:2px solid var(--primary);background:#fff;color:var(--primary);font-size:24px}
@@ -59,7 +52,7 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 <div class="supply-banner">
   <div>
     <div style="color:#fff;font-size:13px">Available to Mint</div>
-    <div class="supply-count" id="remainingSupply">300 / 300</div>
+    <div class="supply-count">300 / 300</div>
   </div>
   <div style="flex:1;margin:0 24px">
     <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
@@ -73,14 +66,14 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 <div class="nft-preview">
   <div class="nft-grid-container">
     <div class="nft-grid-item"><img src="/launch/1.png"></div>
-  <div class="nft-grid-item"><img src="/launch/2.png"></div>
-  <div class="nft-grid-item"><img src="/launch/3.png"></div>
-  <div class="nft-grid-item"><img src="/launch/4.png"></div>
-  <div class="nft-grid-item"><img src="/launch/5.png"></div>
-  <div class="nft-grid-item"><img src="/launch/6.png"></div>
-  <div class="nft-grid-item"><img src="/launch/7.png"></div>
-  <div class="nft-grid-item"><img src="/launch/8.png"></div>
-  <div class="nft-grid-item"><img src="/launch/9.png"></div>
+    <div class="nft-grid-item"><img src="/launch/2.png"></div>
+    <div class="nft-grid-item"><img src="/launch/3.png"></div>
+    <div class="nft-grid-item"><img src="/launch/4.png"></div>
+    <div class="nft-grid-item"><img src="/launch/5.png"></div>
+    <div class="nft-grid-item"><img src="/launch/6.png"></div>
+    <div class="nft-grid-item"><img src="/launch/7.png"></div>
+    <div class="nft-grid-item"><img src="/launch/8.png"></div>
+    <div class="nft-grid-item"><img src="/launch/9.png"></div>
   </div>
 </div>
 
@@ -102,41 +95,46 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 </div>
 
 <script>
-/* ===== LIVE CONFIG ===== */
-const MODE = "LIVE";
+/* ===== FIXED LIVE MINT ===== */
 const PRICE_PER_NFT = 0.3;
-const TREASURY = "0x73C4e88f22c53a02791C64D647C4E0ee011b86C5";
+const CONTRACT_ADDRESS = "0xe428ADb731D5fd4E5a117C85059828d894683E78";
 const CHAIN_ID = "0x3e7";
 
-let qty = 1;
-let user = null;
+const ABI = [
+  "function publicMint(uint256 quantity) payable"
+];
 
-function inc(){qty++;document.getElementById("qty").innerText=qty}
-function dec(){if(qty>1)qty--;document.getElementById("qty").innerText=qty}
+let qty = 1;
+
+function inc(){ qty++; document.getElementById("qty").innerText = qty; }
+function dec(){ if(qty>1) qty--; document.getElementById("qty").innerText = qty; }
 
 async function mint(){
   if(!window.ethereum) return alert("Install MetaMask");
 
-  const [acc] = await ethereum.request({method:"eth_requestAccounts"});
-  user = acc;
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+  const signer = provider.getSigner();
 
-  const chain = await ethereum.request({method:"eth_chainId"});
+  const chain = await provider.send("eth_chainId", []);
   if(chain !== CHAIN_ID){
-    await ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:CHAIN_ID}]});
+    await window.ethereum.request({
+      method:"wallet_switchEthereumChain",
+      params:[{chainId:CHAIN_ID}]
+    });
   }
 
-  const value = BigInt(Math.floor(qty * PRICE_PER_NFT * 1e18)).toString(16);
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+  const value = ethers.utils.parseEther((PRICE_PER_NFT * qty).toString());
 
-  await ethereum.request({
-    method:"eth_sendTransaction",
-    params:[{
-      from:user,
-      to:TREASURY,
-      value:"0x"+value
-    }]
-  });
-
-  alert("✅ MINT SUCCESS");
+  try{
+    const tx = await contract.publicMint(qty, { value });
+    await tx.wait();
+    alert("✅ NFT SUCCESSFULLY MINTED");
+  }catch(e){
+    console.error(e);
+    alert("❌ Mint failed");
+  }
 }
 </script>
 
