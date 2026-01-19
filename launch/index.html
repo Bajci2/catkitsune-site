@@ -2,114 +2,67 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CatKitSune – Mint NFT</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>CatKitSune – Free Mint</title>
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --primary:#14b8a6;
-  --primary-dark:#0d9488;
-  --bg-main:#f0fdf9;
-  --text-main:#111827;
-  --border:#e5e7eb
-}
-body{
-  font-family:Inter,sans-serif;
-  background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);
-  min-height:100vh;
-}
-.container{max-width:1200px;margin:0 auto;padding:20px}
-header{
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  padding:16px;
-}
-.logo{
-  font-size:24px;
-  font-weight:900;
-  color:var(--primary);
-}
-.mint-card{
-  margin-top:40px;
-  background:#fff;
-  border-radius:24px;
-  padding:40px;
-  box-shadow:0 10px 40px rgba(0,0,0,.1);
-  text-align:center;
-}
-.mint-button{
-  margin-top:20px;
-  width:100%;
-  padding:20px;
-  font-size:20px;
-  font-weight:800;
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  border:none;
-  border-radius:16px;
-  color:#fff;
-  cursor:pointer;
-}
+body{font-family:Arial;background:#0f172a;color:#fff;text-align:center;padding-top:100px}
+button{padding:20px 40px;font-size:20px;border-radius:12px;border:none;cursor:pointer;background:#14b8a6;color:#000;font-weight:700}
 </style>
 </head>
-
 <body>
 
-<header>
-  <div class="container">
-    <div class="logo">🐱 CatKitSune – Free Mint</div>
-  </div>
-</header>
+<h1>🐱 CatKitSune</h1>
+<h2>Mint 1 NFT – FREE</h2>
+<p>0 HYPE · Test mint</p>
 
-<div class="container">
-  <div class="mint-card">
-    <h1>Mint 1 NFT (FREE)</h1>
-    <p style="margin:10px 0;font-size:16px;">0 HYPE · 1 NFT · Test mint</p>
-    <button class="mint-button" onclick="mint()">Connect & Mint</button>
-  </div>
-</div>
+<button onclick="mint()">Connect & Mint</button>
 
 <script>
-/* ===== CONFIG ===== */
 const CONTRACT_ADDRESS = "0xf64D89F2DD7E26C4b4555F03b556428F1EBe9598";
-const CHAIN_ID = "0x3e7"; // HyperEVM
+const HYPEREVM_CHAIN_ID = "0x3e7"; // 999
 
 const ABI = [
-  "function mint() payable"
+  "function publicMint(uint256 quantity) payable"
 ];
 
-async function mint(){
-  try{
-    if(!window.ethereum){
-      alert("MetaMask not found");
+async function ensureHyperEVM() {
+  const currentChain = await window.ethereum.request({ method: "eth_chainId" });
+  if (currentChain !== HYPEREVM_CHAIN_ID) {
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: HYPEREVM_CHAIN_ID }]
+    });
+  }
+}
+
+async function mint() {
+  try {
+    if (!window.ethereum) {
+      alert("MetaMask required");
       return;
     }
 
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+    await ensureHyperEVM();
+
+    // ⚠️ provider CSAK EZUTÁN!
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
 
-    const currentChain = await provider.send("eth_chainId", []);
-    if(currentChain !== CHAIN_ID){
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: CHAIN_ID }]
-      });
-    }
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      ABI,
+      signer
+    );
 
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-
-    const tx = await contract.mint({ value: 0 });
+    const tx = await contract.publicMint(1, { value: 0 });
     await tx.wait();
 
-    alert("✅ NFT SUCCESSFULLY MINTED");
+    alert("✅ FREE NFT MINTED SUCCESSFULLY");
 
-  }catch(err){
+  } catch (err) {
     console.error(err);
-    alert("❌ Mint failed:\n" + (err?.data?.message || err.message));
+    alert("❌ Mint failed – check console");
   }
 }
 </script>
