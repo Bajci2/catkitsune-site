@@ -1,45 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CatKitSune – Free Mint</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
 <style>
-body{font-family:Arial;background:#0f172a;color:#fff;text-align:center;padding-top:100px}
-button{padding:20px 40px;font-size:20px;border-radius:12px;border:none;cursor:pointer;background:#14b8a6;color:#000;font-weight:700}
-#status{margin-top:20px;padding:10px;background:#1e293b;border-radius:8px;max-width:600px;margin-left:auto;margin-right:auto}
+body {
+  font-family: Inter, sans-serif;
+  background: linear-gradient(135deg,#0f766e,#042f2e);
+  min-height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+}
+.card {
+  background:#022c22;
+  padding:40px;
+  border-radius:20px;
+  max-width:420px;
+  width:100%;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+h1 { font-size:28px; margin-bottom:10px; }
+p { opacity:.85; margin-bottom:30px; }
+button {
+  width:100%;
+  padding:18px;
+  font-size:18px;
+  font-weight:800;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#14b8a6,#0d9488);
+  color:white;
+  cursor:pointer;
+}
+button:disabled {
+  opacity:.6;
+  cursor:not-allowed;
+}
+.status {
+  margin-top:20px;
+  font-size:14px;
+  min-height:20px;
+}
 </style>
 </head>
+
 <body>
-<h1>🐱 CatKitSune</h1>
-<h2>Mint 1 NFT – FREE</h2>
-<p>0 HYPE · Test mint</p>
-<button onclick="mint()">Connect & Mint</button>
-<div id="status"></div>
+
+<div class="card">
+  <h1>🐱 CatKitSune</h1>
+  <p>Mint 1 NFT for FREE<br>0 HYPE · Test mint</p>
+
+  <button id="mintBtn" onclick="mint()">Connect & Mint</button>
+  <div class="status" id="status"></div>
+</div>
+
 <script>
+/* ================= CONFIG ================= */
+
 const CONTRACT_ADDRESS = "0xf64D89F2DD7E26C4b4555F03b556428F1EBe9598";
 const HYPEREVM_CHAIN_ID = "0x3e7"; // 999
+
 const ABI = [
-  "function publicMint(uint256 quantity) payable",
-  "function totalSupply() view returns (uint256)",
-  "function maxSupply() view returns (uint256)"
+  "function publicMint(uint256 quantity) payable"
 ];
 
-function log(msg) {
-  document.getElementById('status').innerHTML = msg;
-  console.log(msg);
-}
+/* ================= LOGIC ================= */
 
-async function ensureHyperEVM() {
-  const currentChain = await window.ethereum.request({ method: "eth_chainId" });
-  if (currentChain !== HYPEREVM_CHAIN_ID) {
-    log("🔄 Switching to HyperEVM...");
-    await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: HYPEREVM_CHAIN_ID }]
-    });
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  }
+const statusEl = document.getElementById("status");
+const btn = document.getElementById("mintBtn");
+
+function setStatus(msg) {
+  statusEl.innerText = msg;
 }
 
 async function mint() {
@@ -48,66 +87,55 @@ async function mint() {
       alert("MetaMask required");
       return;
     }
-    
-    log("🔌 Connecting wallet...");
+
+    btn.disabled = true;
+    setStatus("Connecting wallet...");
+
     await window.ethereum.request({ method: "eth_requestAccounts" });
-    await ensureHyperEVM();
-    
+
+    const chainId = await window.ethereum.request({
+      method: "eth_chainId"
+    });
+
+    // 👉 NETWORK SWITCH + HARD RELOAD (ethers v5 FIX)
+    if (chainId !== HYPEREVM_CHAIN_ID) {
+      setStatus("Switching to HyperEVM...");
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: HYPEREVM_CHAIN_ID }]
+      });
+
+      location.reload();
+      return;
+    }
+
+    // 🔥 PROVIDER CSAK SWITCH UTÁN
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    
-    // ✅ Ellenőrizzük, hogy létezik-e a contract
-    log("🔍 Checking contract...");
-    const code = await provider.getCode(CONTRACT_ADDRESS);
-    if (code === '0x') {
-      throw new Error("Contract not deployed at this address!");
-    }
-    
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-    
-    // ✅ Ellenőrizzük a supply-t
-    try {
-      const totalSupply = await contract.totalSupply();
-      const maxSupply = await contract.maxSupply();
-      log(`📊 Supply: ${totalSupply}/${maxSupply}`);
-      
-      if (totalSupply.gte(maxSupply)) {
-        throw new Error("Max supply reached!");
-      }
-    } catch (e) {
-      log("⚠️ Could not check supply (functions may not exist)");
-    }
-    
-    // ✅ Próbáljuk meg a mintet
-    log("⛏️ Minting...");
-    const tx = await contract.publicMint(1, { 
-      value: 0,
-      gasLimit: 500000 // Explicit gas limit
-    });
-    
-    log("⏳ Waiting for confirmation...");
+
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      ABI,
+      signer
+    );
+
+    setStatus("Minting NFT...");
+
+    const tx = await contract.publicMint(1, { value: 0 });
     await tx.wait();
-    
-    log("✅ FREE NFT MINTED SUCCESSFULLY!");
+
+    setStatus("✅ NFT successfully minted!");
+    alert("SUCCESS: NFT minted");
+
   } catch (err) {
     console.error(err);
-    let errorMsg = "❌ Mint failed: ";
-    
-    if (err.code === 'UNPREDICTABLE_GAS_LIMIT') {
-      errorMsg += "Transaction would fail. Possible reasons:\n";
-      errorMsg += "- Contract not deployed\n";
-      errorMsg += "- Minting not started yet\n";
-      errorMsg += "- Max supply reached\n";
-      errorMsg += "- Wrong network";
-    } else if (err.message) {
-      errorMsg += err.message;
-    } else {
-      errorMsg += "Unknown error (check console)";
-    }
-    
-    log(errorMsg);
+    setStatus("❌ Mint failed");
+    alert("Mint failed – check console");
+  } finally {
+    btn.disabled = false;
   }
 }
 </script>
+
 </body>
 </html>
