@@ -7,6 +7,7 @@
 <style>
 body{font-family:Arial;background:#0f172a;color:#fff;text-align:center;padding-top:100px}
 button{padding:20px 40px;font-size:20px;border-radius:12px;border:none;cursor:pointer;background:#14b8a6;color:#000;font-weight:700}
+#status{margin-top:20px;padding:10px;background:#1e293b;border-radius:8px;max-width:600px;margin-left:auto;margin-right:auto}
 </style>
 </head>
 <body>
@@ -14,21 +15,29 @@ button{padding:20px 40px;font-size:20px;border-radius:12px;border:none;cursor:po
 <h2>Mint 1 NFT – FREE</h2>
 <p>0 HYPE · Test mint</p>
 <button onclick="mint()">Connect & Mint</button>
+<div id="status"></div>
 <script>
 const CONTRACT_ADDRESS = "0xf64D89F2DD7E26C4b4555F03b556428F1EBe9598";
 const HYPEREVM_CHAIN_ID = "0x3e7"; // 999
 const ABI = [
-  "function publicMint(uint256 quantity) payable"
+  "function publicMint(uint256 quantity) payable",
+  "function totalSupply() view returns (uint256)",
+  "function maxSupply() view returns (uint256)"
 ];
+
+function log(msg) {
+  document.getElementById('status').innerHTML = msg;
+  console.log(msg);
+}
 
 async function ensureHyperEVM() {
   const currentChain = await window.ethereum.request({ method: "eth_chainId" });
   if (currentChain !== HYPEREVM_CHAIN_ID) {
+    log("🔄 Switching to HyperEVM...");
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: HYPEREVM_CHAIN_ID }]
     });
-    // 🔥 Kis delay a network switch után
     await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
@@ -40,26 +49,63 @@ async function mint() {
       return;
     }
     
+    log("🔌 Connecting wallet...");
     await window.ethereum.request({ method: "eth_requestAccounts" });
     await ensureHyperEVM();
     
-    // ✅ Provider létrehozása CSAK a hálózatváltás után
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     
-    const contract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      ABI,
-      signer
-    );
+    // ✅ Ellenőrizzük, hogy létezik-e a contract
+    log("🔍 Checking contract...");
+    const code = await provider.getCode(CONTRACT_ADDRESS);
+    if (code === '0x') {
+      throw new Error("Contract not deployed at this address!");
+    }
     
-    const tx = await contract.publicMint(1, { value: 0 });
+    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+    
+    // ✅ Ellenőrizzük a supply-t
+    try {
+      const totalSupply = await contract.totalSupply();
+      const maxSupply = await contract.maxSupply();
+      log(`📊 Supply: ${totalSupply}/${maxSupply}`);
+      
+      if (totalSupply.gte(maxSupply)) {
+        throw new Error("Max supply reached!");
+      }
+    } catch (e) {
+      log("⚠️ Could not check supply (functions may not exist)");
+    }
+    
+    // ✅ Próbáljuk meg a mintet
+    log("⛏️ Minting...");
+    const tx = await contract.publicMint(1, { 
+      value: 0,
+      gasLimit: 500000 // Explicit gas limit
+    });
+    
+    log("⏳ Waiting for confirmation...");
     await tx.wait();
     
-    alert("✅ FREE NFT MINTED SUCCESSFULLY");
+    log("✅ FREE NFT MINTED SUCCESSFULLY!");
   } catch (err) {
     console.error(err);
-    alert("❌ Mint failed: " + (err.message || "Unknown error"));
+    let errorMsg = "❌ Mint failed: ";
+    
+    if (err.code === 'UNPREDICTABLE_GAS_LIMIT') {
+      errorMsg += "Transaction would fail. Possible reasons:\n";
+      errorMsg += "- Contract not deployed\n";
+      errorMsg += "- Minting not started yet\n";
+      errorMsg += "- Max supply reached\n";
+      errorMsg += "- Wrong network";
+    } else if (err.message) {
+      errorMsg += err.message;
+    } else {
+      errorMsg += "Unknown error (check console)";
+    }
+    
+    log(errorMsg);
   }
 }
 </script>
