@@ -10,17 +10,13 @@ button{padding:20px 40px;font-size:20px;border-radius:12px;border:none;cursor:po
 </style>
 </head>
 <body>
-
 <h1>🐱 CatKitSune</h1>
 <h2>Mint 1 NFT – FREE</h2>
 <p>0 HYPE · Test mint</p>
-
 <button onclick="mint()">Connect & Mint</button>
-
 <script>
 const CONTRACT_ADDRESS = "0xf64D89F2DD7E26C4b4555F03b556428F1EBe9598";
 const HYPEREVM_CHAIN_ID = "0x3e7"; // 999
-
 const ABI = [
   "function publicMint(uint256 quantity) payable"
 ];
@@ -32,6 +28,8 @@ async function ensureHyperEVM() {
       method: "wallet_switchEthereumChain",
       params: [{ chainId: HYPEREVM_CHAIN_ID }]
     });
+    // 🔥 Kis delay a network switch után
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
 
@@ -41,31 +39,29 @@ async function mint() {
       alert("MetaMask required");
       return;
     }
-
+    
     await window.ethereum.request({ method: "eth_requestAccounts" });
     await ensureHyperEVM();
-
-    // ⚠️ provider CSAK EZUTÁN!
+    
+    // ✅ Provider létrehozása CSAK a hálózatváltás után
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-
+    
     const contract = new ethers.Contract(
       CONTRACT_ADDRESS,
       ABI,
       signer
     );
-
+    
     const tx = await contract.publicMint(1, { value: 0 });
     await tx.wait();
-
+    
     alert("✅ FREE NFT MINTED SUCCESSFULLY");
-
   } catch (err) {
     console.error(err);
-    alert("❌ Mint failed – check console");
+    alert("❌ Mint failed: " + (err.message || "Unknown error"));
   }
 }
 </script>
-
 </body>
 </html>
