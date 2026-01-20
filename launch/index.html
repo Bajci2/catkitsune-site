@@ -4,8 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>CatKitSune – Free Mint</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
 <style>
 body {
   font-family: Inter, sans-serif;
@@ -37,11 +39,6 @@ button {
   background:linear-gradient(135deg,#14b8a6,#0d9488);
   color:white;
   cursor:pointer;
-  transition: all 0.3s;
-}
-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(20,184,166,0.3);
 }
 button:disabled {
   opacity:.6;
@@ -57,130 +54,89 @@ button:disabled {
 .success { color:#86efac; }
 </style>
 </head>
+
 <body>
 <div class="card">
   <h1>🐱 CatKitSune</h1>
-  <p>Mint 1 NFT for FREE<br>0 HYPE · Test mint</p>
+  <p>Mint 1 NFT for FREE<br>0 HYPE · HyperEVM</p>
+
   <button id="mintBtn" onclick="mint()">Connect & Mint</button>
   <div class="status" id="status"></div>
 </div>
+
 <script>
 /* ================= CONFIG ================= */
-const CONTRACT_ADDRESS = "0xf64D89F2DD7E26C4b4555F03b556428F1EBe9598";
+const CONTRACT_ADDRESS = "0x29b93a354D5b10FeD22E0FBb5cca69a84787CC35";
 const HYPEREVM_CHAIN_ID = "0x3e7"; // 999
+
 const ABI = [
-  "function publicMint(uint256 quantity) payable",
-  "function totalSupply() view returns (uint256)",
-  "function maxSupply() view returns (uint256)",
-  "function owner() view returns (address)"
+  "function mint() payable"
 ];
 
 /* ================= LOGIC ================= */
 const statusEl = document.getElementById("status");
 const btn = document.getElementById("mintBtn");
 
-function setStatus(msg, type = "info") {
-  statusEl.className = `status ${type}`;
+function setStatus(msg, type = "") {
+  statusEl.className = "status " + type;
   statusEl.innerHTML = msg;
-  console.log(msg);
 }
 
 async function mint() {
   try {
     if (!window.ethereum) {
-      alert("❌ MetaMask not detected!\n\nPlease install MetaMask extension.");
+      alert("MetaMask not detected");
       return;
     }
 
     btn.disabled = true;
     setStatus("🔌 Connecting wallet...");
-    
+
     await window.ethereum.request({ method: "eth_requestAccounts" });
-    
     const chainId = await window.ethereum.request({ method: "eth_chainId" });
-    
-    // 👉 NETWORK SWITCH
+
     if (chainId !== HYPEREVM_CHAIN_ID) {
       setStatus("🔄 Switching to HyperEVM...");
-      try {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: HYPEREVM_CHAIN_ID }]
-        });
-        // Kis delay a network switch után
-        await new Promise(resolve => setTimeout(resolve, 1500));
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          alert("❌ HyperEVM network not found!\n\nPlease add HyperEVM to MetaMask first.");
-          setStatus("Network not configured", "error");
-          btn.disabled = false;
-          return;
-        }
-        throw switchError;
-      }
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: HYPEREVM_CHAIN_ID }]
+      });
+      await new Promise(r => setTimeout(r, 1200));
     }
 
-    // 🔥 PROVIDER CSAK SWITCH UTÁN
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const userAddress = await signer.getAddress();
-    
-    setStatus(`👤 Connected: ${userAddress.slice(0,6)}...${userAddress.slice(-4)}`);
+    const user = await signer.getAddress();
 
-    // ✅ CHECK CONTRACT EXISTS
-    setStatus("🔍 Checking contract...");
+    setStatus(`👤 Connected: ${user.slice(0,6)}...${user.slice(-4)}`);
+
     const code = await provider.getCode(CONTRACT_ADDRESS);
-    
     if (code === "0x") {
-      setStatus(`❌ Contract not deployed!<br><br>Address: ${CONTRACT_ADDRESS}<br><br>Make sure you deployed the contract to HyperEVM testnet.`, "error");
+      setStatus("❌ Contract not found on HyperEVM", "error");
       btn.disabled = false;
       return;
     }
 
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-    // ✅ TRY TO READ CONTRACT DATA
-    try {
-      setStatus("📊 Reading contract data...");
-      const [totalSupply, maxSupply] = await Promise.all([
-        contract.totalSupply().catch(() => ethers.BigNumber.from(0)),
-        contract.maxSupply().catch(() => ethers.BigNumber.from(0))
-      ]);
-      
-      if (maxSupply.gt(0)) {
-        setStatus(`📊 Supply: ${totalSupply}/${maxSupply}`);
-        
-        if (totalSupply.gte(maxSupply)) {
-          setStatus("❌ Max supply reached!", "error");
-          btn.disabled = false;
-          return;
-        }
-      }
-    } catch (e) {
-      console.warn("Could not read supply:", e);
-    }
-
-    // ✅ ATTEMPT MINT
-    setStatus("⛏️ Preparing transaction...");
-    
-    const tx = await contract.publicMint(1, { 
-      value: ethers.utils.parseEther("0"),
-      gasLimit: 500000 // Explicit gas limit
+    setStatus("⛏️ Minting NFT...");
+    const tx = await contract.mint({
+      value: 0,
+      gasLimit: 500000
     });
 
     setStatus("⏳ Waiting for confirmation...");
-    const receipt = await tx.wait();
+    await tx.wait();
 
-    setStatus(`✅ NFT Minted Successfully!<br><br>Tx: ${receipt.transactionHash.slice(0,10)}...`, "success");
-    
-    setTimeout(() => {
-      alert("🎉 SUCCESS!\n\nYour NFT has been minted!");
-    }, 500);
+    setStatus("✅ NFT minted successfully!", "success");
 
   } catch (err) {
-    console.error("Mint error:", err);
-    
-    let errorMsg = "❌ Mint failed";
-    
-    if (err.code === "UNPREDICTABLE_GAS_LIMIT") {
-      errorMsg = `❌ Transaction would fail!<br><br>Possible reasons:<br>• Contract not properly deployed<br>• Minting n
+    console.error(err);
+    setStatus("❌ Mint failed", "error");
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
