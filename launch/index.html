@@ -80,6 +80,7 @@ const CONTRACT_ADDRESS = "0xF08C6631c57f786A0FbC12045bc82F0f3665CE8";
 const HYPEREVM_CHAIN_ID = "0x3e7"; // 999
 const MAX_SUPPLY = 300;
 const MINT_PRICE = "0.3";
+const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
 
 const ABI = [
   "function mint() payable",
@@ -100,9 +101,7 @@ function setStatus(msg, type = "") {
 /* ================= COUNTER ================= */
 async function updateMintCounter() {
   try {
-    if (!window.ethereum) return;
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
 
     const minted = await contract.totalMinted();
@@ -123,10 +122,8 @@ async function updateMintCounter() {
   }
 }
 
-// betöltéskor
+// init + auto refresh
 updateMintCounter();
-
-// frissítés 10 mp-enként
 setInterval(updateMintCounter, 10000);
 
 /* ================= MINT ================= */
@@ -158,13 +155,6 @@ async function mint() {
 
     setStatus(`👤 Connected: ${user.slice(0,6)}...${user.slice(-4)}`);
 
-    const code = await provider.getCode(CONTRACT_ADDRESS);
-    if (code === "0x") {
-      setStatus("❌ Contract not found on HyperEVM", "error");
-      btn.disabled = false;
-      return;
-    }
-
     const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
     setStatus("⛏️ Minting NFT...");
@@ -177,9 +167,7 @@ async function mint() {
     await tx.wait();
 
     setStatus("✅ NFT minted successfully!", "success");
-
-    // AZONNALI számláló frissítés
-    await updateMintCounter();
+    updateMintCounter();
 
   } catch (err) {
     console.error(err);
