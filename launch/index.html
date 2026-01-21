@@ -9,7 +9,6 @@
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
-/* ---- KINÉZET VÁLTOZATLAN ---- */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
 body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
@@ -29,9 +28,6 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 .nft-grid-container{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .nft-grid-item img{width:100%;border-radius:12px}
 .mint-button{width:100%;padding:20px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:16px;font-size:18px;font-weight:700;cursor:pointer}
-.quantity-selector{display:flex;gap:20px;justify-content:center}
-.quantity-btn{width:48px;height:48px;border-radius:12px;border:2px solid var(--primary);background:#fff;color:var(--primary);font-size:24px}
-.quantity-display{font-size:32px;font-weight:900}
 </style>
 </head>
 
@@ -76,16 +72,8 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 
 <div class="mint-card">
   <h1>🔥 Mint Your NFT</h1>
-
-  <div class="quantity-selector">
-    <button class="quantity-btn" onclick="dec()">−</button>
-    <div class="quantity-display" id="qty">1</div>
-    <button class="quantity-btn" onclick="inc()">+</button>
-  </div>
-
   <h2 style="margin:20px 0">0.3 HYPE</h2>
-
-  <button class="mint-button" onclick="mint()">Connect / Mint</button>
+  <button class="mint-button" onclick="mint()">Connect & Mint</button>
 </div>
 
 </div>
@@ -93,27 +81,22 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 
 <script>
 /* ===== CONFIG ===== */
-const CONTRACT_ADDRESS = "0xF08C6631c57f786A0FbC12045bc82F0f3665CE8";
+const CONTRACT_ADDRESS = "0x3245FBe8515B8125643337238EB98B6f8a407303";
 const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
-const CHAIN_ID = "0x3e7";
+const CHAIN_ID = "0x3E7";
 const MAX_SUPPLY = 300;
-const PRICE = 0.3;
+const PRICE = "0.3";
 
 const ABI = [
   "function mint() payable",
   "function totalMinted() view returns (uint256)"
 ];
 
-let qty = 1;
-
-/* ===== QUANTITY ===== */
-function inc(){ qty++; document.getElementById("qty").innerText = qty; }
-function dec(){ if(qty>1) qty--; document.getElementById("qty").innerText = qty; }
-
-/* ===== SUPPLY COUNTER ===== */
+/* ===== SUPPLY ===== */
 async function updateSupply(){
   const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
   const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+
   const minted = (await contract.totalMinted()).toNumber();
   const remaining = MAX_SUPPLY - minted;
   const percent = Math.floor((minted / MAX_SUPPLY) * 100);
@@ -132,25 +115,34 @@ setInterval(updateSupply, 10000);
 
 /* ===== MINT ===== */
 async function mint(){
-  if(!window.ethereum) return alert("Install MetaMask");
+  if(!window.ethereum){
+    alert("Please install MetaMask");
+    return;
+  }
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner();
 
-  const chain = await provider.send("eth_chainId", []);
-  if(chain !== CHAIN_ID){
-    await window.ethereum.request({
-      method:"wallet_switchEthereumChain",
-      params:[{chainId:CHAIN_ID}]
-    });
+  const chainId = await provider.send("eth_chainId", []);
+  if(chainId !== CHAIN_ID){
+    try{
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: CHAIN_ID }]
+      });
+    }catch{
+      alert("Switch to HyperEVM network");
+      return;
+    }
   }
 
   const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-  const value = ethers.utils.parseEther((PRICE * qty).toString());
 
   try{
-    const tx = await contract.mint({ value });
+    const tx = await contract.mint({
+      value: ethers.utils.parseEther(PRICE)
+    });
     await tx.wait();
     updateSupply();
     alert("✅ NFT SUCCESSFULLY MINTED");
