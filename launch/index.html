@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CatKitSune – Mint</title>
+<title>CatKitSune – Public Mint</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
@@ -28,7 +28,7 @@ body {
   box-shadow:0 20px 60px rgba(0,0,0,.4);
 }
 h1 { font-size:28px; margin-bottom:10px; }
-p { opacity:.85; margin-bottom:24px; }
+p { opacity:.85; margin-bottom:20px; }
 
 #mintCounter {
   margin-bottom:18px;
@@ -66,7 +66,7 @@ button:disabled {
 <body>
 <div class="card">
   <h1>🐱 CatKitSune</h1>
-  <p>Mint 1 NFT<br>HyperEVM</p>
+  <p>Mint 1 NFT<br><strong>0.3 HYPE</strong> · HyperEVM</p>
 
   <div id="mintCounter">Loading mint status...</div>
 
@@ -79,6 +79,7 @@ button:disabled {
 const CONTRACT_ADDRESS = "0x3245FBe8515B8125643337238EB98B6f8a407303";
 const HYPEREVM_CHAIN_ID = "0x3e7"; // 999
 const MAX_SUPPLY = 300;
+const MINT_PRICE = "0.3";
 
 const ABI = [
   "function mint() payable",
@@ -122,7 +123,7 @@ async function updateMintCounter() {
   }
 }
 
-// első betöltéskor
+// betöltéskor
 updateMintCounter();
 
 // frissítés 10 mp-enként
@@ -168,7 +169,7 @@ async function mint() {
 
     setStatus("⛏️ Minting NFT...");
     const tx = await contract.mint({
-      value: 0,
+      value: ethers.utils.parseEther(MINT_PRICE),
       gasLimit: 500000
     });
 
