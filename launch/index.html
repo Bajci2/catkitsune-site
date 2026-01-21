@@ -10,27 +10,21 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
-body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
+:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--border:#e5e7eb}
+body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9,#ccfbf1);min-height:100vh}
 .container{max-width:1400px;margin:0 auto;padding:20px}
-header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
+header{background:#fff;border-bottom:1px solid var(--border);padding:16px 0}
 .header-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none;font-weight:600}
-.supply-banner{background:linear-gradient(135deg,#667eea,#764ba2);padding:16px 24px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:40px}
-.supply-count{font-size:32px;font-weight:900;color:#fff}
+.logo{font-size:24px;font-weight:900;color:#14b8a6;text-decoration:none}
+.back-btn{padding:10px 20px;background:#14b8a6;color:#fff;border-radius:12px;text-decoration:none;font-weight:600}
+.supply-banner{background:linear-gradient(135deg,#667eea,#764ba2);padding:16px 24px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;color:#fff}
 .progress-bar{height:12px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#22c55e);width:0%}
-.progress-text{color:#fff;font-size:12px;text-align:center}
-.status-badge{background:rgba(255,255,255,.2);padding:8px 16px;border-radius:999px;color:#fff;font-weight:700}
+.progress-fill{height:100%;background:#22c55e;width:0%}
 .mint-section{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-.nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.1)}
+.nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px}
 .nft-grid-container{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .nft-grid-item img{width:100%;border-radius:12px}
-.mint-button{width:100%;padding:20px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:16px;font-size:18px;font-weight:700;cursor:pointer;transition:opacity 0.3s}
-.mint-button:hover{opacity:0.9}
-.mint-button:disabled{opacity:0.5;cursor:not-allowed}
-.debug-info{margin-top:20px;padding:16px;background:#f3f4f6;border-radius:12px;font-size:12px;font-family:monospace;max-height:200px;overflow-y:auto}
+.mint-button{width:100%;padding:20px;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;border:none;border-radius:16px;font-size:18px;font-weight:700;cursor:pointer}
 </style>
 </head>
 
@@ -38,7 +32,7 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 
 <header>
   <div class="header-content">
-    <a class="logo" href="/">🐱 CatKitSune</a>
+    <a class="logo">🐱 CatKitSune</a>
     <a class="back-btn" href="/">← Back</a>
   </div>
 </header>
@@ -47,14 +41,13 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 
 <div class="supply-banner">
   <div>
-    <div style="color:#fff;font-size:13px">Minted</div>
-    <div class="supply-count" id="supplyCount">– / 300</div>
+    <div>Minted</div>
+    <div id="supplyCount">– / 300</div>
   </div>
   <div style="flex:1;margin:0 24px">
     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-text" id="progressText">Loading…</div>
   </div>
-  <div class="status-badge" id="statusBadge">🔥 Minting Live</div>
+  <div>🔥 Minting Live</div>
 </div>
 
 <div class="mint-section">
@@ -76,18 +69,16 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 <div class="mint-card">
   <h1>🔥 Mint Your NFT</h1>
   <h2 style="margin:20px 0">0.3 HYPE</h2>
-  <button class="mint-button" id="mintBtn" onclick="mint()">Connect & Mint</button>
-  <div class="debug-info" id="debugLog">Debug info will appear here...</div>
+  <button class="mint-button" onclick="mint()">Connect & Mint</button>
 </div>
 
 </div>
 </div>
 
 <script>
-/* ===== CONFIG ===== */
 const CONTRACT_ADDRESS = "0x3245FBe8515B8125643337238EB98B6f8a407303";
 const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
-const CHAIN_ID = "0x3E7"; // 999 in decimal
+const CHAIN_ID = "0x3e7";
 const MAX_SUPPLY = 300;
 const PRICE = "0.3";
 
@@ -96,163 +87,43 @@ const ABI = [
   "function totalMinted() view returns (uint256)"
 ];
 
-/* ===== DEBUG LOG ===== */
-function log(msg){
-  const debugLog = document.getElementById("debugLog");
-  const timestamp = new Date().toLocaleTimeString();
-  debugLog.innerHTML += `<div>${timestamp}: ${msg}</div>`;
-  debugLog.scrollTop = debugLog.scrollHeight;
-  console.log(msg);
-}
-
-/* ===== SUPPLY ===== */
 async function updateSupply(){
-  try {
-    log("📊 Checking supply...");
-    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-
-    const minted = (await contract.totalMinted()).toNumber();
-    const remaining = MAX_SUPPLY - minted;
-    const percent = Math.floor((minted / MAX_SUPPLY) * 100);
-
-    document.getElementById("supplyCount").innerText = `${minted} / ${MAX_SUPPLY}`;
-    document.getElementById("progressFill").style.width = percent + "%";
-    document.getElementById("progressText").innerText = `Remaining: ${remaining}`;
-
-    if(remaining <= 0){
-      document.getElementById("statusBadge").innerText = "SOLD OUT";
-      document.getElementById("mintBtn").disabled = true;
-    }
-    
-    log(`✅ Supply: ${minted}/${MAX_SUPPLY}`);
-  } catch(e) {
-    log("❌ Supply check error: " + e.message);
-  }
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+  const minted = (await contract.totalMinted()).toNumber();
+  document.getElementById("supplyCount").innerText = `${minted} / ${MAX_SUPPLY}`;
+  document.getElementById("progressFill").style.width = (minted / MAX_SUPPLY * 100) + "%";
 }
-
 updateSupply();
 setInterval(updateSupply, 10000);
 
-/* ===== MINT ===== */
 async function mint(){
-  const btn = document.getElementById("mintBtn");
-  btn.disabled = true;
-  log("🚀 Mint started...");
-  
-  if(!window.ethereum){
-    alert("❌ Please install MetaMask");
-    log("❌ MetaMask not found");
-    btn.disabled = false;
-    return;
+  if(!window.ethereum) return alert("Install MetaMask");
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  await provider.send("eth_requestAccounts", []);
+
+  if(await provider.send("eth_chainId", []) !== CHAIN_ID){
+    await window.ethereum.request({
+      method:"wallet_switchEthereumChain",
+      params:[{chainId:CHAIN_ID}]
+    });
   }
 
-  try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    log("✅ Provider created");
-    
-    await provider.send("eth_requestAccounts", []);
-    log("✅ Accounts requested");
-    
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
-    log("✅ Connected: " + address.substring(0, 8) + "...");
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-    const chainId = await provider.send("eth_chainId", []);
-    log(`🔗 Current chain: ${chainId} (Expected: ${CHAIN_ID})`);
-    
-    if(chainId !== CHAIN_ID){
-      log("⚠️ Wrong network, switching...");
-      try{
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: CHAIN_ID }]
-        });
-        log("✅ Network switched to HyperEVM");
-      }catch(switchError){
-        log("❌ Network switch failed: " + switchError.message);
-        alert("❌ Please switch to HyperEVM network manually");
-        btn.disabled = false;
-        return;
-      }
-    }
-
-    const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-    log("✅ Contract instance created");
-    
-    // Ellenőrizzük az egyenleget
-    const balance = await signer.getBalance();
-    const balanceHYPE = ethers.utils.formatEther(balance);
-    log(`💰 Balance: ${balanceHYPE} HYPE (Required: ${PRICE})`);
-    
-    if(balance.lt(ethers.utils.parseEther(PRICE))){
-      alert(`❌ Insufficient balance. You have ${balanceHYPE} HYPE, need ${PRICE}`);
-      log("❌ Insufficient balance");
-      btn.disabled = false;
-      return;
-    }
-
-    // Gas becslés
-    log("⛽ Estimating gas...");
-    try {
-      const gasEstimate = await contract.estimateGas.mint({
-        value: ethers.utils.parseEther(PRICE)
-      });
-      log(`✅ Gas estimate: ${gasEstimate.toString()}`);
-    } catch(gasError) {
-      log("❌ Gas estimation failed: " + gasError.message);
-      
-      // Részletes hiba info
-      if(gasError.error){
-        log("Error details: " + JSON.stringify(gasError.error));
-      }
-      
-      alert("❌ Gas estimation failed. This might mean:\n" +
-            "- Contract not deployed\n" +
-            "- Minting paused\n" +
-            "- Sold out\n" +
-            "Check console for details");
-      btn.disabled = false;
-      return;
-    }
-
-    log("📤 Sending transaction...");
+  try{
     const tx = await contract.mint({
       value: ethers.utils.parseEther(PRICE),
-      gasLimit: 200000 // Explicit gas limit
+      gasLimit: 300000
     });
-    
-    log(`✅ TX sent: ${tx.hash}`);
-    alert(`⏳ Transaction sent!\n\nHash: ${tx.hash.substring(0, 16)}...\n\nWaiting for confirmation...`);
-    
-    log("⏳ Waiting for confirmation...");
-    const receipt = await tx.wait();
-    
-    log(`✅ TX confirmed in block ${receipt.blockNumber}`);
+    await tx.wait();
     updateSupply();
-    alert("✅ NFT SUCCESSFULLY MINTED! 🎉");
-    
+    alert("✅ Mint successful");
   }catch(e){
-    log("❌ Mint error: " + e.message);
-    console.error("Full error:", e);
-    
-    // Részletes hiba üzenet
-    let errorMsg = "❌ Mint failed:\n\n";
-    if(e.code === 4001){
-      errorMsg += "Transaction rejected by user";
-    } else if(e.code === -32603){
-      errorMsg += "Internal error - check contract or network";
-    } else if(e.message.includes("insufficient funds")){
-      errorMsg += "Insufficient funds for gas";
-    } else if(e.message){
-      errorMsg += e.message;
-    } else {
-      errorMsg += "Unknown error - check console";
-    }
-    
-    alert(errorMsg);
-  } finally {
-    btn.disabled = false;
+    console.error(e);
+    alert("❌ Mint failed");
   }
 }
 </script>
