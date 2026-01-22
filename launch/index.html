@@ -3,67 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CatKitSune - Mint NFT</title>
+<title>CatKitSune – Mint</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
-body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
-.container{max-width:1400px;margin:0 auto;padding:20px}
-header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
-.header-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none;font-weight:600}
-.supply-banner{background:linear-gradient(135deg,#667eea,#764ba2);padding:16px 24px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:40px}
-.supply-count{font-size:32px;font-weight:900;color:#fff}
-.progress-bar{height:12px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#22c55e);width:0%}
-.progress-text{color:#fff;font-size:12px;text-align:center;margin-top:4px}
-.status-badge{background:rgba(255,255,255,.2);padding:8px 16px;border-radius:999px;color:#fff;font-weight:700}
-.mint-section{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-.nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.1)}
-.mint-button{width:100%;padding:20px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border:none;border-radius:16px;font-size:18px;font-weight:700;cursor:pointer}
-.debug-info{margin-top:20px;padding:16px;background:#f3f4f6;border-radius:12px;font-size:11px;font-family:monospace}
+body{
+  font-family:Inter,sans-serif;
+  background:linear-gradient(135deg,#f0fdf9,#ccfbf1);
+  min-height:100vh;
+}
+.container{max-width:1100px;margin:0 auto;padding:24px}
+.card{
+  background:#fff;
+  border-radius:20px;
+  padding:32px;
+  box-shadow:0 10px 40px rgba(0,0,0,.1);
+}
+button{
+  width:100%;
+  padding:18px;
+  background:linear-gradient(135deg,#14b8a6,#0d9488);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+}
+button:disabled{opacity:.6}
+.log{
+  margin-top:20px;
+  background:#f3f4f6;
+  border-radius:12px;
+  padding:14px;
+  font-family:monospace;
+  font-size:12px;
+}
+.progress{
+  height:10px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+  margin:12px 0;
+}
+.progress div{
+  height:100%;
+  background:linear-gradient(90deg,#10b981,#22c55e);
+  width:0%;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+  <div class="card">
+    <h1 style="font-size:34px;margin-bottom:8px">CatKitSune Mint</h1>
+    <p style="opacity:.7;margin-bottom:16px">Price: <b>0.00001 HYPE</b></p>
 
-<div class="supply-banner">
-  <div>
-    <div style="color:#fff;font-size:13px;opacity:0.8">Minted</div>
-    <div class="supply-count" id="supplyCount">– / 300</div>
+    <div>
+      <b id="supplyText">– / 300</b>
+      <div class="progress"><div id="progressBar"></div></div>
+    </div>
+
+    <button id="mintBtn" onclick="mint()">Connect & Mint</button>
+    <div class="log" id="log"></div>
   </div>
-  <div style="flex:1;margin:0 24px">
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="progress-text" id="progressText">Loading…</div>
-  </div>
-  <div class="status-badge">🔥 Mint Live</div>
-</div>
-
-<div class="mint-section">
-
-<div class="mint-card">
-  <h1 style="font-size:32px;margin-bottom:8px">Mint CatKitSune</h1>
-  <p style="color:var(--text-muted);margin-bottom:24px">Price: <b>0.00001 HYPE</b></p>
-  <button class="mint-button" onclick="mint()">Connect & Mint</button>
-  <div class="debug-info" id="log"></div>
-</div>
-
-</div>
 </div>
 
 <script>
 /* ===== CONFIG ===== */
 const CONTRACT_ADDRESS = "0x4107530a61B1133A0B1C1C0d595942f9F6DEa137";
 const PRICE = "0.00001";
+const CHAIN_ID_DEC = 999;
+const CHAIN_ID_HEX = "0x3E7";
 const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
-const CHAIN_ID = "0x3E7";
 const MAX_SUPPLY = 300;
 
 const ABI = [
@@ -71,48 +88,75 @@ const ABI = [
   "function totalMinted() view returns (uint256)"
 ];
 
+const logEl = document.getElementById("log");
 function log(msg){
-  document.getElementById("log").innerHTML += msg + "<br>";
+  logEl.innerHTML += msg + "<br>";
+  logEl.scrollTop = logEl.scrollHeight;
 }
 
 /* ===== SUPPLY ===== */
 async function loadSupply(){
-  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-  const c = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
-  const minted = (await c.totalMinted()).toNumber();
-  document.getElementById("supplyCount").innerText = `${minted} / ${MAX_SUPPLY}`;
-  document.getElementById("progressFill").style.width = `${(minted/MAX_SUPPLY)*100}%`;
-  document.getElementById("progressText").innerText = `${MAX_SUPPLY-minted} remaining`;
+  try{
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+    const c = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+    const minted = (await c.totalMinted()).toNumber();
+    document.getElementById("supplyText").innerText = `${minted} / ${MAX_SUPPLY}`;
+    document.getElementById("progressBar").style.width = `${(minted/MAX_SUPPLY)*100}%`;
+  }catch(e){
+    log("Supply error");
+  }
 }
 loadSupply();
 
 /* ===== MINT ===== */
 async function mint(){
-  if(!window.ethereum) return alert("MetaMask required");
+  if(!window.ethereum){
+    alert("MetaMask required");
+    return;
+  }
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  document.getElementById("mintBtn").disabled = true;
+  log("Connecting wallet...");
+
+  // 🔑 CRITICAL FIX: provider with 'any'
+  let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+
   await provider.send("eth_requestAccounts", []);
 
-  const chainId = await provider.send("eth_chainId", []);
-  if(chainId !== CHAIN_ID){
+  let network = await provider.getNetwork();
+  log("Current chain: " + network.chainId);
+
+  if(network.chainId !== CHAIN_ID_DEC){
+    log("Switching to HyperEVM...");
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: CHAIN_ID }]
+      params: [{ chainId: CHAIN_ID_HEX }]
     });
+
+    // 🔑 CRITICAL FIX: recreate provider after switch
+    provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   }
 
   const signer = provider.getSigner();
   const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
 
-  log("Minting...");
-  const tx = await contract.mint({
-    value: ethers.utils.parseEther(PRICE)
-  });
-  log("TX sent: " + tx.hash);
+  try{
+    log("Sending mint tx...");
+    const tx = await contract.mint({
+      value: ethers.utils.parseEther(PRICE)
+    });
 
-  await tx.wait();
-  log("Mint success!");
-  loadSupply();
+    log("TX sent: " + tx.hash);
+    await tx.wait();
+
+    log("✅ Mint successful");
+    loadSupply();
+  }catch(e){
+    console.error(e);
+    alert(e.message || "Mint failed");
+  }
+
+  document.getElementById("mintBtn").disabled = false;
 }
 </script>
 
