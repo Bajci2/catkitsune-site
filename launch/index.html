@@ -62,7 +62,9 @@ button:disabled{opacity:.6}
 <div class="container">
   <div class="card">
     <h1 style="font-size:34px;margin-bottom:8px">CatKitSune Mint</h1>
-    <p style="opacity:.7;margin-bottom:16px">Price: <b>0.00001 HYPE</b></p>
+    <p style="opacity:.7;margin-bottom:16px">
+      Price: <b id="priceText">loading…</b>
+    </p>
 
     <div>
       <b id="supplyText">– / 300</b>
@@ -77,7 +79,6 @@ button:disabled{opacity:.6}
 <script>
 /* ===== CONFIG ===== */
 const CONTRACT_ADDRESS = "0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
-const PRICE = "0.00001";
 const CHAIN_ID_DEC = 999;
 const CHAIN_ID_HEX = "0x3E7";
 const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
@@ -85,8 +86,11 @@ const MAX_SUPPLY = 300;
 
 const ABI = [
   "function mint() payable",
-  "function totalMinted() view returns (uint256)"
+  "function totalMinted() view returns (uint256)",
+  "function price() view returns (uint256)"
 ];
+
+let CURRENT_PRICE_WEI = null;
 
 const logEl = document.getElementById("log");
 function log(msg){
@@ -94,19 +98,25 @@ function log(msg){
   logEl.scrollTop = logEl.scrollHeight;
 }
 
-/* ===== SUPPLY ===== */
-async function loadSupply(){
+/* ===== LOAD SUPPLY + PRICE ===== */
+async function loadData(){
   try{
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const c = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+
     const minted = (await c.totalMinted()).toNumber();
     document.getElementById("supplyText").innerText = `${minted} / ${MAX_SUPPLY}`;
     document.getElementById("progressBar").style.width = `${(minted/MAX_SUPPLY)*100}%`;
+
+    CURRENT_PRICE_WEI = await c.price();
+    document.getElementById("priceText").innerText =
+      ethers.utils.formatEther(CURRENT_PRICE_WEI) + " HYPE";
+
   }catch(e){
-    log("Supply error");
+    log("Load error");
   }
 }
-loadSupply();
+loadData();
 
 /* ===== MINT ===== */
 async function mint(){
@@ -118,22 +128,15 @@ async function mint(){
   document.getElementById("mintBtn").disabled = true;
   log("Connecting wallet...");
 
-  // 🔑 CRITICAL FIX: provider with 'any'
   let provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-
   await provider.send("eth_requestAccounts", []);
 
   let network = await provider.getNetwork();
-  log("Current chain: " + network.chainId);
-
   if(network.chainId !== CHAIN_ID_DEC){
-    log("Switching to HyperEVM...");
     await window.ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: CHAIN_ID_HEX }]
     });
-
-    // 🔑 CRITICAL FIX: recreate provider after switch
     provider = new ethers.providers.Web3Provider(window.ethereum, "any");
   }
 
@@ -143,14 +146,14 @@ async function mint(){
   try{
     log("Sending mint tx...");
     const tx = await contract.mint({
-      value: ethers.utils.parseEther(PRICE)
+      value: CURRENT_PRICE_WEI
     });
 
     log("TX sent: " + tx.hash);
     await tx.wait();
 
     log("✅ Mint successful");
-    loadSupply();
+    loadData();
   }catch(e){
     console.error(e);
     alert(e.message || "Mint failed");
