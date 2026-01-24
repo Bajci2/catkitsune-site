@@ -1097,7 +1097,7 @@ const NFT_COLLECTIONS = [
     address: '0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353', 
     pointsPerNFT: 1, 
     galleryIndex: 4,
-    image: 'https://pbs.twimg.com/profile_images/1882772558825062400/ygJpAGKM_400x400.jpg'
+    image: 'https://static.drip.trade/collections/catkitsune_pfp.png'
   },
   { 
     name: 'Illumeownati by Catbal', 
@@ -1186,6 +1186,11 @@ function showView(event, viewName) {
   document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
   document.getElementById('view-' + viewName).classList.add('active');
   if (event && event.target) event.target.classList.add('active');
+  
+  // Initialize staking UI when switching to staking view
+  if (viewName === 'staking') {
+    setTimeout(() => updateStakingUI(), 50);
+  }
   
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -1854,7 +1859,11 @@ window.onload = function() {
     updateWalletButton();
     loadUserPoints();
     loadNFTData();
+    loadStakingData();
   }
+  
+  // Initialize staking UI on page load
+  updateStakingUI();
   
   console.log('✅ Ready!');
 };
