@@ -20,6 +20,7 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 .back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none;font-weight:600}
 .back-btn:hover{opacity:0.9}
 
+/* SUPPLY */
 .supply-banner{
   background:linear-gradient(135deg,#667eea,#764ba2);
   padding:20px 32px;
@@ -36,15 +37,29 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 .progress-text{color:#fff;font-size:12px;text-align:center;margin-top:6px}
 .status-badge{background:rgba(255,255,255,.25);padding:10px 20px;border-radius:999px;color:#fff;font-weight:700}
 
+/* LAYOUT */
 .mint-section{display:grid;grid-template-columns:1fr 1fr;gap:32px}
 .nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.08)}
 
-.nft-grid-container{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.nft-grid-item img{width:100%;border-radius:12px}
+/* ⬇⬇⬇ EZ VOLT A PROBLÉMA – ITT JAVÍTVA ⬇⬇⬇ */
+.nft-grid-container{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  max-width:900px;
+  margin:0 auto;
+}
 
+.nft-grid-container img{
+  width:100%;
+  aspect-ratio:1 / 1;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+/* MINT */
 .mint-card h1{font-size:32px}
 .mint-card h2{font-size:28px;font-weight:800;color:var(--primary);margin:16px 0 24px}
-
 .mint-button{
   width:100%;
   padding:20px;
@@ -132,11 +147,6 @@ const ABI = [
   "function totalMinted() view returns (uint256)"
 ];
 
-function log(msg){
-  const el=document.getElementById("debugLog");
-  el.innerHTML+=msg+"<br>";
-}
-
 async function updateSupply(){
   const p=new ethers.providers.JsonRpcProvider(RPC_URL);
   const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,p);
@@ -145,7 +155,6 @@ async function updateSupply(){
   document.getElementById("progressFill").style.width=`${(m/MAX_SUPPLY)*100}%`;
   document.getElementById("progressText").innerText=`Remaining: ${MAX_SUPPLY-m}`;
 }
-
 updateSupply();
 setInterval(updateSupply,10000);
 
