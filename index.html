@@ -861,20 +861,23 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 
 <!-- STAKING VIEW -->
 <main class="view" id="view-staking">
-<div class="page-title" style="text-align:center; margin-bottom:24px;">
+<div class="page-title" style="text-align:center; margin-bottom:16px;">
 <h1 style="font-size:32px; font-weight:800; margin-bottom:8px;">💎 NFT Staking</h1>
-<p style="font-size:14px; color:var(--text-muted);">Stake up to 5 NFTs from each series and earn 5 EP per NFT!</p>
+<p style="font-size:14px; color:var(--text-muted); margin-bottom:16px;">Stake up to 5 NFTs from each series and earn 5 EP per NFT!</p>
+
+<!-- Navigation Buttons -->
+<div style="display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:24px;">
+<button class="top-nav-btn" onclick="showView(event, 'quests')" style="padding:10px 16px; background:white; border:1px solid var(--border); border-radius:999px; cursor:pointer; font-size:18px; transition:all 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.1);">🎮</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')" style="padding:10px 16px; background:white; border:1px solid var(--border); border-radius:999px; cursor:pointer; font-size:18px; transition:all 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.1);">🗺️</button>
+<button class="top-nav-btn active" onclick="showView(event, 'staking')" style="padding:10px 16px; background:var(--primary); color:white; border:1px solid var(--primary); border-radius:999px; cursor:pointer; font-size:18px; transition:all 0.2s; box-shadow:0 2px 4px rgba(20,184,166,0.3);">💎</button>
+</div>
 </div>
 
 <!-- Staking Info Card -->
 <div class="card" style="margin-bottom:20px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1)); border: 1px solid rgba(168, 85, 247, 0.3);">
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
 <h3 style="font-size:16px; font-weight:700;">📊 Your Staking Stats</h3>
-<div style="display:flex; gap:8px; align-items:center;">
-<button class="top-nav-btn" onclick="showView(event, 'quests')" style="padding:8px 12px; background:white; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s;">🎮</button>
-<button class="top-nav-btn" onclick="showView(event, 'roadmap')" style="padding:8px 12px; background:white; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s;">🗺️</button>
-<button class="top-nav-btn active" onclick="showView(event, 'staking')" style="padding:8px 12px; background:var(--primary); color:white; border:1px solid var(--primary); border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s;">💎</button>
-<div style="width:1px; height:30px; background:var(--border); margin:0 8px;"></div>
+<div style="display:flex; gap:16px; align-items:center;">
 <div style="text-align:center;">
 <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">Staked NFTs</div>
 <div id="totalStaked" style="font-size:20px; font-weight:800; color:var(--primary);">0/15</div>
@@ -1931,10 +1934,9 @@ async function stakeToSlot(seriesNumber, slotIndex) {
   
   const seriesKey = `series${seriesNumber}`;
   
-  // Check if slot is already filled
+  // Check if slot is already filled - if yes, do nothing (only X button can unstake)
   if (stakedNFTs[seriesKey][slotIndex] !== null) {
-    // Unstake
-    unstakeFromSlot(seriesNumber, slotIndex);
+    showNotification('⚠️ Slot is already filled! Use the X button to unstake.');
     return;
   }
   
@@ -2076,6 +2078,11 @@ function updateStakingUI() {
           <div style="font-size:10px; color:var(--primary); text-align:center; margin-top:4px; opacity:0.7;">Click to stake</div>
         `;
         
+        // Re-add onclick event (since innerHTML removes it)
+        slotEl.onclick = function() {
+          stakeToSlot(seriesNum, slotIndex);
+        };
+        
         // Add hover effect
         slotEl.onmouseenter = function() {
           this.style.background = '#e0f2fe';
@@ -2091,7 +2098,10 @@ function updateStakingUI() {
         // Filled slot
         slotEl.style.background = 'linear-gradient(135deg, var(--primary), #8b5cf6)';
         slotEl.style.border = '2px solid var(--primary)';
-        slotEl.style.cursor = 'pointer';
+        slotEl.style.cursor = 'default';
+        slotEl.onclick = null; // Remove click event from filled slots
+        slotEl.onmouseenter = null;
+        slotEl.onmouseleave = null;
         slotEl.innerHTML = `
           <div style="position:relative; width:100%; height:100%;">
             <button onclick="event.stopPropagation(); unstakeFromSlot(${seriesNum}, ${slotIndex})" style="position:absolute; top:-8px; right:-8px; background:#ef4444; color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; z-index:10; box-shadow:0 2px 4px rgba(0,0,0,0.2);">×</button>
