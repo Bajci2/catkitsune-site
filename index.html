@@ -40,6 +40,16 @@
 .top-nav-btn.mint-tab {
   animation: subtle-pulse-red 2s ease-in-out infinite;
 }
+
+/* Staking Slot Styles */
+.staking-slot {
+  transition: all 0.3s ease !important;
+}
+
+.staking-slot:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
+}
 </style>
 
 <style>
@@ -851,11 +861,6 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 
 <!-- STAKING VIEW -->
 <main class="view" id="view-staking">
-<div class="nav-tabs">
-<button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
-<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
-<button class="top-nav-btn active" onclick="showView(event, 'staking')">💎</button>
-</div>
 <div class="page-title" style="text-align:center; margin-bottom:24px;">
 <h1 style="font-size:32px; font-weight:800; margin-bottom:8px;">💎 NFT Staking</h1>
 <p style="font-size:14px; color:var(--text-muted);">Stake up to 5 NFTs from each series and earn 5 EP per NFT!</p>
@@ -865,10 +870,11 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 <div class="card" style="margin-bottom:20px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1)); border: 1px solid rgba(168, 85, 247, 0.3);">
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
 <h3 style="font-size:16px; font-weight:700;">📊 Your Staking Stats</h3>
-<div style="display:flex; gap:12px; align-items:center;">
-<button onclick="checkCatKitSuneNFTs()" style="padding:6px 12px; background:var(--primary); color:white; border:none; border-radius:8px; font-size:11px; cursor:pointer; font-weight:600;">
-🔍 Check NFTs
-</button>
+<div style="display:flex; gap:8px; align-items:center;">
+<button class="top-nav-btn" onclick="showView(event, 'quests')" style="padding:8px 12px; background:white; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s;">🎮</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')" style="padding:8px 12px; background:white; border:1px solid var(--border); border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s;">🗺️</button>
+<button class="top-nav-btn active" onclick="showView(event, 'staking')" style="padding:8px 12px; background:var(--primary); color:white; border:1px solid var(--primary); border-radius:8px; cursor:pointer; font-size:16px; transition:all 0.2s;">💎</button>
+<div style="width:1px; height:30px; background:var(--border); margin:0 8px;"></div>
 <div style="text-align:center;">
 <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">Staked NFTs</div>
 <div id="totalStaked" style="font-size:20px; font-weight:800; color:var(--primary);">0/15</div>
@@ -2065,9 +2071,22 @@ function updateStakingUI() {
         slotEl.style.border = '2px dashed #e5e7eb';
         slotEl.style.cursor = 'pointer';
         slotEl.innerHTML = `
-          <div style="font-size:32px; opacity:0.3; margin-bottom:8px;">🦊</div>
-          <div style="font-size:12px; color:var(--text-muted); text-align:center;">Empty Slot</div>
+          <div style="font-size:32px; opacity:0.3; margin-bottom:8px; transition:all 0.3s;">🦊</div>
+          <div style="font-size:12px; color:var(--text-muted); text-align:center; font-weight:600;">Empty Slot</div>
+          <div style="font-size:10px; color:var(--primary); text-align:center; margin-top:4px; opacity:0.7;">Click to stake</div>
         `;
+        
+        // Add hover effect
+        slotEl.onmouseenter = function() {
+          this.style.background = '#e0f2fe';
+          this.style.borderColor = 'var(--primary)';
+          this.querySelector('div:first-child').style.opacity = '0.6';
+        };
+        slotEl.onmouseleave = function() {
+          this.style.background = '#f9fafb';
+          this.style.borderColor = '#e5e7eb';
+          this.querySelector('div:first-child').style.opacity = '0.3';
+        };
       } else {
         // Filled slot
         slotEl.style.background = 'linear-gradient(135deg, var(--primary), #8b5cf6)';
