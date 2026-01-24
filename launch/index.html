@@ -10,15 +10,15 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
-body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
+:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--border:#e5e7eb}
+body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh}
 .container{max-width:1400px;margin:0 auto;padding:20px}
 
-header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
+/* HEADER */
+header{background:#fff;border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
 .header-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none;font-weight:600}
-.back-btn:hover{opacity:0.9}
+.logo{font-size:24px;font-weight:900;color:var(--primary);text-decoration:none}
+.back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none}
 
 /* SUPPLY */
 .supply-banner{
@@ -32,8 +32,13 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 }
 .supply-count{font-size:32px;font-weight:900;color:#fff}
 .progress-container{flex:1;margin:0 24px}
-.progress-bar{height:12px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#22c55e);width:0%}
+.progress-bar{height:12px;background:rgba(255,255,255,.25);border-radius:999px;overflow:hidden}
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#10b981,#22c55e);
+  transition:width .6s ease;
+}
 .progress-text{color:#fff;font-size:12px;text-align:center;margin-top:6px}
 .status-badge{background:rgba(255,255,255,.25);padding:10px 20px;border-radius:999px;color:#fff;font-weight:700}
 
@@ -41,18 +46,17 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 .mint-section{display:grid;grid-template-columns:1fr 1fr;gap:32px}
 .nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.08)}
 
-/* ⬇⬇⬇ EZ VOLT A PROBLÉMA – ITT JAVÍTVA ⬇⬇⬇ */
+/* NFT GRID – FIX MÉRET */
 .nft-grid-container{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
-  max-width:900px;
+  max-width:360px;
   margin:0 auto;
 }
-
 .nft-grid-container img{
   width:100%;
-  aspect-ratio:1 / 1;
+  aspect-ratio:1/1;
   object-fit:cover;
   border-radius:12px;
 }
@@ -70,18 +74,6 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
   font-size:18px;
   font-weight:700;
   cursor:pointer;
-}
-.mint-button:disabled{opacity:.5}
-
-.debug-info{
-  margin-top:20px;
-  padding:16px;
-  background:#f3f4f6;
-  border-radius:12px;
-  font-size:12px;
-  font-family:monospace;
-  max-height:250px;
-  overflow-y:auto;
 }
 </style>
 </head>
@@ -128,21 +120,20 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 <div class="mint-card">
   <h1>🔥 Mint Your NFT</h1>
   <h2>0.1 HYPE</h2>
-  <button class="mint-button" id="mintBtn" onclick="mint()">Connect & Mint</button>
-  <div class="debug-info" id="debugLog"></div>
+  <button class="mint-button" onclick="mint()">Connect & Mint</button>
 </div>
 
 </div>
 </div>
 
 <script>
-const CONTRACT_ADDRESS = "0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
-const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
-const CHAIN_ID_HEX = "0x3E7";
-const MAX_SUPPLY = 300;
-const PRICE = "0.1";
+const CONTRACT_ADDRESS="0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
+const RPC_URL="https://rpc.hyperliquid.xyz/evm";
+const CHAIN_ID_HEX="0x3E7";
+const MAX_SUPPLY=300;
+const PRICE="0.1";
 
-const ABI = [
+const ABI=[
   "function mint() payable",
   "function totalMinted() view returns (uint256)"
 ];
@@ -151,8 +142,9 @@ async function updateSupply(){
   const p=new ethers.providers.JsonRpcProvider(RPC_URL);
   const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,p);
   const m=(await c.totalMinted()).toNumber();
+  const percent=Math.round((m/MAX_SUPPLY)*100);
   document.getElementById("supplyCount").innerText=`${m} / ${MAX_SUPPLY}`;
-  document.getElementById("progressFill").style.width=`${(m/MAX_SUPPLY)*100}%`;
+  document.getElementById("progressFill").style.width=percent+"%";
   document.getElementById("progressText").innerText=`Remaining: ${MAX_SUPPLY-m}`;
 }
 updateSupply();
