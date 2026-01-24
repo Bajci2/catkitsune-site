@@ -10,15 +10,15 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--border:#e5e7eb}
-body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh}
+:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
+body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
 .container{max-width:1400px;margin:0 auto;padding:20px}
 
-/* HEADER */
-header{background:#fff;border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
+header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
 .header-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:900;color:var(--primary);text-decoration:none}
-.back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none}
+.logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+.back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none;font-weight:600}
+.back-btn:hover{opacity:0.9}
 
 /* SUPPLY */
 .supply-banner{
@@ -32,13 +32,8 @@ header{background:#fff;border-bottom:1px solid var(--border);padding:16px 0;posi
 }
 .supply-count{font-size:32px;font-weight:900;color:#fff}
 .progress-container{flex:1;margin:0 24px}
-.progress-bar{height:12px;background:rgba(255,255,255,.25);border-radius:999px;overflow:hidden}
-.progress-fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#10b981,#22c55e);
-  transition:width .6s ease;
-}
+.progress-bar{height:12px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#22c55e);width:0%}
 .progress-text{color:#fff;font-size:12px;text-align:center;margin-top:6px}
 .status-badge{background:rgba(255,255,255,.25);padding:10px 20px;border-radius:999px;color:#fff;font-weight:700}
 
@@ -46,17 +41,17 @@ header{background:#fff;border-bottom:1px solid var(--border);padding:16px 0;posi
 .mint-section{display:grid;grid-template-columns:1fr 1fr;gap:32px}
 .nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.08)}
 
-/* NFT GRID – FIX MÉRET */
 .nft-grid-container{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
-  max-width:360px;
+  max-width:900px;
   margin:0 auto;
 }
+
 .nft-grid-container img{
   width:100%;
-  aspect-ratio:1/1;
+  aspect-ratio:1 / 1;
   object-fit:cover;
   border-radius:12px;
 }
@@ -75,6 +70,21 @@ header{background:#fff;border-bottom:1px solid var(--border);padding:16px 0;posi
   font-weight:700;
   cursor:pointer;
 }
+.mint-button:disabled{opacity:.5;cursor:not-allowed}
+.mint-button:hover:not(:disabled){opacity:0.9}
+
+.debug-info{
+  margin-top:20px;
+  padding:16px;
+  background:#f3f4f6;
+  border-radius:12px;
+  font-size:12px;
+  font-family:monospace;
+  max-height:250px;
+  overflow-y:auto;
+  line-height:1.5;
+}
+.debug-info div{margin-bottom:4px}
 </style>
 </head>
 
@@ -120,46 +130,126 @@ header{background:#fff;border-bottom:1px solid var(--border);padding:16px 0;posi
 <div class="mint-card">
   <h1>🔥 Mint Your NFT</h1>
   <h2>0.1 HYPE</h2>
-  <button class="mint-button" onclick="mint()">Connect & Mint</button>
+  <button class="mint-button" id="mintBtn" onclick="mint()">Connect & Mint</button>
+  <div class="debug-info" id="debugLog">Debug info will appear here...</div>
 </div>
 
 </div>
 </div>
 
 <script>
-const CONTRACT_ADDRESS="0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
-const RPC_URL="https://rpc.hyperliquid.xyz/evm";
-const CHAIN_ID_HEX="0x3E7";
-const MAX_SUPPLY=300;
-const PRICE="0.1";
+const CONTRACT_ADDRESS = "0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
+const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
+const CHAIN_ID_HEX = "0x3E7";
+const MAX_SUPPLY = 300;
+const PRICE = "0.1";
 
-const ABI=[
+const ABI = [
   "function mint() payable",
   "function totalMinted() view returns (uint256)"
 ];
 
+// LOG FUNCTION
+function log(msg){
+  const d = document.getElementById("debugLog");
+  const t = new Date().toLocaleTimeString();
+  d.innerHTML += `<div>${t}: ${msg}</div>`;
+  d.scrollTop = d.scrollHeight;
+}
+
+// UPDATE SUPPLY
 async function updateSupply(){
-  const p=new ethers.providers.JsonRpcProvider(RPC_URL);
-  const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,p);
-  const m=(await c.totalMinted()).toNumber();
-  const percent=Math.round((m/MAX_SUPPLY)*100);
-  document.getElementById("supplyCount").innerText=`${m} / ${MAX_SUPPLY}`;
-  document.getElementById("progressFill").style.width=percent+"%";
-  document.getElementById("progressText").innerText=`Remaining: ${MAX_SUPPLY-m}`;
+  try{
+    const p = new ethers.providers.JsonRpcProvider(RPC_URL);
+    const c = new ethers.Contract(CONTRACT_ADDRESS, ABI, p);
+    const m = (await c.totalMinted()).toNumber();
+    document.getElementById("supplyCount").innerText = `${m} / ${MAX_SUPPLY}`;
+    document.getElementById("progressFill").style.width = `${(m/MAX_SUPPLY)*100}%`;
+    document.getElementById("progressText").innerText = `Remaining: ${MAX_SUPPLY-m}`;
+    log(`✅ Supply: ${m}/300`);
+  }catch(err){
+    log(`❌ Supply check failed: ${err.message}`);
+  }
 }
 updateSupply();
-setInterval(updateSupply,10000);
+setInterval(updateSupply, 10000);
 
+// MINT FUNCTION
 async function mint(){
-  if(!window.ethereum)return alert("MetaMask needed");
-  const p=new ethers.providers.Web3Provider(window.ethereum);
-  await p.send("eth_requestAccounts",[]);
-  if(await p.send("eth_chainId",[])!==CHAIN_ID_HEX){
-    await ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:CHAIN_ID_HEX}]});
+  const btn = document.getElementById("mintBtn");
+  
+  try{
+    log("🔌 Connecting to MetaMask...");
+    
+    if(!window.ethereum){
+      alert("MetaMask needed! Please install MetaMask extension.");
+      log("❌ MetaMask not found");
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.innerText = "Connecting...";
+    
+    const p = new ethers.providers.Web3Provider(window.ethereum);
+    log("✅ Provider created");
+    
+    await p.send("eth_requestAccounts", []);
+    log("✅ Wallet connected");
+    
+    const chainId = await p.send("eth_chainId", []);
+    log(`📡 Current chain: ${chainId}`);
+    
+    if(chainId !== CHAIN_ID_HEX){
+      log("🔄 Switching to HyperEVM (Chain ID: 999)...");
+      btn.innerText = "Switch Network...";
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{chainId: CHAIN_ID_HEX}]
+      });
+      log("✅ Network switched to HyperEVM");
+    }
+    
+    const s = p.getSigner();
+    const addr = await s.getAddress();
+    log(`👤 Address: ${addr.slice(0,6)}...${addr.slice(-4)}`);
+    
+    const c = new ethers.Contract(CONTRACT_ADDRESS, ABI, s);
+    
+    btn.innerText = "Minting...";
+    log("📝 Sending mint transaction...");
+    log(`💰 Price: ${PRICE} HYPE`);
+    
+    const tx = await c.mint({
+      value: ethers.utils.parseEther(PRICE),
+      gasLimit: 200000
+    });
+    
+    log(`⏳ TX Hash: ${tx.hash.slice(0,10)}...${tx.hash.slice(-8)}`);
+    btn.innerText = "Waiting for confirmation...";
+    
+    await tx.wait();
+    log("🎉 Mint successful!");
+    
+    btn.innerText = "✅ Minted!";
+    setTimeout(() => {
+      btn.innerText = "Connect & Mint";
+      btn.disabled = false;
+    }, 3000);
+    
+    updateSupply();
+    
+  }catch(err){
+    log(`❌ Error: ${err.message}`);
+    console.error(err);
+    btn.innerText = "Connect & Mint";
+    btn.disabled = false;
+    
+    if(err.code === 4001){
+      alert("Transaction rejected by user");
+    }else{
+      alert(`Error: ${err.message}`);
+    }
   }
-  const s=p.getSigner();
-  const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,s);
-  await c.mint({value:ethers.utils.parseEther(PRICE),gasLimit:200000});
 }
 </script>
 
