@@ -50,6 +50,198 @@
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
 }
+
+/* 🎨 NFT Selection Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.modal-close {
+  background: #f3f4f6;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: #ef4444;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.nft-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.nft-select-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.nft-select-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(20, 184, 166, 0.2);
+}
+
+.nft-select-card.selected {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(139, 92, 246, 0.1));
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.3);
+}
+
+.nft-select-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #f0fdf9, #ccfbf1);
+}
+
+.nft-select-id {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.nft-select-series {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.modal-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid #f3f4f6;
+  display: flex;
+  gap: 12px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-btn-primary {
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
+  color: white;
+}
+
+.modal-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
+}
+
+.modal-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modal-btn-secondary {
+  background: #f3f4f6;
+  color: var(--text-main);
+}
+
+.modal-btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.modal-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.modal-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.modal-empty-text {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.modal-empty-subtext {
+  font-size: 14px;
+}
 </style>
 
 <style>
@@ -167,106 +359,9 @@
   position: relative;
 }
 
-    .hero-card {
-      background: linear-gradient(180deg, #f0fdf9 0%, #ccfbf1 100%);
-      border-radius: 24px;
-      padding: 16px 14px 14px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      margin-bottom: 0;
-      text-align: center;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(16, 185, 129, 0.1));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 0;
-    }
-
-    .hero-card:hover::before {
-      opacity: 1;
-    }
-
-    .hero-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-card:hover {
-      box-shadow: 0 12px 40px rgba(20, 184, 166, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .hero-title { font-size: 18px; font-weight: 800; margin-bottom: 3px; }
-    .hero-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
-
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px; margin-bottom: 0;
-    }
-
-    .stat-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 8px 6px;
-      border: 1px solid var(--primary-soft);
-      transition: all 0.3s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(16, 185, 129, 0.1));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 0;
-    }
-
-    .stat-card:hover::before {
-      opacity: 1;
-    }
-
-    .stat-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(20, 184, 166, 0.15);
-      border-color: var(--primary);
-      background: white;
-    }
-
-    .stat-label { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; }
-    .stat-value { font-size: 16px; font-weight: 700; }
-
     .content-grid {
       display: flex;
       flex-direction: column;
-      gap: 32px;
-    }
-
-    .quests-section {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
       gap: 32px;
     }
 
@@ -310,15 +405,6 @@
       border-color: var(--primary-soft);
     }
 
-    .card div[style*="background:linear-gradient"] {
-      transition: all 0.3s ease;
-    }
-    
-    .card div[style*="background:linear-gradient"]:hover {
-      transform: translateX(4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
     .card-title {
       font-size: 14px; font-weight: 700; margin-bottom: 12px;
       display: flex; align-items: center; gap: 8px;
@@ -328,68 +414,9 @@
       width: 6px; height: 6px; border-radius: 999px; background: var(--primary);
     }
 
-    .mission-list { display: flex; flex-direction: column; gap: 8px; }
-
-    .mission-item {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 9px 10px; border-radius: 12px;
-      border: 1px solid #e5e7eb; background: #f9fafb;
-      font-size: 12px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .mission-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(106, 61, 245, 0.1), rgba(34, 197, 94, 0.1));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: 0;
-    }
-
-    .mission-item:hover::before {
-      opacity: 1;
-    }
-
-    .mission-item > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .mission-item:hover {
-      border-color: var(--primary);
-      background: white;
-      box-shadow: 0 6px 16px rgba(106, 61, 245, 0.15);
-      transform: translateY(-2px);
-    }
-
-    .mission-left { display: flex; align-items: center; gap: 10px; }
-
-    .mission-check {
-      width: 16px; height: 16px; border-radius: 999px;
-      border: 2px solid #d1d5db; background: #fff;
-    }
-
-    .mission-check.completed {
-      background: var(--accent-green);
-      border-color: var(--accent-green);
-    }
-
-    .mission-text-title { font-weight: 600; margin-bottom: 2px; }
-    .mission-text-sub { color: var(--text-muted); font-size: 11px; }
-
-    .mission-points { color: #16a34a; font-weight: 600; font-size: 12px; }
-
     .nft-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 12px;
       margin-top: 10px;
     }
@@ -410,7 +437,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 90px;
+      height: 120px;
     }
 
     .nft-card::before {
@@ -471,35 +498,22 @@
       margin-top: 4px;
     }
 
-    @media (max-width: 768px) {
-      .quests-section {
-        grid-template-columns: 1fr;
+    @media (max-width: 1024px) {
+      .nft-grid {
+        grid-template-columns: repeat(4, 1fr);
       }
+    }
+
+    @media (max-width: 768px) {
+      .nft-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
       .nft-grid {
         grid-template-columns: repeat(2, 1fr);
       }
-    }
-    #view-roadmap .content-grid {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-    }
-    
-    #view-airdrop .content-grid {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-    }
-    
-    #view-token .content-grid {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
-    }
-
-    #view-roadmap,
-    #view-airdrop,
-    #view-token,
-    #view-staking {
-      margin-top: 0 !important;
-      padding-top: 0 !important;
     }
   </style>
 </head>
@@ -527,19 +541,28 @@ Login with Twitter
 </div>
 </header>
 
+<!-- 🎨 NFT Selection Modal -->
+<div id="nftModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">🦊 Select NFT to Stake</h2>
+      <button class="modal-close" onclick="closeNFTModal()">×</button>
+    </div>
+    
+    <div id="modalNFTList">
+      <!-- NFTs will be loaded here -->
+    </div>
+    
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" onclick="closeNFTModal()">Cancel</button>
+      <button class="modal-btn modal-btn-primary" id="confirmStakeBtn" onclick="confirmStake()" disabled>Stake NFT</button>
+    </div>
+  </div>
+</div>
+
 <div class="views-container">
 
 <main class="view active" id="view-quests">
-<div class="hero-card">
-<div class="hero-title">Complete quests. Earn points. Climb the leaderboard.</div>
-<div class="hero-sub">Join the community and reach the highest level!</div>
-<div class="stats-row">
-<div class="stat-card"><div class="stat-label">Total Points</div><div class="stat-value" id="totalPoints">0</div></div>
-<div class="stat-card"><div class="stat-label">Quests</div><div class="stat-value">10</div></div>
-<div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" id="completedQuests">0</div></div>
-<div class="stat-card"><div class="stat-label">Rank</div><div class="stat-value">#TBD</div></div>
-</div>
-</div>
 
 <div class="top-nav">
 <button class="top-nav-btn active" onclick="showView(event, 'quests')">🎮</button>
@@ -549,138 +572,7 @@ Login with Twitter
 
 <div class="content-grid">
 
-<div class="card">
-<div class="card-title" style="margin-bottom:20px;">
-<span class="dot"></span> Leaderboard
-</div>
-
-<div style="position:relative;margin-bottom:20px;">
-<input type="text" id="questsLeaderboardSearch" placeholder="Search for user or wallet address..." oninput="filterQuestsLeaderboard()" style="width:100%;padding:10px 36px 10px 12px;border-radius:10px;border:1px solid #e5e7eb;font-size:13px;outline:none;background:white;transition:all 0.3s ease;" onfocus="this.style.borderColor='#6a3df5';this.style.boxShadow='0 0 0 3px rgba(106,61,245,0.1)'" onblur="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
-<span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);opacity:0.5;">🔍</span>
-</div>
-
-<div style="border:1px solid #e5e7eb;border-radius:10px;background:white;overflow:hidden;">
-<div style="background:#f9fafb;padding:10px 14px;display:grid;grid-template-columns:80px 2fr 1fr;gap:12px;font-size:12px;font-weight:600;color:#6b7280;border-bottom:2px solid #e5e7eb;position:sticky;top:0;z-index:10;">
-<div>Rank</div>
-<div>User</div>
-<div style="text-align:right;">Points</div>
-</div>
-
-<div id="questsLeaderboardRows" style="max-height:250px;overflow-y:auto;">
-</div>
-</div>
-</div>
-
-<div class="quests-section">
-<div class="card">
-<div class="card-title"><span class="dot"></span> Quests</div>
-<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px;color:#856404;">
-⚠️ <strong>Not Live Yet</strong> - Quests are currently in testing phase
-</div>
-<div class="mission-list">
-<div class="mission-item" onclick="completeQuest(this, 150)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Follow on X</div>
-<div class="mission-text-sub">Follow <a href="https://x.com/GborSzakl1" target="_blank" onclick="event.stopPropagation()">@GborSzakl1</a> on X.</div>
-</div>
-</div>
-<div class="mission-points">+150 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 300)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Mint the CatKitSune NFT</div>
-<div class="mission-text-sub">Airdrop bonus reward.</div>
-</div>
-</div>
-<div class="mission-points">+300 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 150)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Swap on CatKitSune</div>
-<div class="mission-text-sub">Make a swap worth at least $10.</div>
-</div>
-</div>
-<div class="mission-points">+150 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 250)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Share on X</div>
-<div class="mission-text-sub"><a href="https://x.com/GborSzakl1/status/1989254176568672659" target="_blank" onclick="event.stopPropagation()">Open Tweet</a></div>
-</div>
-</div>
-<div class="mission-points">+250 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 500)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Bridge to HYPE</div>
-<div class="mission-text-sub">Bridge $10 to HYPE.</div>
-</div>
-</div>
-<div class="mission-points">+500 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 300)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Mini Mover</div>
-<div class="mission-text-sub">Transact $50 today.</div>
-</div>
-</div>
-<div class="mission-points">+300 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 300)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Earn Boost</div>
-<div class="mission-text-sub">Complete 3 tasks.</div>
-</div>
-</div>
-<div class="mission-points">+300 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 800)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Weekly Volume</div>
-<div class="mission-text-sub">Transact $2000.</div>
-</div>
-</div>
-<div class="mission-points">+800 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 200)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Swap It Up</div>
-<div class="mission-text-sub">Swap $10 on KittenSwap.</div>
-</div>
-</div>
-<div class="mission-points">+200 EP</div>
-</div>
-<div class="mission-item" onclick="completeQuest(this, 1200)">
-<div class="mission-left">
-<div class="mission-check"></div>
-<div>
-<div class="mission-text-title">Hold all NFTs</div>
-<div class="mission-text-sub">Own 1 from each listed collection.</div>
-</div>
-</div>
-<div class="mission-points">+1200 EP</div>
-</div>
-</div>
-</div>
-
+<!-- NFT GALLERY - FULL WIDTH -->
 <div class="card">
 <div class="card-title"><span class="dot"></span> NFT Gallery</div>
 <div class="nft-grid">
@@ -776,17 +668,12 @@ Login with Twitter
 </div>
 </div>
 </div>
-</div>
-</div>
+
 </div>
 </main>
 
 <!-- ROADMAP PAGE -->
 <main class="view" id="view-roadmap">
-<div class="hero-card">
-<div class="hero-title">🗺️ CatKitSune Roadmap</div>
-<div class="hero-sub">Our journey and future plans</div>
-</div>
 
 <div class="top-nav">
 <button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
@@ -853,9 +740,6 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 </div>
 </div>
 
-<!-- PHASE 2 - PHASE 5 remain exactly the same as original -->
-<!-- ... keeping rest of roadmap phases unchanged for brevity ... -->
-
 </div>
 </main>
 
@@ -912,12 +796,10 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 </div>
 
 <!-- 5 Staking Slots for Series 1 -->
-<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:16px;">
-<!-- 5 Staking Slots for Series 1 WITH NFT IMAGES -->
-<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:16px;">
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:16px;" id="series1-slots">
 
 <!-- Slot 0 -->
-<div id="series1-slot0" class="staking-slot" data-series="1" data-slot="0" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="stakeToSlot(1, 0)">
+<div id="series1-slot0" class="staking-slot" data-series="1" data-slot="0" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="openNFTModal(1, 0)">
 <img src="/launch/1.png" class="nft-slot-image" alt="CatKitSune NFT" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0.4; transition:opacity 0.3s ease; border-radius:12px;">
 <div class="slot-overlay" style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:180px; padding:16px; background:linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(139, 92, 246, 0.05));">
 <div style="font-size:14px; color:var(--primary); font-weight:700; text-align:center; text-shadow:0 2px 4px rgba(255,255,255,0.8);">+ Add NFT</div>
@@ -926,7 +808,7 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 </div>
 
 <!-- Slot 1 -->
-<div id="series1-slot1" class="staking-slot" data-series="1" data-slot="1" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="stakeToSlot(1, 1)">
+<div id="series1-slot1" class="staking-slot" data-series="1" data-slot="1" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="openNFTModal(1, 1)">
 <img src="/launch/2.png" class="nft-slot-image" alt="CatKitSune NFT" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0.4; transition:opacity 0.3s ease; border-radius:12px;">
 <div class="slot-overlay" style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:180px; padding:16px; background:linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(139, 92, 246, 0.05));">
 <div style="font-size:14px; color:var(--primary); font-weight:700; text-align:center; text-shadow:0 2px 4px rgba(255,255,255,0.8);">+ Add NFT</div>
@@ -935,7 +817,7 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 </div>
 
 <!-- Slot 2 -->
-<div id="series1-slot2" class="staking-slot" data-series="1" data-slot="2" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="stakeToSlot(1, 2)">
+<div id="series1-slot2" class="staking-slot" data-series="1" data-slot="2" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="openNFTModal(1, 2)">
 <img src="/launch/3.png" class="nft-slot-image" alt="CatKitSune NFT" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0.4; transition:opacity 0.3s ease; border-radius:12px;">
 <div class="slot-overlay" style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:180px; padding:16px; background:linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(139, 92, 246, 0.05));">
 <div style="font-size:14px; color:var(--primary); font-weight:700; text-align:center; text-shadow:0 2px 4px rgba(255,255,255,0.8);">+ Add NFT</div>
@@ -944,7 +826,7 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 </div>
 
 <!-- Slot 3 -->
-<div id="series1-slot3" class="staking-slot" data-series="1" data-slot="3" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="stakeToSlot(1, 3)">
+<div id="series1-slot3" class="staking-slot" data-series="1" data-slot="3" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="openNFTModal(1, 3)">
 <img src="/launch/4.png" class="nft-slot-image" alt="CatKitSune NFT" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0.4; transition:opacity 0.3s ease; border-radius:12px;">
 <div class="slot-overlay" style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:180px; padding:16px; background:linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(139, 92, 246, 0.05));">
 <div style="font-size:14px; color:var(--primary); font-weight:700; text-align:center; text-shadow:0 2px 4px rgba(255,255,255,0.8);">+ Add NFT</div>
@@ -953,7 +835,7 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 </div>
 
 <!-- Slot 4 -->
-<div id="series1-slot4" class="staking-slot" data-series="1" data-slot="4" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="stakeToSlot(1, 4)">
+<div id="series1-slot4" class="staking-slot" data-series="1" data-slot="4" style="background:white; border:2px solid var(--primary); border-radius:12px; min-height:180px; position:relative; cursor:pointer; transition:all 0.3s; overflow:hidden;" onclick="openNFTModal(1, 4)">
 <img src="/launch/5.png" class="nft-slot-image" alt="CatKitSune NFT" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0.4; transition:opacity 0.3s ease; border-radius:12px;">
 <div class="slot-overlay" style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:180px; padding:16px; background:linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(139, 92, 246, 0.05));">
 <div style="font-size:14px; color:var(--primary); font-weight:700; text-align:center; text-shadow:0 2px 4px rgba(255,255,255,0.8);">+ Add NFT</div>
@@ -962,6 +844,8 @@ This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at 
 </div>
 
 </div>
+</div>
+
 </div>
 </main>
 
@@ -1008,7 +892,7 @@ let nftPointsEarned = 0;
 const questsLive = false;
 
 // ==========================================
-// NFT COLLECTIONS - ✅ CATKITSUNE ADDED
+// NFT COLLECTIONS
 // ==========================================
 const NFT_COLLECTIONS = [
   { 
@@ -1039,7 +923,6 @@ const NFT_COLLECTIONS = [
     galleryIndex: 3,
     image: 'https://static.drip.trade/collections/hyperian-genesis_pfp.png'
   },
-  // ✅ CATKITSUNE HOZZÁADVA
   { 
     name: 'CatKitSune', 
     address: '0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353', 
@@ -1127,6 +1010,28 @@ const ERC721_ABI = [
 ];
 
 // ==========================================
+// STAKING VARIABLES
+// ==========================================
+let stakedNFTs = {
+  series1: [null, null, null, null, null],
+  series2: [null, null, null, null, null],
+  series3: [null, null, null, null, null]
+};
+
+let currentStakingSlot = { series: null, slot: null };
+let selectedNFTForStaking = null;
+
+const MAX_NFTS_PER_SERIES = 5;
+
+function getSeriesFromTokenId(tokenId) {
+  const id = parseInt(tokenId);
+  if (id >= 1 && id <= 100) return 1;
+  if (id >= 101 && id <= 200) return 2;
+  if (id >= 201 && id <= 300) return 3;
+  return null;
+}
+
+// ==========================================
 // VIEW SWITCHING
 // ==========================================
 function showView(event, viewName) {
@@ -1135,7 +1040,6 @@ function showView(event, viewName) {
   document.getElementById('view-' + viewName).classList.add('active');
   if (event && event.target) event.target.classList.add('active');
   
-  // Initialize staking UI when switching to staking view
   if (viewName === 'staking') {
     setTimeout(() => updateStakingUI(), 50);
   }
@@ -1271,33 +1175,6 @@ async function loadTwitterUser() {
 }
 
 // ==========================================
-// QUESTS
-// ==========================================
-function completeQuest(element, points) {
-  if (!questsLive) {
-    showNotification('⚠️ Quests are in testing phase - no points earned yet');
-    return;
-  }
-  
-  const checkbox = element.querySelector('.mission-check');
-  if (checkbox.classList.contains('completed')) return;
-  
-  checkbox.classList.add('completed');
-  element.style.opacity = '0.7';
-  element.style.pointerEvents = 'none';
-  
-  totalPoints += points;
-  completedCount++;
-  
-  document.getElementById('totalPoints').textContent = totalPoints;
-  document.getElementById('completedQuests').textContent = completedCount;
-  
-  saveUserPoints();
-  
-  showNotification(`+${points} EP earned! 🎉`);
-}
-
-// ==========================================
 // NOTIFICATIONS
 // ==========================================
 function showNotification(message) {
@@ -1361,9 +1238,6 @@ async function loadUserPoints() {
         totalPoints = userData.points || 0;
         completedCount = userData.completedQuests || 0;
         
-        document.getElementById('totalPoints').textContent = totalPoints;
-        document.getElementById('completedQuests').textContent = completedCount;
-        
         console.log(`🔥 Points loaded from Firebase: ${totalPoints} EP`);
         
         localStorage.setItem(userDataKey, JSON.stringify({
@@ -1388,159 +1262,11 @@ async function loadUserPoints() {
       totalPoints = userData.totalPoints || 0;
       completedCount = userData.completedQuests || 0;
       
-      document.getElementById('totalPoints').textContent = totalPoints;
-      document.getElementById('completedQuests').textContent = completedCount;
-      
       console.log(`📂 Points loaded from localStorage: ${totalPoints} EP`);
     } catch (e) {
       console.error('Error loading user points:', e);
     }
   }
-}
-
-// ==========================================
-// LEADERBOARD
-// ==========================================
-let leaderboardData = [];
-let filteredQuestsData = [];
-
-async function loadLeaderboardFromFirebase() {
-  if (!firebaseEnabled || !database) {
-    console.warn('⚠️ Firebase not enabled, using empty leaderboard');
-    leaderboardData = [];
-    filteredQuestsData = [];
-    generateQuestsLeaderboard();
-    return;
-  }
-  
-  try {
-    const usersRef = database.ref('users');
-    const snapshot = await usersRef.once('value');
-    
-    if (snapshot.exists()) {
-      const users = snapshot.val();
-      leaderboardData = [];
-      
-      Object.keys(users).forEach(walletAddr => {
-        const user = users[walletAddr];
-        leaderboardData.push({
-          name: walletAddr.substring(0, 6) + '...' + walletAddr.substring(walletAddr.length - 4),
-          address: walletAddr,
-          points: user.points || 0,
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${walletAddr}`
-        });
-      });
-      
-      leaderboardData.sort((a, b) => b.points - a.points);
-      filteredQuestsData = [...leaderboardData];
-      
-      console.log(`🔥 Loaded ${leaderboardData.length} users from Firebase`);
-    } else {
-      console.log('📊 No users in Firebase yet');
-      leaderboardData = [];
-      filteredQuestsData = [];
-    }
-    
-    generateQuestsLeaderboard();
-    
-  } catch (error) {
-    console.error('❌ Error loading leaderboard from Firebase:', error);
-    leaderboardData = [];
-    filteredQuestsData = [];
-    generateQuestsLeaderboard();
-  }
-}
-
-function setupLeaderboardListener() {
-  if (!firebaseEnabled || !database) return;
-  
-  const usersRef = database.ref('users');
-  
-  usersRef.on('value', (snapshot) => {
-    if (snapshot.exists()) {
-      const users = snapshot.val();
-      leaderboardData = [];
-      
-      Object.keys(users).forEach(walletAddr => {
-        const user = users[walletAddr];
-        leaderboardData.push({
-          name: walletAddr.substring(0, 6) + '...' + walletAddr.substring(walletAddr.length - 4),
-          address: walletAddr,
-          points: user.points || 0,
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${walletAddr}`
-        });
-      });
-      
-      leaderboardData.sort((a, b) => b.points - a.points);
-      filteredQuestsData = [...leaderboardData];
-      
-      generateQuestsLeaderboard();
-      
-      console.log('🔄 Leaderboard updated in real-time');
-    }
-  });
-}
-
-function generateQuestsLeaderboard() {
-  const container = document.getElementById('questsLeaderboardRows');
-  if (!container) {
-    console.error('❌ Leaderboard container not found!');
-    return;
-  }
-  
-  const currentUser = walletAddress ? walletAddress.toLowerCase() : '';
-  filteredQuestsData.sort((a, b) => b.points - a.points);
-  
-  console.log('✅ Generating leaderboard:', filteredQuestsData.length, 'players');
-  
-  if (filteredQuestsData.length === 0) {
-    container.innerHTML = `
-      <div style="padding:40px 20px;text-align:center;color:#6b7280;">
-        <div style="font-size:48px;margin-bottom:12px;">📊</div>
-        <div style="font-size:16px;font-weight:600;margin-bottom:8px;">No players yet!</div>
-        <div style="font-size:14px;">Be the first to earn points and appear on the leaderboard!</div>
-      </div>
-    `;
-    return;
-  }
-  
-  container.innerHTML = filteredQuestsData.map((player, index) => {
-    const rank = index + 1;
-    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
-    const isCurrentUser = player.address.toLowerCase() === currentUser;
-    
-    const shortAddress = player.address.substring(0, 6) + '...' + player.address.substring(player.address.length - 4);
-    
-    return `
-      <div style="display:grid;grid-template-columns:80px 2fr 1fr;gap:12px;padding:14px 16px;border-bottom:1px solid #f3f4f6;font-size:13px;align-items:center;${isCurrentUser ? 'background:#f2ecff;border-left:3px solid #6a3df5;' : ''}">
-        <div style="font-weight:700;">
-          ${medal ? `<span style="font-size:18px;">${medal}</span>` : `#${rank}`}
-        </div>
-        <div style="font-weight:600;display:flex;align-items:center;gap:6px;">
-          <img src="${player.avatar}" style="width:24px;height:24px;border-radius:50%;">
-          ${shortAddress}
-        </div>
-        <div style="text-align:right;font-weight:700;color:#6a3df5;">${player.points} EP</div>
-      </div>
-    `;
-  }).join('');
-  
-  console.log('✅ Leaderboard generated!');
-}
-
-function filterQuestsLeaderboard() {
-  const searchTerm = document.getElementById('questsLeaderboardSearch').value.toLowerCase();
-  
-  if (!searchTerm) {
-    filteredQuestsData = [...leaderboardData];
-  } else {
-    filteredQuestsData = leaderboardData.filter(player => 
-      player.name.toLowerCase().includes(searchTerm) ||
-      player.address.toLowerCase().includes(searchTerm)
-    );
-  }
-  
-  generateQuestsLeaderboard();
 }
 
 // ==========================================
@@ -1590,7 +1316,6 @@ async function checkNFTBalances() {
     console.log('✅ Connected:', network.name);
     
     let totalNFTs = 0;
-    let totalNFTPoints = 0;
     
     for (const collection of NFT_COLLECTIONS) {
       try {
@@ -1645,7 +1370,6 @@ async function checkNFTBalances() {
               img.src = collection.image;
             };
             
-            // ✅ HIDE TEXT WHEN IMAGE EXISTS
             const strong = nftCard.querySelector('strong');
             if (strong) {
               strong.style.display = 'none';
@@ -1659,7 +1383,6 @@ async function checkNFTBalances() {
               img.remove();
             }
             
-            // ✅ SHOW TEXT WHEN NO IMAGE
             const strong = nftCard.querySelector('strong');
             if (strong) {
               strong.style.display = 'block';
@@ -1687,7 +1410,7 @@ async function checkNFTBalances() {
       }
     }
     
-    console.log(`✅ Total: ${totalNFTs} NFTs found (no EP awarded)`);
+    console.log(`✅ Total: ${totalNFTs} NFTs found`);
     
     saveNFTData();
     
@@ -1765,13 +1488,11 @@ function loadNFTData() {
           }
           img.src = nftData[i].imageUrl;
           
-          // ✅ HIDE TEXT WHEN IMAGE EXISTS
           const strong = nftCard.querySelector('strong');
           if (strong) {
             strong.style.display = 'none';
           }
         } else {
-          // ✅ SHOW TEXT WHEN NO IMAGE
           const strong = nftCard.querySelector('strong');
           if (strong) {
             strong.style.display = 'block';
@@ -1787,103 +1508,9 @@ function loadNFTData() {
 }
 
 // ==========================================
-// INIT
+// NFT STAKING MODAL
 // ==========================================
-window.onload = function() {
-  console.log('🚀 CatKitSune loading...');
-  loadTwitterUser();
-  
-  if (firebaseEnabled) {
-    loadLeaderboardFromFirebase();
-    setupLeaderboardListener();
-  } else {
-    generateQuestsLeaderboard();
-  }
-  
-  const savedWallet = sessionStorage.getItem('wallet_address');
-  if (savedWallet && typeof window.ethereum !== 'undefined') {
-    walletAddress = savedWallet;
-    walletConnected = true;
-    updateWalletButton();
-    loadUserPoints();
-    loadNFTData();
-    loadStakingData();
-  }
-  
-  // Initialize staking UI on page load
-  updateStakingUI();
-  
-  console.log('✅ Ready!');
-};
-
-// ==========================================
-// STAKING FUNCTIONS
-// ==========================================
-let stakedNFTs = {
-  series1: [null, null, null, null, null],
-  series2: [null, null, null, null, null],
-  series3: [null, null, null, null, null]
-};
-
-const MAX_NFTS_PER_SERIES = 5;
-
-// Series ranges: Series 1 = ID 1-100, Series 2 = ID 101-200, Series 3 = ID 201-300
-function getSeriesFromTokenId(tokenId) {
-  const id = parseInt(tokenId);
-  if (id >= 1 && id <= 100) return 1;
-  if (id >= 101 && id <= 200) return 2;
-  if (id >= 201 && id <= 300) return 3;
-  return null;
-}
-
-function loadStakingData() {
-  if (!walletAddress) return;
-  
-  const saved = localStorage.getItem(`staking_${walletAddress}`);
-  if (saved) {
-    stakedNFTs = JSON.parse(saved);
-    updateStakingUI();
-  }
-  
-  // Auto-check NFTs when loading staking page
-  if (walletConnected) {
-    checkCatKitSuneNFTs();
-  }
-}
-
-async function checkCatKitSuneNFTs() {
-  if (!walletConnected) return;
-  
-  const CATKITSUNE_CONTRACT = '0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353';
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  
-  try {
-    console.log('🔍 Checking CatKitSune NFTs for wallet:', walletAddress);
-    
-    const contract = new ethers.Contract(CATKITSUNE_CONTRACT, ERC721_ABI, provider);
-    const balance = await contract.balanceOf(walletAddress);
-    
-    console.log(`📊 Total CatKitSune NFTs owned: ${balance.toString()}`);
-    
-    if (balance.toNumber() > 0) {
-      console.log('📋 Listing all owned NFTs:');
-      for (let i = 0; i < balance; i++) {
-        const tokenId = await contract.tokenOfOwnerByIndex(walletAddress, i);
-        const series = getSeriesFromTokenId(tokenId.toString());
-        console.log(`  - NFT #${tokenId.toString()} → Series ${series}`);
-      }
-    }
-  } catch (error) {
-    console.error('❌ Error checking CatKitSune NFTs:', error);
-  }
-}
-
-function saveStakingData() {
-  if (!walletAddress) return;
-  localStorage.setItem(`staking_${walletAddress}`, JSON.stringify(stakedNFTs));
-}
-
-async function stakeToSlot(seriesNumber, slotIndex) {
+async function openNFTModal(seriesNumber, slotIndex) {
   if (!walletConnected) {
     showNotification('⚠️ Please connect wallet first!');
     return;
@@ -1891,19 +1518,22 @@ async function stakeToSlot(seriesNumber, slotIndex) {
   
   const seriesKey = `series${seriesNumber}`;
   
-  // Check if slot is already filled - if yes, do nothing (only X button can unstake)
+  // Check if slot is already filled
   if (stakedNFTs[seriesKey][slotIndex] !== null) {
     showNotification('⚠️ Slot is already filled! Use the X button to unstake.');
     return;
   }
   
+  // Store current slot info
+  currentStakingSlot = { series: seriesNumber, slot: slotIndex };
+  selectedNFTForStaking = null;
+  
   // Get user's NFTs from this series
+  const CATKITSUNE_CONTRACT = '0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353';
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   let seriesNFTs = [];
   
   try {
-    // Check CatKitSune collection only (index 4 in NFT_COLLECTIONS)
-    const CATKITSUNE_CONTRACT = '0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353';
     const collection = NFT_COLLECTIONS.find(c => c.address.toLowerCase() === CATKITSUNE_CONTRACT.toLowerCase());
     
     if (!collection) {
@@ -1911,70 +1541,162 @@ async function stakeToSlot(seriesNumber, slotIndex) {
       return;
     }
     
-    try {
-      const contract = new ethers.Contract(collection.address, ERC721_ABI, provider);
-      const balance = await contract.balanceOf(walletAddress);
+    const contract = new ethers.Contract(collection.address, ERC721_ABI, provider);
+    const balance = await contract.balanceOf(walletAddress);
+    
+    console.log(`🔍 Checking wallet ${walletAddress} for CatKitSune NFTs...`);
+    console.log(`📊 Balance: ${balance.toString()} NFTs found`);
+    
+    for (let i = 0; i < balance; i++) {
+      const tokenId = await contract.tokenOfOwnerByIndex(walletAddress, i);
+      const series = getSeriesFromTokenId(tokenId.toString());
       
-      console.log(`🔍 Checking wallet ${walletAddress} for CatKitSune NFTs...`);
-      console.log(`📊 Balance: ${balance.toString()} NFTs found`);
+      console.log(`✅ Found NFT #${tokenId.toString()} - Series ${series}`);
       
-      for (let i = 0; i < balance; i++) {
-        const tokenId = await contract.tokenOfOwnerByIndex(walletAddress, i);
-        const series = getSeriesFromTokenId(tokenId.toString());
-        
-        console.log(`✅ Found NFT #${tokenId.toString()} - Series ${series}`);
-        
-        // Check if this NFT is already staked in any slot
-        const isStaked = stakedNFTs[seriesKey].some(nft => nft && nft.tokenId === tokenId.toString());
-        
-        if (series === seriesNumber && !isStaked) {
-          seriesNFTs.push({
-            contract: collection.address,
-            tokenId: tokenId.toString(),
-            collection: collection.name,
-            series: series
-          });
+      // Check if this NFT is already staked in any slot
+      const isStaked = stakedNFTs[seriesKey].some(nft => nft && nft.tokenId === tokenId.toString());
+      
+      if (series === seriesNumber && !isStaked) {
+        // Try to fetch NFT image
+        let nftImage = collection.image;
+        try {
+          const realImage = await fetchNFTImage(contract, tokenId);
+          if (realImage) nftImage = realImage;
+        } catch (e) {
+          console.log('Could not fetch NFT image');
         }
+        
+        seriesNFTs.push({
+          contract: collection.address,
+          tokenId: tokenId.toString(),
+          collection: collection.name,
+          series: series,
+          image: nftImage
+        });
       }
-    } catch (err) {
-      console.error(`❌ Error checking ${collection.name}:`, err);
-      showNotification(`❌ Error checking NFTs: ${err.message}`);
     }
+    
+    // Show modal with NFT list
+    const modalList = document.getElementById('modalNFTList');
+    const confirmBtn = document.getElementById('confirmStakeBtn');
     
     if (seriesNFTs.length === 0) {
-      console.warn(`⚠️ No available Series ${seriesNumber} NFTs found!`);
-      showNotification(`⚠️ No available Series ${seriesNumber} NFTs in your wallet!`);
-      return;
+      modalList.innerHTML = `
+        <div class="modal-empty">
+          <div class="modal-empty-icon">🦊</div>
+          <div class="modal-empty-text">No available NFTs</div>
+          <div class="modal-empty-subtext">You don't have any Series ${seriesNumber} NFTs available to stake.</div>
+        </div>
+      `;
+      confirmBtn.disabled = true;
+    } else {
+      modalList.innerHTML = `
+        <div class="nft-selection-grid">
+          ${seriesNFTs.map((nft, index) => `
+            <div class="nft-select-card" data-nft-index="${index}" onclick="selectNFTForStaking(${index})">
+              <img src="${nft.image}" class="nft-select-img" alt="NFT #${nft.tokenId}">
+              <div class="nft-select-id">NFT #${nft.tokenId}</div>
+              <div class="nft-select-series">Series ${nft.series}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      confirmBtn.disabled = true;
     }
     
-    console.log(`✅ Found ${seriesNFTs.length} available Series ${seriesNumber} NFTs`);
+    // Store NFTs for later use
+    window.availableNFTsForStaking = seriesNFTs;
     
-    // Use the first available NFT
-    const selectedNFT = seriesNFTs[0];
-    
-    console.log(`🎯 Staking NFT #${selectedNFT.tokenId} to Series ${seriesNumber}, Slot ${slotIndex}`);
-    
-    // Stake the NFT to the slot
-    stakedNFTs[seriesKey][slotIndex] = selectedNFT;
-    
-    // Award EP points
-    const epEarned = 5;
-    totalPoints += epEarned;
-    nftPointsEarned += epEarned;
-    
-    console.log(`💰 Awarded ${epEarned} EP. Total: ${totalPoints} EP`);
-    
-    saveStakingData();
-    saveUserData();
-    updateStakingUI();
-    updatePointsDisplay();
-    
-    showNotification(`🎉 NFT #${selectedNFT.tokenId} staked to Series ${seriesNumber}! +${epEarned} EP earned!`);
+    // Show modal
+    document.getElementById('nftModal').classList.add('active');
     
   } catch (error) {
-    console.error('❌ Staking error:', error);
-    showNotification(`❌ Staking failed: ${error.message}`);
+    console.error('❌ Error loading NFTs:', error);
+    showNotification(`❌ Error: ${error.message}`);
   }
+}
+
+function selectNFTForStaking(index) {
+  // Remove previous selection
+  document.querySelectorAll('.nft-select-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  
+  // Add selection to clicked card
+  const selectedCard = document.querySelector(`[data-nft-index="${index}"]`);
+  if (selectedCard) {
+    selectedCard.classList.add('selected');
+    selectedNFTForStaking = window.availableNFTsForStaking[index];
+    document.getElementById('confirmStakeBtn').disabled = false;
+  }
+}
+
+function closeNFTModal() {
+  document.getElementById('nftModal').classList.remove('active');
+  selectedNFTForStaking = null;
+  currentStakingSlot = { series: null, slot: null };
+}
+
+function confirmStake() {
+  if (!selectedNFTForStaking || !currentStakingSlot.series) {
+    showNotification('⚠️ Please select an NFT first!');
+    return;
+  }
+  
+  const { series, slot } = currentStakingSlot;
+  const seriesKey = `series${series}`;
+  
+  console.log(`🎯 Staking NFT #${selectedNFTForStaking.tokenId} to Series ${series}, Slot ${slot}`);
+  
+  // Stake the NFT to the slot
+  stakedNFTs[seriesKey][slot] = selectedNFTForStaking;
+  
+  // Award EP points
+  const epEarned = 5;
+  totalPoints += epEarned;
+  nftPointsEarned += epEarned;
+  
+  console.log(`💰 Awarded ${epEarned} EP. Total: ${totalPoints} EP`);
+  
+  saveStakingData();
+  saveUserPoints();
+  updateStakingUI();
+  
+  closeNFTModal();
+  
+  showNotification(`🎉 NFT #${selectedNFTForStaking.tokenId} staked to Series ${series}! +${epEarned} EP earned!`);
+}
+
+// ==========================================
+// STAKING DATA MANAGEMENT
+// ==========================================
+function loadStakingData() {
+  if (!walletAddress) return;
+  
+  const saved = localStorage.getItem(`staking_${walletAddress}`);
+  if (saved) {
+    try {
+      stakedNFTs = JSON.parse(saved);
+      
+      // Calculate EP from staked NFTs
+      nftPointsEarned = 0;
+      Object.keys(stakedNFTs).forEach(seriesKey => {
+        const stakedCount = stakedNFTs[seriesKey].filter(nft => nft !== null).length;
+        nftPointsEarned += stakedCount * 5;
+      });
+      
+      console.log(`📂 Loaded staking data: ${nftPointsEarned} EP from staking`);
+      updateStakingUI();
+    } catch (e) {
+      console.error('Error loading staking data:', e);
+    }
+  }
+}
+
+function saveStakingData() {
+  if (!walletAddress) return;
+  localStorage.setItem(`staking_${walletAddress}`, JSON.stringify(stakedNFTs));
+  console.log('💾 Staking data saved');
 }
 
 function unstakeFromSlot(seriesNumber, slotIndex) {
@@ -1982,13 +1704,25 @@ function unstakeFromSlot(seriesNumber, slotIndex) {
   
   if (!stakedNFTs[seriesKey][slotIndex]) return;
   
+  const nft = stakedNFTs[seriesKey][slotIndex];
+  console.log(`🔓 Unstaking NFT #${nft.tokenId} from Series ${seriesNumber}, Slot ${slotIndex}`);
+  
   // Remove NFT from slot
   stakedNFTs[seriesKey][slotIndex] = null;
   
+  // Remove EP points
+  const epLost = 5;
+  totalPoints -= epLost;
+  nftPointsEarned -= epLost;
+  
+  if (totalPoints < 0) totalPoints = 0;
+  if (nftPointsEarned < 0) nftPointsEarned = 0;
+  
   saveStakingData();
+  saveUserPoints();
   updateStakingUI();
   
-  showNotification(`✅ NFT unstaked from Series ${seriesNumber}!`);
+  showNotification(`✅ NFT #${nft.tokenId} unstaked from Series ${seriesNumber}!`);
 }
 
 function updateStakingUI() {
@@ -2025,43 +1759,35 @@ function updateStakingUI() {
       if (!slotEl) continue;
       
       if (!nft) {
-        // Empty slot - create as button
+        // Empty slot
+        const imagePaths = [
+          '/launch/1.png',
+          '/launch/2.png',
+          '/launch/3.png',
+          '/launch/4.png',
+          '/launch/5.png'
+        ];
+        
         slotEl.style.background = 'white';
         slotEl.style.border = '2px solid var(--primary)';
         slotEl.style.cursor = 'pointer';
         slotEl.innerHTML = `
-          <button style="width:100%; height:100%; background:linear-gradient(135deg, rgba(20,184,166,0.05), rgba(20,184,166,0.1)); border:none; border-radius:10px; padding:16px; cursor:pointer; transition:all 0.3s; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-            <div style="font-size:32px; margin-bottom:8px; transition:all 0.3s;">🦊</div>
-            <div style="font-size:13px; color:var(--primary); text-align:center; font-weight:700;">+ Add NFT</div>
-            <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:4px;">Click to stake</div>
-          </button>
+          <img src="${imagePaths[slotIndex]}" class="nft-slot-image" alt="CatKitSune NFT" style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; opacity:0.4; transition:opacity 0.3s ease; border-radius:12px;">
+          <div class="slot-overlay" style="position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:180px; padding:16px; background:linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(139, 92, 246, 0.05));">
+            <div style="font-size:14px; color:var(--primary); font-weight:700; text-align:center; text-shadow:0 2px 4px rgba(255,255,255,0.8);">+ Add NFT</div>
+            <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:4px; text-shadow:0 1px 2px rgba(255,255,255,0.8);">Click to stake</div>
+          </div>
         `;
         
-        // Re-add onclick event (since innerHTML removes it)
         slotEl.onclick = function() {
-          stakeToSlot(seriesNum, slotIndex);
+          openNFTModal(seriesNum, slotIndex);
         };
-        
-        // Add hover effect to button inside
-        const btn = slotEl.querySelector('button');
-        if (btn) {
-          btn.onmouseenter = function() {
-            this.style.background = 'linear-gradient(135deg, rgba(20,184,166,0.1), rgba(20,184,166,0.2))';
-            this.style.transform = 'scale(1.02)';
-          };
-          btn.onmouseleave = function() {
-            this.style.background = 'linear-gradient(135deg, rgba(20,184,166,0.05), rgba(20,184,166,0.1))';
-            this.style.transform = 'scale(1)';
-          };
-        }
       } else {
         // Filled slot
         slotEl.style.background = 'linear-gradient(135deg, var(--primary), #8b5cf6)';
         slotEl.style.border = '2px solid var(--primary)';
         slotEl.style.cursor = 'default';
-        slotEl.onclick = null; // Remove click event from filled slots
-        slotEl.onmouseenter = null;
-        slotEl.onmouseleave = null;
+        slotEl.onclick = null;
         slotEl.innerHTML = `
           <div style="position:relative; width:100%; height:100%;">
             <button onclick="event.stopPropagation(); unstakeFromSlot(${seriesNum}, ${slotIndex})" style="position:absolute; top:-8px; right:-8px; background:#ef4444; color:white; border:none; border-radius:50%; width:28px; height:28px; cursor:pointer; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; z-index:10; box-shadow:0 2px 4px rgba(0,0,0,0.2);">×</button>
@@ -2076,6 +1802,28 @@ function updateStakingUI() {
     }
   }
 }
+
+// ==========================================
+// INIT
+// ==========================================
+window.onload = function() {
+  console.log('🚀 CatKitSune loading...');
+  loadTwitterUser();
+  
+  const savedWallet = sessionStorage.getItem('wallet_address');
+  if (savedWallet && typeof window.ethereum !== 'undefined') {
+    walletAddress = savedWallet;
+    walletConnected = true;
+    updateWalletButton();
+    loadUserPoints();
+    loadNFTData();
+    loadStakingData();
+  }
+  
+  updateStakingUI();
+  
+  console.log('✅ Ready!');
+};
 
 if (typeof window.ethereum !== 'undefined') {
   window.ethereum.on('accountsChanged', (accounts) => {
