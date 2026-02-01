@@ -15,8 +15,6 @@
   --primary:#14b8a6;
   --primary-dark:#0d9488;
   --bg-main:#f0fdf9;
-  --text-main:#111827;
-  --text-muted:#6b7280;
   --border:#e5e7eb
 }
 
@@ -24,7 +22,7 @@ body{
   font-family:Inter,sans-serif;
   background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);
   min-height:100vh;
-  color:var(--text-main)
+  color:#111827
 }
 
 .container{
@@ -33,11 +31,11 @@ body{
   padding:20px
 }
 
-/* HEADER — FIXED */
+/* HEADER – UGYANAZ A HÁTTÉR, MINT A BODY */
 header{
   background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);
   border-bottom:1px solid var(--border);
-  padding:20px 0;
+  padding:24px 0;
   position:sticky;
   top:0;
   z-index:100
@@ -60,20 +58,20 @@ header{
 }
 
 .logo-img{
-  height:72px;
+  height:88px; /* NAGYOBB LOGO */
   width:auto;
   display:block
 }
 
 /* BACK BUTTON */
 .back-btn{
-  padding:10px 20px;
+  padding:12px 22px;
   background:var(--primary);
   color:#fff;
-  border-radius:12px;
+  border-radius:14px;
   text-decoration:none;
-  font-weight:600;
-  transition:all .3s
+  font-weight:700;
+  transition:.3s
 }
 .back-btn:hover{
   opacity:.9;
@@ -88,25 +86,14 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:32px;
-  box-shadow:0 20px 60px rgba(102,126,234,.3)
-}
-.supply-label{
-  color:rgba(255,255,255,.8);
-  font-size:14px;
-  font-weight:600;
-  margin-bottom:4px
+  margin-bottom:32px
 }
 .supply-count{
   font-size:36px;
   font-weight:900;
-  color:#fff;
-  letter-spacing:-1px
+  color:#fff
 }
-.progress-container{
-  flex:1;
-  margin:0 32px
-}
+.progress-container{flex:1;margin:0 32px}
 .progress-bar{
   height:14px;
   background:rgba(255,255,255,.2);
@@ -116,8 +103,7 @@ header{
 .progress-fill{
   height:100%;
   background:linear-gradient(90deg,#10b981,#22c55e);
-  width:0%;
-  transition:width .5s ease
+  width:0%
 }
 .progress-text{
   color:#fff;
@@ -131,11 +117,7 @@ header{
   padding:12px 24px;
   border-radius:999px;
   color:#fff;
-  font-weight:700;
-  font-size:14px;
-  display:flex;
-  align-items:center;
-  gap:8px
+  font-weight:700
 }
 
 /* LAYOUT */
@@ -165,14 +147,7 @@ header{
   width:100%;
   aspect-ratio:1/1;
   object-fit:cover;
-  border-radius:16px;
-  transition:.3s;
-  cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,.1)
-}
-.nft-grid-container img:hover{
-  transform:scale(1.05) rotate(2deg);
-  box-shadow:0 8px 24px rgba(20,184,166,.3)
+  border-radius:16px
 }
 
 /* MINT CARD */
@@ -192,12 +167,8 @@ header{
   border-radius:16px;
   font-size:18px;
   font-weight:700;
-  cursor:pointer;
-  transition:.3s;
-  box-shadow:0 8px 20px rgba(20,184,166,.3)
+  cursor:pointer
 }
-.mint-button:hover{transform:translateY(-2px)}
-.mint-button:disabled{opacity:.6;cursor:not-allowed}
 
 /* DEBUG */
 .debug-info{
@@ -208,8 +179,7 @@ header{
   font-size:11px;
   font-family:monospace;
   max-height:300px;
-  overflow:auto;
-  border:1px solid #e5e7eb
+  overflow:auto
 }
 </style>
 </head>
@@ -219,11 +189,7 @@ header{
 <header>
   <div class="header-content">
     <a href="/" class="logo">
-      <img
-        src="https://catkitsune.xyz/ck-logo-new.png"
-        alt="CatKitSune Logo"
-        class="logo-img"
-      >
+      <img src="/ck-logo-new.png" alt="" class="logo-img">
     </a>
     <a class="back-btn" href="/">← Back</a>
   </div>
@@ -233,7 +199,7 @@ header{
 
 <div class="supply-banner">
   <div>
-    <div class="supply-label">Minted</div>
+    <div style="color:#fff;opacity:.8;font-size:14px">Minted</div>
     <div class="supply-count" id="supplyCount">— / 300</div>
   </div>
   <div class="progress-container">
@@ -264,32 +230,12 @@ header{
 <div class="mint-card">
   <h1>🔥 Mint Your NFT</h1>
   <h2>0.1 HYPE</h2>
-  <button class="mint-button" id="mintBtn">Connect & Mint</button>
-  <div class="debug-info" id="debugLog">Debug info will appear here...</div>
+  <button class="mint-button">Connect & Mint</button>
+  <div class="debug-info">Debug info will appear here…</div>
 </div>
 
 </div>
 </div>
-
-<script>
-const CONTRACT_ADDRESS="0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
-const RPC_URL="https://rpc.hyperliquid.xyz/evm";
-const MAX_SUPPLY=300;
-
-const ABI=[
-  "function totalMinted() view returns (uint256)"
-];
-
-async function updateSupply(){
-  const p=new ethers.providers.JsonRpcProvider(RPC_URL);
-  const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,p);
-  const m=(await c.totalMinted()).toNumber();
-  document.getElementById("supplyCount").innerText=`${m} / ${MAX_SUPPLY}`;
-  document.getElementById("progressFill").style.width=`${(m/MAX_SUPPLY)*100}%`;
-  document.getElementById("progressText").innerText=`Remaining: ${MAX_SUPPLY-m}`;
-}
-updateSupply();
-</script>
 
 </body>
 </html>
