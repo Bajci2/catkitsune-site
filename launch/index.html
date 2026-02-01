@@ -33,10 +33,9 @@ body{
   padding:20px
 }
 
-/* HEADER */
+/* HEADER — FIXED */
 header{
-  background:rgba(255,255,255,.95);
-  backdrop-filter:blur(10px);
+  background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);
   border-bottom:1px solid var(--border);
   padding:20px 0;
   position:sticky;
@@ -61,7 +60,7 @@ header{
 }
 
 .logo-img{
-  height:64px;
+  height:72px;
   width:auto;
   display:block
 }
@@ -129,7 +128,6 @@ header{
 }
 .status-badge{
   background:rgba(255,255,255,.25);
-  backdrop-filter:blur(10px);
   padding:12px 24px;
   border-radius:999px;
   color:#fff;
@@ -221,7 +219,11 @@ header{
 <header>
   <div class="header-content">
     <a href="/" class="logo">
-      <img src="/ck-logo-new.png" alt="CatKitSune Logo" class="logo-img">
+      <img
+        src="https://catkitsune.xyz/ck-logo-new.png"
+        alt="CatKitSune Logo"
+        class="logo-img"
+      >
     </a>
     <a class="back-btn" href="/">← Back</a>
   </div>
@@ -262,7 +264,7 @@ header{
 <div class="mint-card">
   <h1>🔥 Mint Your NFT</h1>
   <h2>0.1 HYPE</h2>
-  <button class="mint-button" id="mintBtn" onclick="mint()">Connect & Mint</button>
+  <button class="mint-button" id="mintBtn">Connect & Mint</button>
   <div class="debug-info" id="debugLog">Debug info will appear here...</div>
 </div>
 
@@ -273,10 +275,8 @@ header{
 const CONTRACT_ADDRESS="0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
 const RPC_URL="https://rpc.hyperliquid.xyz/evm";
 const MAX_SUPPLY=300;
-const PRICE="0.1";
 
 const ABI=[
-  "function mint() payable",
   "function totalMinted() view returns (uint256)"
 ];
 
