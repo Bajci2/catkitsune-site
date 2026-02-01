@@ -10,15 +10,76 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#14b8a6;--primary-dark:#0d9488;--bg-main:#f0fdf9;--text-main:#111827;--text-muted:#6b7280;--border:#e5e7eb}
-body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);min-height:100vh;color:var(--text-main)}
-.container{max-width:1400px;margin:0 auto;padding:20px}
 
-header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100}
-.header-content{max-width:1400px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,var(--primary),var(--primary-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-.back-btn{padding:10px 20px;background:var(--primary);color:#fff;border-radius:12px;text-decoration:none;font-weight:600;transition:all 0.3s}
-.back-btn:hover{opacity:0.9;transform:translateY(-2px)}
+:root{
+  --primary:#14b8a6;
+  --primary-dark:#0d9488;
+  --bg-main:#f0fdf9;
+  --text-main:#111827;
+  --text-muted:#6b7280;
+  --border:#e5e7eb
+}
+
+body{
+  font-family:Inter,sans-serif;
+  background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);
+  min-height:100vh;
+  color:var(--text-main)
+}
+
+.container{
+  max-width:1400px;
+  margin:0 auto;
+  padding:20px
+}
+
+/* HEADER */
+header{
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:20px 0;
+  position:sticky;
+  top:0;
+  z-index:100
+}
+
+.header-content{
+  max-width:1400px;
+  margin:0 auto;
+  padding:0 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+/* LOGO */
+.logo{
+  display:flex;
+  align-items:center;
+  text-decoration:none
+}
+
+.logo-img{
+  height:64px;
+  width:auto;
+  display:block
+}
+
+/* BACK BUTTON */
+.back-btn{
+  padding:10px 20px;
+  background:var(--primary);
+  color:#fff;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:600;
+  transition:all .3s
+}
+.back-btn:hover{
+  opacity:.9;
+  transform:translateY(-2px)
+}
 
 /* SUPPLY BANNER */
 .supply-banner{
@@ -29,61 +90,101 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
   justify-content:space-between;
   align-items:center;
   margin-bottom:32px;
-  box-shadow:0 20px 60px rgba(102,126,234,0.3);
+  box-shadow:0 20px 60px rgba(102,126,234,.3)
 }
-.supply-label{color:rgba(255,255,255,0.8);font-size:14px;font-weight:600;margin-bottom:4px}
-.supply-count{font-size:36px;font-weight:900;color:#fff;letter-spacing:-1px}
-.progress-container{flex:1;margin:0 32px}
-.progress-bar{height:14px;background:rgba(255,255,255,.2);border-radius:999px;overflow:hidden;box-shadow:inset 0 2px 4px rgba(0,0,0,0.1)}
-.progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#22c55e);width:0%;transition:width 0.5s ease}
-.progress-text{color:#fff;font-size:13px;text-align:center;margin-top:8px;font-weight:600}
-.status-badge{background:rgba(255,255,255,.25);backdrop-filter:blur(10px);padding:12px 24px;border-radius:999px;color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.supply-label{
+  color:rgba(255,255,255,.8);
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:4px
+}
+.supply-count{
+  font-size:36px;
+  font-weight:900;
+  color:#fff;
+  letter-spacing:-1px
+}
+.progress-container{
+  flex:1;
+  margin:0 32px
+}
+.progress-bar{
+  height:14px;
+  background:rgba(255,255,255,.2);
+  border-radius:999px;
+  overflow:hidden
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,#10b981,#22c55e);
+  width:0%;
+  transition:width .5s ease
+}
+.progress-text{
+  color:#fff;
+  font-size:13px;
+  text-align:center;
+  margin-top:8px;
+  font-weight:600
+}
+.status-badge{
+  background:rgba(255,255,255,.25);
+  backdrop-filter:blur(10px);
+  padding:12px 24px;
+  border-radius:999px;
+  color:#fff;
+  font-weight:700;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  gap:8px
+}
 
 /* LAYOUT */
-.mint-section{display:grid;grid-template-columns:1fr 1fr;gap:32px}
-@media(max-width:1024px){.mint-section{grid-template-columns:1fr}}
+.mint-section{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px
+}
+@media(max-width:1024px){
+  .mint-section{grid-template-columns:1fr}
+}
 
-.nft-preview,.mint-card{background:#fff;border-radius:24px;padding:32px;box-shadow:0 10px 40px rgba(0,0,0,.08)}
+.nft-preview,.mint-card{
+  background:#fff;
+  border-radius:24px;
+  padding:32px;
+  box-shadow:0 10px 40px rgba(0,0,0,.08)
+}
 
 /* NFT GRID */
 .nft-grid-container{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:16px;
+  gap:16px
 }
-
 .nft-grid-container img{
   width:100%;
-  aspect-ratio:1 / 1;
+  aspect-ratio:1/1;
   object-fit:cover;
   border-radius:16px;
-  transition:transform 0.3s ease, box-shadow 0.3s ease;
+  transition:.3s;
   cursor:pointer;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  box-shadow:0 4px 12px rgba(0,0,0,.1)
 }
-
 .nft-grid-container img:hover{
   transform:scale(1.05) rotate(2deg);
-  box-shadow:0 8px 24px rgba(20,184,166,0.3);
+  box-shadow:0 8px 24px rgba(20,184,166,.3)
 }
 
 /* MINT CARD */
-.mint-card{position:relative;overflow:hidden}
-.mint-card::before{
-  content:'';
-  position:absolute;
-  top:-50%;
-  right:-50%;
-  width:200%;
-  height:200%;
-  background:linear-gradient(45deg,transparent,rgba(20,184,166,0.05),transparent);
-  animation:shine 3s infinite;
+.mint-card h1{font-size:32px;margin-bottom:8px}
+.mint-card h2{
+  font-size:36px;
+  font-weight:900;
+  color:var(--primary);
+  margin-bottom:24px
 }
-@keyframes shine{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
-
-.mint-card h1{font-size:32px;margin-bottom:8px;position:relative;z-index:1}
-.mint-card h2{font-size:36px;font-weight:900;color:var(--primary);margin-bottom:24px;position:relative;z-index:1;letter-spacing:-1px}
-
 .mint-button{
   width:100%;
   padding:20px;
@@ -94,44 +195,23 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
   font-size:18px;
   font-weight:700;
   cursor:pointer;
-  transition:all 0.3s ease;
-  box-shadow:0 8px 20px rgba(20,184,166,0.3);
-  position:relative;
-  z-index:1;
+  transition:.3s;
+  box-shadow:0 8px 20px rgba(20,184,166,.3)
 }
-.mint-button:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.mint-button:hover:not(:disabled){
-  transform:translateY(-2px);
-  box-shadow:0 12px 28px rgba(20,184,166,0.4);
-}
-.mint-button:active:not(:disabled){transform:translateY(0)}
+.mint-button:hover{transform:translateY(-2px)}
+.mint-button:disabled{opacity:.6;cursor:not-allowed}
 
-/* DEBUG INFO */
+/* DEBUG */
 .debug-info{
   margin-top:24px;
   padding:20px;
-  background:linear-gradient(135deg,#f9fafb,#f3f4f6);
+  background:#f9fafb;
   border-radius:16px;
   font-size:11px;
-  font-family:'Courier New',monospace;
+  font-family:monospace;
   max-height:300px;
-  overflow-y:auto;
-  line-height:1.6;
-  border:1px solid #e5e7eb;
-  position:relative;
-  z-index:1;
-}
-.debug-info::-webkit-scrollbar{width:8px}
-.debug-info::-webkit-scrollbar-track{background:#f1f1f1;border-radius:10px}
-.debug-info::-webkit-scrollbar-thumb{background:var(--primary);border-radius:10px}
-.debug-info::-webkit-scrollbar-thumb:hover{background:var(--primary-dark)}
-
-.debug-info div{
-  margin-bottom:6px;
-  padding:4px 8px;
-  background:rgba(255,255,255,0.5);
-  border-radius:6px;
-  border-left:3px solid var(--primary);
+  overflow:auto;
+  border:1px solid #e5e7eb
 }
 </style>
 </head>
@@ -140,7 +220,9 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 
 <header>
   <div class="header-content">
-    <a class="logo" href="/">🐱 CatKitSune</a>
+    <a href="/" class="logo">
+      <img src="/ck-logo-new.png" alt="CatKitSune Logo" class="logo-img">
+    </a>
     <a class="back-btn" href="/">← Back</a>
   </div>
 </header>
@@ -153,28 +235,27 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
     <div class="supply-count" id="supplyCount">— / 300</div>
   </div>
   <div class="progress-container">
-    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
     <div class="progress-text" id="progressText">Loading…</div>
   </div>
-  <div class="status-badge">
-    <span>🔥</span>
-    <span>Minting Live</span>
-  </div>
+  <div class="status-badge">🔥 Minting Live</div>
 </div>
 
 <div class="mint-section">
 
 <div class="nft-preview">
   <div class="nft-grid-container">
-    <img src="/launch/1.png" alt="NFT 1">
-    <img src="/launch/2.png" alt="NFT 2">
-    <img src="/launch/3.png" alt="NFT 3">
-    <img src="/launch/4.png" alt="NFT 4">
-    <img src="/launch/5.png" alt="NFT 5">
-    <img src="/launch/6.png" alt="NFT 6">
-    <img src="/launch/7.png" alt="NFT 7">
-    <img src="/launch/8.png" alt="NFT 8">
-    <img src="/launch/9.png" alt="NFT 9">
+    <img src="/launch/1.png">
+    <img src="/launch/2.png">
+    <img src="/launch/3.png">
+    <img src="/launch/4.png">
+    <img src="/launch/5.png">
+    <img src="/launch/6.png">
+    <img src="/launch/7.png">
+    <img src="/launch/8.png">
+    <img src="/launch/9.png">
   </div>
 </div>
 
@@ -189,116 +270,25 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom
 </div>
 
 <script>
-const CONTRACT_ADDRESS = "0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
-const RPC_URL = "https://rpc.hyperliquid.xyz/evm";
-const CHAIN_ID_HEX = "0x3E7";
-const MAX_SUPPLY = 300;
-const PRICE = "0.1";
+const CONTRACT_ADDRESS="0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353";
+const RPC_URL="https://rpc.hyperliquid.xyz/evm";
+const MAX_SUPPLY=300;
+const PRICE="0.1";
 
-const ABI = [
+const ABI=[
   "function mint() payable",
   "function totalMinted() view returns (uint256)"
 ];
 
-function log(msg){
-  const d = document.getElementById("debugLog");
-  const t = new Date().toLocaleTimeString();
-  d.innerHTML += `<div>${t}: ${msg}</div>`;
-  d.scrollTop = d.scrollHeight;
-}
-
 async function updateSupply(){
-  try{
-    const p = new ethers.providers.JsonRpcProvider(RPC_URL);
-    const c = new ethers.Contract(CONTRACT_ADDRESS, ABI, p);
-    const m = (await c.totalMinted()).toNumber();
-    document.getElementById("supplyCount").innerText = `${m} / ${MAX_SUPPLY}`;
-    document.getElementById("progressFill").style.width = `${(m/MAX_SUPPLY)*100}%`;
-    document.getElementById("progressText").innerText = `Remaining: ${MAX_SUPPLY-m}`;
-    log(`✅ Supply: ${m}/300`);
-  }catch(err){
-    log(`❌ Supply check failed: ${err.message}`);
-  }
+  const p=new ethers.providers.JsonRpcProvider(RPC_URL);
+  const c=new ethers.Contract(CONTRACT_ADDRESS,ABI,p);
+  const m=(await c.totalMinted()).toNumber();
+  document.getElementById("supplyCount").innerText=`${m} / ${MAX_SUPPLY}`;
+  document.getElementById("progressFill").style.width=`${(m/MAX_SUPPLY)*100}%`;
+  document.getElementById("progressText").innerText=`Remaining: ${MAX_SUPPLY-m}`;
 }
 updateSupply();
-setInterval(updateSupply, 10000);
-
-async function mint(){
-  const btn = document.getElementById("mintBtn");
-  
-  try{
-    log("🔌 Connecting to MetaMask...");
-    
-    if(!window.ethereum){
-      alert("MetaMask needed! Please install MetaMask extension.");
-      log("❌ MetaMask not found");
-      return;
-    }
-    
-    btn.disabled = true;
-    btn.innerText = "Connecting...";
-    
-    const p = new ethers.providers.Web3Provider(window.ethereum);
-    log("✅ Provider created");
-    
-    await p.send("eth_requestAccounts", []);
-    log("✅ Wallet connected");
-    
-    const chainId = await p.send("eth_chainId", []);
-    log(`📡 Current chain: ${chainId}`);
-    
-    if(chainId !== CHAIN_ID_HEX){
-      log("🔄 Switching to HyperEVM (Chain ID: 999)...");
-      btn.innerText = "Switch Network...";
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{chainId: CHAIN_ID_HEX}]
-      });
-      log("✅ Network switched to HyperEVM");
-    }
-    
-    const s = p.getSigner();
-    const addr = await s.getAddress();
-    log(`👤 Address: ${addr.slice(0,6)}...${addr.slice(-4)}`);
-    
-    const c = new ethers.Contract(CONTRACT_ADDRESS, ABI, s);
-    
-    btn.innerText = "Minting...";
-    log("📝 Sending mint transaction...");
-    log(`💰 Price: ${PRICE} HYPE`);
-    
-    const tx = await c.mint({
-      value: ethers.utils.parseEther(PRICE),
-      gasLimit: 200000
-    });
-    
-    log(`⏳ TX Hash: ${tx.hash.slice(0,10)}...${tx.hash.slice(-8)}`);
-    btn.innerText = "Waiting for confirmation...";
-    
-    await tx.wait();
-    log("🎉 Mint successful!");
-    
-    btn.innerText = "✅ Minted!";
-    setTimeout(() => {
-      btn.innerText = "Connect & Mint";
-      btn.disabled = false;
-    }, 3000);
-    
-    updateSupply();
-    
-  }catch(err){
-    log(`❌ Error: ${err.message}`);
-    console.error(err);
-    btn.innerText = "Connect & Mint";
-    btn.disabled = false;
-    
-    if(err.code === 4001){
-      alert("Transaction rejected by user");
-    }else{
-      alert(`Error: ${err.message}`);
-    }
-  }
-}
 </script>
 
 </body>
