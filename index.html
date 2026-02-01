@@ -250,6 +250,7 @@
       --bg-main: #f0fdf9;
       --bg-card: #ffffff;
       --primary: #14b8a6;
+      --primary-dark: #0d9488;
       --primary-soft: #ccfbf1;
       --accent-green: #10b981;
       --border: #e5e7eb;
@@ -277,22 +278,23 @@
     }
 
     .logo {
-      font-size: 14px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
       display: flex;
       align-items: center;
       gap: 8px;
       cursor: pointer;
     }
-
-    .paw-icon {
-      width: 24px;
-      height: 24px;
-      display: inline-block;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><ellipse cx="65" cy="50" rx="23" ry="33" fill="%2314b8a6"/><ellipse cx="135" cy="50" rx="23" ry="33" fill="%2314b8a6"/><ellipse cx="35" cy="80" rx="20" ry="30" fill="%2314b8a6" transform="rotate(-25 35 80)"/><ellipse cx="165" cy="80" rx="20" ry="30" fill="%2314b8a6" transform="rotate(25 165 80)"/><ellipse cx="100" cy="130" rx="55" ry="50" fill="%2314b8a6"/></svg>');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
+    
+    .logo::before {
+      content: '🐱';
+      font-size: 24px;
+      -webkit-text-fill-color: initial;
     }
 
     .top-actions { display: flex; align-items: center; gap: 8px; }
@@ -521,7 +523,6 @@
 <div class="app">
 <header>
 <div class="logo" onclick="showView(event, 'quests')">
-<span class="paw-icon"></span>
 <span>CatKitSune</span>
 </div>
 <div class="top-actions">
@@ -1806,7 +1807,7 @@ function updateStakingUI() {
 // ==========================================
 // INIT
 // ==========================================
-window.onload = function() {
+window.onload = async function() {
   console.log('🚀 CatKitSune loading...');
   loadTwitterUser();
   
@@ -1818,6 +1819,10 @@ window.onload = function() {
     loadUserPoints();
     loadNFTData();
     loadStakingData();
+    
+    // ✅ Check NFT balances when page loads with connected wallet
+    console.log('🔍 Refreshing NFT balances...');
+    await checkNFTBalances();
   }
   
   updateStakingUI();
