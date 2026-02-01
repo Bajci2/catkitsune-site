@@ -278,23 +278,26 @@
     }
 
     .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    
+    .logo-icon {
+      height: 40px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+    
+    .logo-text {
       font-size: 24px;
       font-weight: 900;
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
-    
-    .logo::before {
-      content: '🐱';
-      font-size: 24px;
-      -webkit-text-fill-color: initial;
     }
 
     .top-actions { display: flex; align-items: center; gap: 8px; }
@@ -523,7 +526,8 @@
 <div class="app">
 <header>
 <div class="logo" onclick="showView(event, 'quests')">
-<span>CatKitSune</span>
+<img src="/ck-logo.png" alt="CK" class="logo-icon">
+<span class="logo-text">CatKitSune</span>
 </div>
 <div class="top-actions">
 <button class="login-btn mint-tab" onclick="window.location.href='/launch'" style="margin-right: 8px;">
