@@ -31,7 +31,7 @@ body{
   padding:20px
 }
 
-/* HEADER – UGYANAZ A HÁTTÉR, MINT A BODY */
+/* HEADER */
 header{
   background:linear-gradient(135deg,#f0fdf9 0%,#ccfbf1 100%);
   border-bottom:1px solid var(--border);
@@ -58,7 +58,7 @@ header{
 }
 
 .logo-img{
-  height:88px; /* NAGYOBB LOGO */
+  height:88px;
   width:auto;
   display:block
 }
@@ -158,6 +158,8 @@ header{
   color:var(--primary);
   margin-bottom:24px
 }
+
+/* 🔥 FIX: KATTINTHATÓ GOMB */
 .mint-button{
   width:100%;
   padding:20px;
@@ -167,10 +169,12 @@ header{
   border-radius:16px;
   font-size:18px;
   font-weight:700;
-  cursor:pointer
+  cursor:pointer;
+  position:relative;
+  z-index:10;
 }
 
-/* DEBUG */
+/* DEBUG – NEM BLOKKOLHAT */
 .debug-info{
   margin-top:24px;
   padding:20px;
@@ -179,7 +183,10 @@ header{
   font-size:11px;
   font-family:monospace;
   max-height:300px;
-  overflow:auto
+  overflow:auto;
+  pointer-events:none;
+  position:relative;
+  z-index:1;
 }
 </style>
 </head>
