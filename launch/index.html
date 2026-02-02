@@ -553,7 +553,7 @@ async function loadSupplyData() {
       readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
     }
     
-    // Try to read counter
+    // Try to read counter (silently fail if not available)
     try {
       const counter = await readContract._tokenIdCounter();
       const contractCount = counter.toNumber();
@@ -567,11 +567,11 @@ async function loadSupplyData() {
         document.getElementById('progressText').textContent = `${newPercentage.toFixed(1)}% minted`;
       }
     } catch (e) {
-      log('Could not read counter from contract', 'error');
+      // Silently ignore - contract may not have this function
     }
     
   } catch (error) {
-    log(`Contract read failed: ${error.message}`, 'error');
+    // Silently ignore - no need to spam errors
   }
 }
 
