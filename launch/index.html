@@ -592,14 +592,22 @@ async function mintNFT() {
 
     const receipt = await tx.wait();
     
-    log(`Minted successfully! Block: ${receipt.blockNumber}`, 'success');
+    log(`✅ Minted successfully! Block: ${receipt.blockNumber}`, 'success');
     log(`Transaction: ${tx.hash}`, 'success');
 
-    // Supply frissítés
+    // 🔥 AUTO-REFRESH SUPPLY
     await loadSupplyData();
     
     updateButtonState('connected');
-    alert('🎉 NFT successfully minted!');
+    
+    // 🎉 Success message
+    alert(`🎉 NFT successfully minted!\n\nTransaction: ${tx.hash.substring(0, 10)}...`);
+    
+    // 🔄 Reload page after 2 seconds to refresh NFT balance
+    log('Reloading page to update NFT balance...', 'success');
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
 
   } catch (error) {
     log(`Mint failed: ${error.message}`, 'error');
