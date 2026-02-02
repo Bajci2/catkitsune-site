@@ -542,15 +542,22 @@ async function loadSupplyData() {
   
   log(`Supply: ${minted}/${max} (${percentage.toFixed(1)}%)`, 'success');
   
-  // Try to read from contract if possible
+  // Try to read from contract even if wallet not connected
   try {
-    if (!contract) return;
+    // Create a read-only provider if contract not initialized yet
+    let readContract = contract;
     
-    // Try different possible function names
+    if (!readContract) {
+      // Create read-only provider
+      const readProvider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_CONFIG.rpcUrls[0]);
+      readContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+    }
+    
+    // Try to read counter
     try {
-      const counter = await contract._tokenIdCounter();
+      const counter = await readContract._tokenIdCounter();
       const contractCount = counter.toNumber();
-      if (contractCount > 0) {
+      if (contractCount > 0 && contractCount !== currentMintedSupply) {
         currentMintedSupply = contractCount;
         log(`✅ Contract counter: ${contractCount}`, 'success');
         // Re-update display with contract data
@@ -560,11 +567,11 @@ async function loadSupplyData() {
         document.getElementById('progressText').textContent = `${newPercentage.toFixed(1)}% minted`;
       }
     } catch (e) {
-      log('No _tokenIdCounter function', 'error');
+      log('Could not read counter from contract', 'error');
     }
     
   } catch (error) {
-    log(`Contract read attempt failed: ${error.message}`, 'error');
+    log(`Contract read failed: ${error.message}`, 'error');
   }
 }
 
@@ -693,9 +700,6 @@ if (window.ethereum) {
 window.addEventListener('load', () => {
   log('Page loaded, ready to connect wallet');
   
-  // ❌ NE auto-connecteljünk! Ez okozza a rate limiting-et
-  // A user manuálisan kattintson a gombra
-  
   // Csak ellenőrizzük, hogy van-e MetaMask
   if (typeof window.ethereum !== 'undefined') {
     log('MetaMask extension detected', 'success');
@@ -703,13 +707,14 @@ window.addEventListener('load', () => {
     log('MetaMask not installed', 'error');
   }
   
-  // 🔥 PERIODIC SUPPLY REFRESH - 5 másodpercenként frissít
+  // 🔥 IMMEDIATE FIRST LOAD
+  loadSupplyData();
+  
+  // 🔥 PERIODIC SUPPLY REFRESH - 3 másodpercenként frissít (MINDIG, wallet nélkül is!)
   setInterval(async () => {
-    if (contract) {
-      log('🔄 Auto-refreshing supply...', 'success');
-      await loadSupplyData();
-    }
-  }, 5000); // 5 seconds
+    log('🔄 Auto-refreshing supply...', 'success');
+    await loadSupplyData();
+  }, 3000); // 3 seconds
 });
 </script>
 
