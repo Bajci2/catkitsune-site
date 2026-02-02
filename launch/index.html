@@ -702,6 +702,14 @@ window.addEventListener('load', () => {
   } else {
     log('MetaMask not installed', 'error');
   }
+  
+  // 🔥 PERIODIC SUPPLY REFRESH - 5 másodpercenként frissít
+  setInterval(async () => {
+    if (contract) {
+      log('🔄 Auto-refreshing supply...', 'success');
+      await loadSupplyData();
+    }
+  }, 5000); // 5 seconds
 });
 </script>
 
