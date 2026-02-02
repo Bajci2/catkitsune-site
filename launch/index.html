@@ -309,6 +309,12 @@ let signer = null;
 let contract = null;
 let userAddress = null;
 
+// 🔥 RATE LIMITING PROTECTION
+let isConnecting = false;
+let isSwitchingNetwork = false;
+let connectionAttempts = 0;
+const MAX_CONNECTION_ATTEMPTS = 3;
+
 // ===========================
 // DEBUG LOGGING
 // ===========================
@@ -325,6 +331,21 @@ function log(message, type = 'info') {
 // WALLET CONNECTION
 // ===========================
 async function connectWallet() {
+  // 🔒 PREVENT MULTIPLE SIMULTANEOUS CONNECTIONS
+  if (isConnecting) {
+    log('Connection already in progress, please wait...', 'error');
+    return;
+  }
+
+  if (connectionAttempts >= MAX_CONNECTION_ATTEMPTS) {
+    log('Too many connection attempts. Please refresh the page.', 'error');
+    alert('Too many connection attempts. Please refresh the page and try again.');
+    return;
+  }
+
+  isConnecting = true;
+  connectionAttempts++;
+
   try {
     log('Checking for MetaMask...');
     
@@ -367,9 +388,26 @@ async function connectWallet() {
     updateButtonState('connected');
     await loadSupplyData();
 
+    // Sikeres kapcsolódás után reset
+    connectionAttempts = 0;
+
   } catch (error) {
     log(`Connection error: ${error.message}`, 'error');
-    alert(`Connection failed: ${error.message}`);
+    
+    // User cancelled
+    if (error.code === 4001) {
+      alert('Connection cancelled by user');
+    } 
+    // Already pending
+    else if (error.message.includes('already pending')) {
+      alert('Network change already in progress. Please check MetaMask and complete the action.');
+    }
+    // Generic error
+    else {
+      alert(`Connection failed: ${error.message}`);
+    }
+  } finally {
+    isConnecting = false;
   }
 }
 
@@ -377,16 +415,30 @@ async function connectWallet() {
 // NETWORK SWITCHING
 // ===========================
 async function switchToHyperliquid() {
+  // 🔒 PREVENT MULTIPLE SIMULTANEOUS NETWORK SWITCHES
+  if (isSwitchingNetwork) {
+    log('Network switch already in progress...', 'error');
+    throw new Error('Network switch already in progress. Please complete it in MetaMask.');
+  }
+
+  isSwitchingNetwork = true;
+
   try {
+    // Először próbáljuk meg váltani
     await window.ethereum.request({
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: HYPERLIQUID_CONFIG.chainId }],
     });
     log('Switched to Hyperliquid!', 'success');
+    
   } catch (switchError) {
-    // Ha a hálózat még nincs hozzáadva
+    // Ha a hálózat még nincs hozzáadva (4902)
     if (switchError.code === 4902) {
       log('Hyperliquid not found, adding network...');
+      
+      // Kis delay a rate limiting elkerülésére
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       try {
         await window.ethereum.request({
           method: 'wallet_addEthereumChain',
@@ -400,11 +452,27 @@ async function switchToHyperliquid() {
         });
         log('Hyperliquid network added!', 'success');
       } catch (addError) {
+        // Already pending error
+        if (addError.message && addError.message.includes('already pending')) {
+          log('Network add request already pending in MetaMask', 'error');
+          throw new Error('Please complete the network addition in MetaMask popup');
+        }
         throw new Error(`Failed to add Hyperliquid network: ${addError.message}`);
       }
-    } else {
+    } 
+    // User cancelled (4001)
+    else if (switchError.code === 4001) {
+      throw new Error('Network switch cancelled by user');
+    }
+    // Already pending
+    else if (switchError.message && switchError.message.includes('already pending')) {
+      throw new Error('Network switch already pending. Please check MetaMask.');
+    }
+    else {
       throw switchError;
     }
+  } finally {
+    isSwitchingNetwork = false;
   }
 }
 
@@ -538,10 +606,14 @@ if (window.ethereum) {
 window.addEventListener('load', () => {
   log('Page loaded, ready to connect wallet');
   
-  // Ha már csatlakoztatva van MetaMask
-  if (window.ethereum && window.ethereum.selectedAddress) {
-    log('Previous connection detected, auto-connecting...');
-    connectWallet();
+  // ❌ NE auto-connecteljünk! Ez okozza a rate limiting-et
+  // A user manuálisan kattintson a gombra
+  
+  // Csak ellenőrizzük, hogy van-e MetaMask
+  if (typeof window.ethereum !== 'undefined') {
+    log('MetaMask extension detected', 'success');
+  } else {
+    log('MetaMask not installed', 'error');
   }
 });
 </script>
