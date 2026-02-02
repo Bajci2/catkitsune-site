@@ -386,6 +386,26 @@ async function connectWallet() {
     userAddress = accounts[0];
     log(`Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(38)}`, 'success');
 
+    // 🔥 ELLENŐRIZD A JELENLEGI HÁLÓZATOT ELŐSZÖR
+    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+    log(`Current MetaMask network: ${currentChainId} (${parseInt(currentChainId, 16)})`);
+    
+    // Ha NEM a helyes hálózat, akkor EGYBŐL váltson
+    if (currentChainId !== HYPERLIQUID_CONFIG.chainId) {
+      log(`Wrong network detected! Expected: ${HYPERLIQUID_CONFIG.chainId}, Got: ${currentChainId}`, 'error');
+      log('Forcing network switch to Hyperliquid mainnet...', 'error');
+      await switchToHyperliquid();
+      
+      // Várd meg hogy váltson
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Ellenőrizd újra
+      const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (newChainId !== HYPERLIQUID_CONFIG.chainId) {
+        throw new Error(`Network switch failed. Please manually switch to Hyperliquid mainnet (Chain ID: 999) in MetaMask.`);
+      }
+    }
+
     // Provider és signer inicializálás
     provider = new ethers.providers.Web3Provider(window.ethereum, {
       name: 'hyperliquid',
@@ -396,15 +416,7 @@ async function connectWallet() {
 
     // Hálózat ellenőrzés
     const network = await provider.getNetwork();
-    log(`Current network: ${network.name} (${network.chainId})`);
-
-    // Ha nem Hyperliquid, akkor váltás
-    if (network.chainId !== parseInt(HYPERLIQUID_CONFIG.chainId, 16)) {
-      log('Wrong network! Switching to Hyperliquid...');
-      await switchToHyperliquid();
-    } else {
-      log('Already on Hyperliquid network!', 'success');
-    }
+    log(`Provider network: ${network.name} (${network.chainId})`, 'success');
 
     // Contract inicializálás
     log(`Initializing contract at ${CONTRACT_ADDRESS}...`);
@@ -428,6 +440,10 @@ async function connectWallet() {
     // Already pending
     else if (error.message.includes('already pending')) {
       alert('Network change already in progress. Please check MetaMask and complete the action.');
+    }
+    // Network error
+    else if (error.message.includes('Network switch failed')) {
+      alert(error.message);
     }
     // Generic error
     else {
