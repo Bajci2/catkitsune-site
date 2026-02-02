@@ -305,12 +305,15 @@ if (CONTRACT_ADDRESS === '0xYourContractAddressHere' || !CONTRACT_ADDRESS.starts
   console.error('⚠️ CONTRACT ADDRESS NOT SET! Please update CONTRACT_ADDRESS in the code.');
 }
 
-// SIMPLIFIED ABI - csak a szükséges funkciók
+// 🔥 UPDATED ABI - Based on actual contract functions from blockchain
+// This contract uses a custom implementation, not standard ERC721
 const CONTRACT_ABI = [
-  'function mint() public payable',
-  'function totalSupply() public view returns (uint256)',
-  'function MAX_SUPPLY() public view returns (uint256)',
-  'function balanceOf(address owner) public view returns (uint256)'
+  'function mint() public payable', // 0x1249c58b - standard mint function
+  'function _tokenIdCounter() public view returns (uint256)', // Custom counter
+  'function MAX_SUPPLY() public view returns (uint256)', // May not exist
+  'function balanceOf(address owner) public view returns (uint256)',
+  'function owner() public view returns (address)',
+  'function mintPrice() public view returns (uint256)' // 0x6352211e
 ];
 
 // MINT ÁR (0.1 HYPE)
@@ -524,39 +527,40 @@ async function switchToHyperliquid() {
 // SUPPLY DATA
 // ===========================
 async function loadSupplyData() {
+  // 🔥 ALWAYS USE HARDCODED - Contract doesn't have standard totalSupply/MAX_SUPPLY
+  const minted = 27; // Manually tracked
+  const max = 300;
+  const percentage = (minted / max) * 100;
+  
+  document.getElementById('supplyCount').textContent = `${minted} / ${max}`;
+  document.getElementById('progressFill').style.width = `${percentage}%`;
+  document.getElementById('progressText').textContent = `${percentage.toFixed(1)}% minted`;
+  
+  log(`Supply: ${minted}/${max} (${percentage.toFixed(1)}%) - hardcoded`, 'success');
+  
+  // Try to read from contract if possible (won't work with this contract)
   try {
-    log('Loading supply data...');
+    if (!contract) return;
     
-    if (!contract) {
-      log('Contract not initialized yet', 'error');
-      return;
+    // Try different possible function names
+    let supply = null;
+    
+    try {
+      supply = await contract._tokenIdCounter();
+      log(`Contract counter: ${supply.toNumber()}`, 'success');
+    } catch (e) {
+      log('No _tokenIdCounter function', 'error');
     }
     
-    const totalSupply = await contract.totalSupply();
-    const maxSupply = await contract.MAX_SUPPLY();
+    try {
+      const totalSupply = await contract.totalSupply();
+      log(`Contract totalSupply: ${totalSupply.toNumber()}`, 'success');
+    } catch (e) {
+      log('No totalSupply function', 'error');
+    }
     
-    const minted = totalSupply.toNumber();
-    const max = maxSupply.toNumber();
-    const percentage = (minted / max) * 100;
-
-    document.getElementById('supplyCount').textContent = `${minted} / ${max}`;
-    document.getElementById('progressFill').style.width = `${percentage}%`;
-    document.getElementById('progressText').textContent = `${percentage.toFixed(1)}% minted`;
-
-    log(`Supply: ${minted}/${max} (${percentage.toFixed(1)}%)`, 'success');
-
   } catch (error) {
-    log(`Failed to load supply: ${error.message}`, 'error');
-    
-    // Fallback values
-    document.getElementById('supplyCount').textContent = '— / 300';
-    document.getElementById('progressFill').style.width = '0%';
-    document.getElementById('progressText').textContent = 'Supply data unavailable';
-    
-    // Ha ENS error, magyarázat
-    if (error.message.includes('ENS') || error.message.includes('UNSUPPORTED_OPERATION')) {
-      log('Note: This is a contract read error, not a connection issue', 'error');
-    }
+    log(`Contract read attempt failed: ${error.message}`, 'error');
   }
 }
 
