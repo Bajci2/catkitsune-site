@@ -391,7 +391,8 @@ async function connectWallet() {
     log(`Current MetaMask network: ${currentChainId} (${parseInt(currentChainId, 16)})`);
     
     // Ha NEM a helyes hálózat, akkor EGYBŐL váltson
-    if (currentChainId !== HYPERLIQUID_CONFIG.chainId) {
+    // 🔥 Case-insensitive comparison!
+    if (currentChainId.toLowerCase() !== HYPERLIQUID_CONFIG.chainId.toLowerCase()) {
       log(`Wrong network detected! Expected: ${HYPERLIQUID_CONFIG.chainId}, Got: ${currentChainId}`, 'error');
       log('Forcing network switch to Hyperliquid mainnet...', 'error');
       await switchToHyperliquid();
@@ -401,7 +402,7 @@ async function connectWallet() {
       
       // Ellenőrizd újra
       const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
-      if (newChainId !== HYPERLIQUID_CONFIG.chainId) {
+      if (newChainId.toLowerCase() !== HYPERLIQUID_CONFIG.chainId.toLowerCase()) {
         throw new Error(`Network switch failed. Please manually switch to Hyperliquid mainnet (Chain ID: 999) in MetaMask.`);
       }
     }
