@@ -288,14 +288,23 @@ const HYPERLIQUID_CONFIG = {
   blockExplorerUrls: ['https://explorer.hyperliquid-testnet.xyz']
 };
 
-// CONTRACT ADDRESS - CSERÉLD KI A SAJÁTODRA!
-const CONTRACT_ADDRESS = '0xYourContractAddressHere';
+// ===========================
+// CONTRACT CONFIGURATION
+// ===========================
+// ✅ CatKitSune NFT Contract Address on Hyperliquid
+const CONTRACT_ADDRESS = '0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353';
+
+// Check if contract address is set
+if (CONTRACT_ADDRESS === '0xYourContractAddressHere' || !CONTRACT_ADDRESS.startsWith('0x')) {
+  console.error('⚠️ CONTRACT ADDRESS NOT SET! Please update CONTRACT_ADDRESS in the code.');
+}
 
 // SIMPLIFIED ABI - csak a szükséges funkciók
 const CONTRACT_ABI = [
   'function mint() public payable',
   'function totalSupply() public view returns (uint256)',
-  'function MAX_SUPPLY() public view returns (uint256)'
+  'function MAX_SUPPLY() public view returns (uint256)',
+  'function balanceOf(address owner) public view returns (uint256)'
 ];
 
 // MINT ÁR (0.1 HYPE)
@@ -331,6 +340,13 @@ function log(message, type = 'info') {
 // WALLET CONNECTION
 // ===========================
 async function connectWallet() {
+  // ✅ CHECK CONTRACT ADDRESS FIRST
+  if (CONTRACT_ADDRESS === '0xYourContractAddressHere' || !CONTRACT_ADDRESS.startsWith('0x') || CONTRACT_ADDRESS.length !== 42) {
+    log('❌ CONTRACT ADDRESS NOT CONFIGURED!', 'error');
+    alert('Error: Contract address is not set! Please update CONTRACT_ADDRESS in the code with your deployed contract address.');
+    return;
+  }
+
   // 🔒 PREVENT MULTIPLE SIMULTANEOUS CONNECTIONS
   if (isConnecting) {
     log('Connection already in progress, please wait...', 'error');
@@ -365,7 +381,11 @@ async function connectWallet() {
     log(`Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(38)}`, 'success');
 
     // Provider és signer inicializálás
-    provider = new ethers.providers.Web3Provider(window.ethereum);
+    provider = new ethers.providers.Web3Provider(window.ethereum, {
+      name: 'hyperliquid',
+      chainId: parseInt(HYPERLIQUID_CONFIG.chainId, 16),
+      ensAddress: null // 🔥 DISABLE ENS - Hyperliquid doesn't support it
+    });
     signer = provider.getSigner();
 
     // Hálózat ellenőrzés
@@ -381,6 +401,7 @@ async function connectWallet() {
     }
 
     // Contract inicializálás
+    log(`Initializing contract at ${CONTRACT_ADDRESS}...`);
     contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
     log('Contract initialized', 'success');
 
@@ -483,6 +504,11 @@ async function loadSupplyData() {
   try {
     log('Loading supply data...');
     
+    if (!contract) {
+      log('Contract not initialized yet', 'error');
+      return;
+    }
+    
     const totalSupply = await contract.totalSupply();
     const maxSupply = await contract.MAX_SUPPLY();
     
@@ -498,7 +524,16 @@ async function loadSupplyData() {
 
   } catch (error) {
     log(`Failed to load supply: ${error.message}`, 'error');
+    
+    // Fallback values
     document.getElementById('supplyCount').textContent = '— / 300';
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('progressText').textContent = 'Supply data unavailable';
+    
+    // Ha ENS error, magyarázat
+    if (error.message.includes('ENS') || error.message.includes('UNSUPPORTED_OPERATION')) {
+      log('Note: This is a contract read error, not a connection issue', 'error');
+    }
   }
 }
 
