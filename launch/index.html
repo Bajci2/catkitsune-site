@@ -269,12 +269,6 @@ header{
   <h1>🔥 Mint Your NFT</h1>
   <h2>0.1 HYPE</h2>
   <button class="mint-button" id="mintButton">Connect Wallet</button>
-  
-  <!-- Refresh button for troubleshooting -->
-  <button onclick="window.location.reload()" style="margin-top:12px;width:100%;padding:12px;background:#f3f4f6;color:#374151;border:2px solid #e5e7eb;border-radius:12px;font-weight:600;cursor:pointer;">
-    🔄 Refresh Page
-  </button>
-  
   <div class="debug-info" id="debugInfo">
     <div class="debug-log">Waiting for wallet connection...</div>
   </div>
@@ -631,9 +625,16 @@ document.getElementById('mintButton').addEventListener('click', connectWallet);
 
 // Hálózatváltás figyelés
 if (window.ethereum) {
-  window.ethereum.on('chainChanged', () => {
-    log('Network changed, reloading...');
-    window.location.reload();
+  window.ethereum.on('chainChanged', (chainId) => {
+    log(`Network changed to: ${chainId}`, 'error');
+    // Ha helyes hálózatra váltott, reload
+    if (chainId === HYPERLIQUID_CONFIG.chainId) {
+      log('Correct network detected, reloading...', 'success');
+      setTimeout(() => window.location.reload(), 1000);
+    } else {
+      log('Wrong network! Please switch to Hyperliquid mainnet (Chain ID: 999)', 'error');
+      alert('Wrong network detected. Please switch to Hyperliquid mainnet in MetaMask.');
+    }
   });
 
   window.ethereum.on('accountsChanged', (accounts) => {
@@ -641,8 +642,8 @@ if (window.ethereum) {
       log('Wallet disconnected', 'error');
       updateButtonState('disconnected');
     } else {
-      log('Account changed, reloading...');
-      window.location.reload();
+      log('Account changed, reloading...', 'error');
+      setTimeout(() => window.location.reload(), 500);
     }
   });
 }
