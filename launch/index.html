@@ -103,7 +103,8 @@ header{
 .progress-fill{
   height:100%;
   background:linear-gradient(90deg,#10b981,#22c55e);
-  width:0%
+  width:0%;
+  transition:width 0.5s ease
 }
 .progress-text{
   color:#fff;
@@ -159,7 +160,7 @@ header{
   margin-bottom:24px
 }
 
-/* 🔥 FIX: KATTINTHATÓ GOMB */
+/* MINT BUTTON */
 .mint-button{
   width:100%;
   padding:20px;
@@ -170,11 +171,21 @@ header{
   font-size:18px;
   font-weight:700;
   cursor:pointer;
-  position:relative;
-  z-index:10;
+  transition:all 0.3s ease;
 }
 
-/* DEBUG – NEM BLOKKOLHAT */
+.mint-button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(20,184,166,0.4);
+}
+
+.mint-button:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* DEBUG */
 .debug-info{
   margin-top:24px;
   padding:20px;
@@ -184,9 +195,24 @@ header{
   font-family:monospace;
   max-height:300px;
   overflow:auto;
-  pointer-events:none;
-  position:relative;
-  z-index:1;
+}
+
+.debug-log{
+  margin:4px 0;
+  padding:4px 8px;
+  border-left:3px solid #14b8a6;
+}
+
+.debug-error{
+  border-left-color:#ef4444;
+  background:#fee;
+  color:#dc2626;
+}
+
+.debug-success{
+  border-left-color:#10b981;
+  background:#d1fae5;
+  color:#059669;
 }
 </style>
 </head>
@@ -222,27 +248,303 @@ header{
 
 <div class="nft-preview">
   <div class="nft-grid-container">
-    <img src="/launch/1.png">
-    <img src="/launch/2.png">
-    <img src="/launch/3.png">
-    <img src="/launch/4.png">
-    <img src="/launch/5.png">
-    <img src="/launch/6.png">
-    <img src="/launch/7.png">
-    <img src="/launch/8.png">
-    <img src="/launch/9.png">
+    <img src="/launch/1.png" alt="NFT 1">
+    <img src="/launch/2.png" alt="NFT 2">
+    <img src="/launch/3.png" alt="NFT 3">
+    <img src="/launch/4.png" alt="NFT 4">
+    <img src="/launch/5.png" alt="NFT 5">
+    <img src="/launch/6.png" alt="NFT 6">
+    <img src="/launch/7.png" alt="NFT 7">
+    <img src="/launch/8.png" alt="NFT 8">
+    <img src="/launch/9.png" alt="NFT 9">
   </div>
 </div>
 
 <div class="mint-card">
   <h1>🔥 Mint Your NFT</h1>
   <h2>0.1 HYPE</h2>
-  <button class="mint-button">Connect & Mint</button>
-  <div class="debug-info">Debug info will appear here…</div>
+  <button class="mint-button" id="mintButton">Connect Wallet</button>
+  <div class="debug-info" id="debugInfo">
+    <div class="debug-log">Waiting for wallet connection...</div>
+  </div>
 </div>
 
 </div>
 </div>
+
+<script>
+// ===========================
+// HYPERLIQUID CONFIG
+// ===========================
+const HYPERLIQUID_CONFIG = {
+  chainId: '0x6665CC1D', // 1721453597 decimal
+  chainName: 'Hyperliquid',
+  rpcUrls: ['https://api.hyperliquid-testnet.xyz/evm'],
+  nativeCurrency: {
+    name: 'HYPE',
+    symbol: 'HYPE',
+    decimals: 18
+  },
+  blockExplorerUrls: ['https://explorer.hyperliquid-testnet.xyz']
+};
+
+// CONTRACT ADDRESS - CSERÉLD KI A SAJÁTODRA!
+const CONTRACT_ADDRESS = '0xYourContractAddressHere';
+
+// SIMPLIFIED ABI - csak a szükséges funkciók
+const CONTRACT_ABI = [
+  'function mint() public payable',
+  'function totalSupply() public view returns (uint256)',
+  'function MAX_SUPPLY() public view returns (uint256)'
+];
+
+// MINT ÁR (0.1 HYPE)
+const MINT_PRICE = ethers.utils.parseEther('0.1');
+
+// ===========================
+// GLOBÁLIS VÁLTOZÓK
+// ===========================
+let provider = null;
+let signer = null;
+let contract = null;
+let userAddress = null;
+
+// ===========================
+// DEBUG LOGGING
+// ===========================
+function log(message, type = 'info') {
+  const debugDiv = document.getElementById('debugInfo');
+  const logClass = type === 'error' ? 'debug-error' : type === 'success' ? 'debug-success' : 'debug-log';
+  const timestamp = new Date().toLocaleTimeString();
+  debugDiv.innerHTML += `<div class="${logClass}">[${timestamp}] ${message}</div>`;
+  debugDiv.scrollTop = debugDiv.scrollHeight;
+  console.log(`[${type.toUpperCase()}] ${message}`);
+}
+
+// ===========================
+// WALLET CONNECTION
+// ===========================
+async function connectWallet() {
+  try {
+    log('Checking for MetaMask...');
+    
+    // MetaMask ellenőrzés
+    if (typeof window.ethereum === 'undefined') {
+      throw new Error('MetaMask not installed! Please install MetaMask extension.');
+    }
+
+    log('MetaMask detected, requesting accounts...');
+    
+    // Fiókok lekérése
+    const accounts = await window.ethereum.request({ 
+      method: 'eth_requestAccounts' 
+    });
+    
+    userAddress = accounts[0];
+    log(`Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(38)}`, 'success');
+
+    // Provider és signer inicializálás
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    signer = provider.getSigner();
+
+    // Hálózat ellenőrzés
+    const network = await provider.getNetwork();
+    log(`Current network: ${network.name} (${network.chainId})`);
+
+    // Ha nem Hyperliquid, akkor váltás
+    if (network.chainId !== parseInt(HYPERLIQUID_CONFIG.chainId, 16)) {
+      log('Wrong network! Switching to Hyperliquid...');
+      await switchToHyperliquid();
+    } else {
+      log('Already on Hyperliquid network!', 'success');
+    }
+
+    // Contract inicializálás
+    contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+    log('Contract initialized', 'success');
+
+    // UI frissítés
+    updateButtonState('connected');
+    await loadSupplyData();
+
+  } catch (error) {
+    log(`Connection error: ${error.message}`, 'error');
+    alert(`Connection failed: ${error.message}`);
+  }
+}
+
+// ===========================
+// NETWORK SWITCHING
+// ===========================
+async function switchToHyperliquid() {
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: HYPERLIQUID_CONFIG.chainId }],
+    });
+    log('Switched to Hyperliquid!', 'success');
+  } catch (switchError) {
+    // Ha a hálózat még nincs hozzáadva
+    if (switchError.code === 4902) {
+      log('Hyperliquid not found, adding network...');
+      try {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: HYPERLIQUID_CONFIG.chainId,
+            chainName: HYPERLIQUID_CONFIG.chainName,
+            rpcUrls: HYPERLIQUID_CONFIG.rpcUrls,
+            nativeCurrency: HYPERLIQUID_CONFIG.nativeCurrency,
+            blockExplorerUrls: HYPERLIQUID_CONFIG.blockExplorerUrls
+          }]
+        });
+        log('Hyperliquid network added!', 'success');
+      } catch (addError) {
+        throw new Error(`Failed to add Hyperliquid network: ${addError.message}`);
+      }
+    } else {
+      throw switchError;
+    }
+  }
+}
+
+// ===========================
+// SUPPLY DATA
+// ===========================
+async function loadSupplyData() {
+  try {
+    log('Loading supply data...');
+    
+    const totalSupply = await contract.totalSupply();
+    const maxSupply = await contract.MAX_SUPPLY();
+    
+    const minted = totalSupply.toNumber();
+    const max = maxSupply.toNumber();
+    const percentage = (minted / max) * 100;
+
+    document.getElementById('supplyCount').textContent = `${minted} / ${max}`;
+    document.getElementById('progressFill').style.width = `${percentage}%`;
+    document.getElementById('progressText').textContent = `${percentage.toFixed(1)}% minted`;
+
+    log(`Supply: ${minted}/${max} (${percentage.toFixed(1)}%)`, 'success');
+
+  } catch (error) {
+    log(`Failed to load supply: ${error.message}`, 'error');
+    document.getElementById('supplyCount').textContent = '— / 300';
+  }
+}
+
+// ===========================
+// MINTING
+// ===========================
+async function mintNFT() {
+  if (!contract || !signer) {
+    log('Wallet not connected!', 'error');
+    return;
+  }
+
+  try {
+    log('Starting mint transaction...');
+    updateButtonState('minting');
+
+    // Gas estimation
+    const gasEstimate = await contract.estimateGas.mint({ value: MINT_PRICE });
+    log(`Estimated gas: ${gasEstimate.toString()}`);
+
+    // Mint transaction
+    const tx = await contract.mint({ 
+      value: MINT_PRICE,
+      gasLimit: gasEstimate.mul(120).div(100) // 20% buffer
+    });
+
+    log(`Transaction sent: ${tx.hash}`);
+    log('Waiting for confirmation...');
+
+    const receipt = await tx.wait();
+    
+    log(`Minted successfully! Block: ${receipt.blockNumber}`, 'success');
+    log(`Transaction: ${tx.hash}`, 'success');
+
+    // Supply frissítés
+    await loadSupplyData();
+    
+    updateButtonState('connected');
+    alert('🎉 NFT successfully minted!');
+
+  } catch (error) {
+    log(`Mint failed: ${error.message}`, 'error');
+    
+    if (error.code === 4001) {
+      alert('Transaction cancelled by user');
+    } else if (error.message.includes('insufficient funds')) {
+      alert('Insufficient HYPE balance. You need 0.1 HYPE + gas fees.');
+    } else {
+      alert(`Minting failed: ${error.message}`);
+    }
+    
+    updateButtonState('connected');
+  }
+}
+
+// ===========================
+// BUTTON STATE MANAGEMENT
+// ===========================
+function updateButtonState(state) {
+  const button = document.getElementById('mintButton');
+  
+  switch(state) {
+    case 'connected':
+      button.textContent = '🔥 Mint Now (0.1 HYPE)';
+      button.disabled = false;
+      button.onclick = mintNFT;
+      break;
+    case 'minting':
+      button.textContent = '⏳ Minting...';
+      button.disabled = true;
+      break;
+    default:
+      button.textContent = 'Connect Wallet';
+      button.disabled = false;
+      button.onclick = connectWallet;
+  }
+}
+
+// ===========================
+// EVENT LISTENERS
+// ===========================
+document.getElementById('mintButton').addEventListener('click', connectWallet);
+
+// Hálózatváltás figyelés
+if (window.ethereum) {
+  window.ethereum.on('chainChanged', () => {
+    log('Network changed, reloading...');
+    window.location.reload();
+  });
+
+  window.ethereum.on('accountsChanged', (accounts) => {
+    if (accounts.length === 0) {
+      log('Wallet disconnected', 'error');
+      updateButtonState('disconnected');
+    } else {
+      log('Account changed, reloading...');
+      window.location.reload();
+    }
+  });
+}
+
+// ===========================
+// INITIAL LOAD
+// ===========================
+window.addEventListener('load', () => {
+  log('Page loaded, ready to connect wallet');
+  
+  // Ha már csatlakoztatva van MetaMask
+  if (window.ethereum && window.ethereum.selectedAddress) {
+    log('Previous connection detected, auto-connecting...');
+    connectWallet();
+  }
+});
+</script>
 
 </body>
 </html>
