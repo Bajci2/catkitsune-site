@@ -333,6 +333,10 @@ let isSwitchingNetwork = false;
 let connectionAttempts = 0;
 const MAX_CONNECTION_ATTEMPTS = 3;
 
+// 🔥 DYNAMIC SUPPLY COUNTER
+let currentMintedSupply = 27; // Starting value
+const MAX_SUPPLY = 300;
+
 // ===========================
 // DEBUG LOGGING
 // ===========================
@@ -527,36 +531,36 @@ async function switchToHyperliquid() {
 // SUPPLY DATA
 // ===========================
 async function loadSupplyData() {
-  // 🔥 ALWAYS USE HARDCODED - Contract doesn't have standard totalSupply/MAX_SUPPLY
-  const minted = 27; // Manually tracked
-  const max = 300;
+  // 🔥 USE DYNAMIC COUNTER
+  const minted = currentMintedSupply;
+  const max = MAX_SUPPLY;
   const percentage = (minted / max) * 100;
   
   document.getElementById('supplyCount').textContent = `${minted} / ${max}`;
   document.getElementById('progressFill').style.width = `${percentage}%`;
   document.getElementById('progressText').textContent = `${percentage.toFixed(1)}% minted`;
   
-  log(`Supply: ${minted}/${max} (${percentage.toFixed(1)}%) - hardcoded`, 'success');
+  log(`Supply: ${minted}/${max} (${percentage.toFixed(1)}%)`, 'success');
   
-  // Try to read from contract if possible (won't work with this contract)
+  // Try to read from contract if possible
   try {
     if (!contract) return;
     
     // Try different possible function names
-    let supply = null;
-    
     try {
-      supply = await contract._tokenIdCounter();
-      log(`Contract counter: ${supply.toNumber()}`, 'success');
+      const counter = await contract._tokenIdCounter();
+      const contractCount = counter.toNumber();
+      if (contractCount > 0) {
+        currentMintedSupply = contractCount;
+        log(`✅ Contract counter: ${contractCount}`, 'success');
+        // Re-update display with contract data
+        const newPercentage = (contractCount / max) * 100;
+        document.getElementById('supplyCount').textContent = `${contractCount} / ${max}`;
+        document.getElementById('progressFill').style.width = `${newPercentage}%`;
+        document.getElementById('progressText').textContent = `${newPercentage.toFixed(1)}% minted`;
+      }
     } catch (e) {
       log('No _tokenIdCounter function', 'error');
-    }
-    
-    try {
-      const totalSupply = await contract.totalSupply();
-      log(`Contract totalSupply: ${totalSupply.toNumber()}`, 'success');
-    } catch (e) {
-      log('No totalSupply function', 'error');
     }
     
   } catch (error) {
@@ -574,7 +578,7 @@ async function mintNFT() {
   }
 
   try {
-    log('Starting mint transaction...');
+    log('Starting mint transaction...', 'success');
     updateButtonState('minting');
 
     // Gas estimation
@@ -587,35 +591,41 @@ async function mintNFT() {
       gasLimit: gasEstimate.mul(120).div(100) // 20% buffer
     });
 
-    log(`Transaction sent: ${tx.hash}`);
-    log('Waiting for confirmation...');
+    log(`Transaction sent: ${tx.hash}`, 'success');
+    log('⏳ Waiting for confirmation...', 'success');
 
     const receipt = await tx.wait();
     
-    log(`✅ Minted successfully! Block: ${receipt.blockNumber}`, 'success');
-    log(`Transaction: ${tx.hash}`, 'success');
+    log(`✅ MINTED SUCCESSFULLY! Block: ${receipt.blockNumber}`, 'success');
+    log(`✅ Transaction: https://purrsec.com/tx/${tx.hash}`, 'success');
 
-    // 🔥 AUTO-REFRESH SUPPLY
+    // 🔥 INCREMENT SUPPLY COUNTER
+    currentMintedSupply++;
+    log(`🔥 Supply updated: ${currentMintedSupply}/${MAX_SUPPLY}`, 'success');
+    
+    // 🔥 UPDATE DISPLAY IMMEDIATELY
     await loadSupplyData();
     
     updateButtonState('connected');
     
     // 🎉 Success message
-    alert(`🎉 NFT successfully minted!\n\nTransaction: ${tx.hash.substring(0, 10)}...`);
+    const shortHash = tx.hash.substring(0, 10) + '...';
+    alert(`🎉 NFT SUCCESSFULLY MINTED!\n\nYou now own ${currentMintedSupply} NFTs!\n\nTransaction: ${shortHash}`);
     
-    // 🔄 Reload page after 2 seconds to refresh NFT balance
-    log('Reloading page to update NFT balance...', 'success');
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    log('✅ Minting complete! You can mint again or check your NFTs in MetaMask.', 'success');
 
   } catch (error) {
-    log(`Mint failed: ${error.message}`, 'error');
+    log(`❌ Mint failed: ${error.message}`, 'error');
     
-    if (error.code === 4001) {
+    if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
+      log('User cancelled transaction', 'error');
       alert('Transaction cancelled by user');
     } else if (error.message.includes('insufficient funds')) {
+      log('Insufficient HYPE balance', 'error');
       alert('Insufficient HYPE balance. You need 0.1 HYPE + gas fees.');
+    } else if (error.message.includes('Sold out')) {
+      log('NFT collection sold out!', 'error');
+      alert('Sorry, all NFTs have been minted!');
     } else {
       alert(`Minting failed: ${error.message}`);
     }
