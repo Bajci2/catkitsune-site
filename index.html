@@ -298,7 +298,7 @@
       backdrop-filter: blur(20px);
       display: flex; align-items: center; justify-content: space-between;
       position: relative;
-      z-index: 100;
+      z-index: 1000;
     }
 
     .logo {
@@ -415,7 +415,6 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      z-index: 10;
     }
 
     .card::before {
@@ -557,86 +556,52 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
-
-    /* ==================== FLOATING PARTICLES ==================== */
-    .particle {
-      position: fixed;
-      width: 6px;
-      height: 6px;
-      background: radial-gradient(circle, #ffffff, #8b5cf6);
-      border-radius: 50%;
-      opacity: 0.9;
-      animation: float-up 15s linear infinite;
-      box-shadow: 
-        0 0 20px #8b5cf6,
-        0 0 40px #8b5cf6,
-        0 0 60px rgba(139, 92, 246, 0.5);
-      filter: brightness(1.5);
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    @keyframes float-up {
-      0% {
-        transform: translateY(100vh) translateX(0);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.9;
-      }
-      90% {
-        opacity: 0.9;
-      }
-      100% {
-        transform: translateY(-100px) translateX(100px);
-        opacity: 0;
-      }
-    }
   </style>
   
   <script>
-  // CRITICAL: Define functions immediately to prevent "not defined" errors
-  // These will be overridden by the full implementations in body script
+  // ========================================
+  // EARLY FUNCTION DEFINITIONS (HEAD)
+  // These ensure onclick handlers work immediately
+  // ========================================
   
   window.showView = function(event, viewName) {
-    // This placeholder will be replaced
-    console.log('showView placeholder called, waiting for main script...');
+    try {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
+      const targetView = document.getElementById('view-' + viewName);
+      if (targetView) {
+        targetView.classList.add('active');
+      }
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      console.error('showView error:', error);
+    }
   };
   
   window.toggleWallet = function() {
-    // This placeholder will be replaced
-    console.log('toggleWallet placeholder called, waiting for main script...');
+    console.log('Wallet button clicked, initializing...');
+    if (typeof connectWallet === 'function') {
+      if (window.walletConnected) {
+        if (confirm('Disconnect wallet?')) {
+          disconnectWallet();
+        }
+      } else {
+        connectWallet();
+      }
+    }
   };
   
   window.loginWithTwitter = function() {
-    // This works immediately
     window.location.href = "https://catkitsune.xyz/api/twitter-login";
   };
   
-  // Auto-initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeFunctions);
-  } else {
-    initializeFunctions();
-  }
-  
-  function initializeFunctions() {
-    console.log('DOM ready, functions will be loaded by main script');
-  }
+  console.log('✅ Early functions loaded in head');
   </script>
 </head>
 <body>
-<!-- FLOATING PARTICLES -->
-<div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-<div class="particle" style="left: 20%; animation-delay: 2s;"></div>
-<div class="particle" style="left: 30%; animation-delay: 4s;"></div>
-<div class="particle" style="left: 40%; animation-delay: 1s;"></div>
-<div class="particle" style="left: 50%; animation-delay: 3s;"></div>
-<div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-<div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
-<div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
-<div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
-
 <div class="app">
 <header>
 <div class="logo" onclick="showView(event, 'quests')">
@@ -684,7 +649,7 @@ Login with Twitter
 
 <div class="top-nav">
 <button class="top-nav-btn active" onclick="showView(event, 'quests')">🎮</button>
-<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🚀</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
@@ -825,123 +790,70 @@ Login with Twitter
 
 <div class="top-nav">
 <button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
-<button class="top-nav-btn active" onclick="showView(event, 'roadmap')">🚀</button>
+<button class="top-nav-btn active" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn" onclick="showView(event, 'staking')">💎</button>
 </div>
 
-<div style="max-width:800px; margin:0 auto;">
-
-<div style="text-align:center; margin-bottom:32px;">
-<h1 style="font-size:36px; font-weight:800; background:linear-gradient(135deg, #8b5cf6, #00f5ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px;">🚀 Launch Your NFT Collection</h1>
-<p style="font-size:16px; color:#a1a1aa; line-height:1.6;">
-Submit your Hyperliquid NFT project to be featured on CatKitSune.<br>
-We'll review and list approved projects on <a href="https://drip.trade" target="_blank" style="color:#00f5ff; font-weight:600;">DripTrade</a>.
-</p>
-</div>
-
-<div class="card" style="padding:32px;">
-
-<!-- How It Works -->
-<div style="margin-bottom:32px;">
-<h2 style="font-size:24px; font-weight:800; color:#ffffff; margin-bottom:16px;">📋 How It Works</h2>
-<div style="display:flex; flex-direction:column; gap:12px;">
-<div style="padding:16px; background:rgba(139, 92, 246, 0.1); border-left:4px solid #8b5cf6; border-radius:8px;">
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">1️⃣ Submit Your Project</div>
-<div style="font-size:14px; color:#a1a1aa;">Send us your project details via email or Discord</div>
-</div>
-<div style="padding:16px; background:rgba(139, 92, 246, 0.1); border-left:4px solid #8b5cf6; border-radius:8px;">
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">2️⃣ Review Process</div>
-<div style="font-size:14px; color:#a1a1aa;">We'll review within 48-72 hours and contact you</div>
-</div>
-<div style="padding:16px; background:rgba(139, 92, 246, 0.1); border-left:4px solid #8b5cf6; border-radius:8px;">
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">3️⃣ Launch on DripTrade</div>
-<div style="font-size:14px; color:#a1a1aa;">Approved projects get listed on <a href="https://drip.trade" target="_blank" style="color:#00f5ff;">DripTrade</a> marketplace</div>
-</div>
+<div style="background:linear-gradient(135deg,#fee2e2,#fecaca);padding:10px 14px;border-radius:10px;margin-bottom:10px;border:1px solid #ef4444;">
+<div style="font-size:12px;font-weight:700;color:#991b1b;margin-bottom:3px;text-align:center;">🚧 Website Under Development</div>
+<div style="font-size:10px;color:#7f1d1d;line-height:1.4;text-align:center;">
+<strong>Note:</strong> Not all features on this website are fully functional yet. Some sections are still in development and will be activated progressively.
 </div>
 </div>
 
-<!-- Requirements -->
-<div style="margin-bottom:32px;">
-<h2 style="font-size:24px; font-weight:800; color:#ffffff; margin-bottom:16px;">📝 Required Information</h2>
-<div style="background:rgba(255,255,255,0.03); padding:24px; border-radius:12px; border:1px solid rgba(139, 92, 246, 0.2);">
-
-<div style="display:flex; flex-direction:column; gap:16px;">
-
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">📛 Project Name</div>
-<div style="font-size:14px; color:#a1a1aa;">Your NFT collection name</div>
+<div style="background:linear-gradient(135deg,#fef3c7,#fde68a);padding:10px 14px;border-radius:10px;margin-bottom:16px;border:1px solid #fbbf24;">
+<div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:3px;text-align:center;">⚠️ Important: No Fixed Timeline</div>
+<div style="font-size:10px;color:#78350f;line-height:1.4;text-align:center;">
+This roadmap is <strong>NOT time-bound</strong>. Progress through each phase at your own pace. Complete prerequisites to unlock next stages.
+</div>
 </div>
 
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">🎨 Banner Image</div>
-<div style="font-size:14px; color:#a1a1aa;">1500x500px (PNG or JPG)</div>
+<div class="content-grid">
+
+<!-- PHASE 1: NFT Series System -->
+<div class="card">
+<div class="card-title"><span class="dot"></span> Phase 1: 🎨 NFT Series System</div>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:12px;">
+
+<div style="padding:16px;background:linear-gradient(135deg,#f0fdf9,#ccfbf1);border-radius:12px;border-left:4px solid #14b8a6;">
+<div style="font-weight:700;font-size:14px;color:#115e59;margin-bottom:6px;">1️⃣ Series 1 NFT – Entry Level</div>
+<div style="font-size:12px;color:#334155;line-height:1.6;">
+<strong>Requirement:</strong> None<br>
+<strong>Unlock:</strong> Series 2 minting access<br>
+<strong>Chain:</strong> Hyperliquid<br>
+<strong>Marketplace:</strong> <a href="https://drip.trade/" target="_blank" style="color:#14b8a6;font-weight:600;">DripTrade</a><br>
+<strong>Minting:</strong> <span style="color:#14b8a6;font-weight:600;">Coming Soon</span>
+</div>
 </div>
 
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">🏷️ Logo Image</div>
-<div style="font-size:14px; color:#a1a1aa;">500x500px (PNG or JPG)</div>
+<div style="padding:16px;background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:12px;border-left:4px solid #f59e0b;">
+<div style="font-weight:700;font-size:14px;color:#92400e;margin-bottom:6px;">2️⃣ Series 2 NFT – Advanced Level</div>
+<div style="font-size:12px;color:#334155;line-height:1.6;">
+<strong>Requirement:</strong> Own Series 1 NFT<br>
+<strong>Unlock:</strong> Series 3 minting access<br>
+<strong>Chain:</strong> Hyperliquid<br>
+<strong>Marketplace:</strong> <a href="https://drip.trade/" target="_blank" style="color:#f59e0b;font-weight:600;">DripTrade</a><br>
+<strong>Minting:</strong> <span style="color:#f59e0b;font-weight:600;">Coming Soon</span>
+</div>
 </div>
 
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">🖼️ NFT Sample Images</div>
-<div style="font-size:14px; color:#a1a1aa;">9 example NFTs from your collection</div>
+<div style="padding:16px;background:linear-gradient(135deg,#faf5ff,#f3e8ff);border-radius:12px;border-left:4px solid #a855f7;">
+<div style="font-weight:700;font-size:14px;color:#6b21a8;margin-bottom:6px;">3️⃣ Series 3 NFT – Premium Level + Token Rewards</div>
+<div style="font-size:12px;color:#334155;line-height:1.6;">
+<strong>Requirement:</strong> Own Series 1 + Series 2 NFTs<br>
+<strong>Benefits:</strong><br>
+- Token rewards<br>
+- Extra airdrop eligibility<br>
+<strong>Chain:</strong> Hyperliquid<br>
+<strong>Marketplace:</strong> <a href="https://drip.trade/" target="_blank" style="color:#a855f7;font-weight:600;">DripTrade</a><br>
+<strong>Minting:</strong> <span style="color:#a855f7;font-weight:600;">Coming Soon</span>
 </div>
-
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">📝 Project Description</div>
-<div style="font-size:14px; color:#a1a1aa;">Brief description of your NFT project and roadmap</div>
-</div>
-
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">🔗 Social Links</div>
-<div style="font-size:14px; color:#a1a1aa;">Twitter, Discord, Website (if available)</div>
-</div>
-
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">💰 Mint Price</div>
-<div style="font-size:14px; color:#a1a1aa;">Price in HYPE (e.g., 0.1 HYPE or FREE)</div>
-</div>
-
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">📊 Total Supply</div>
-<div style="font-size:14px; color:#a1a1aa;">Maximum number of NFTs in collection</div>
-</div>
-
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">⛓️ Blockchain</div>
-<div style="font-size:14px; color:#a1a1aa;">Must be <strong style="color:#00f5ff;">Hyperliquid</strong></div>
-</div>
-
-<div>
-<div style="font-weight:700; color:#ffffff; margin-bottom:4px;">📧 Your Contact</div>
-<div style="font-size:14px; color:#a1a1aa;">Email or Discord for communication</div>
-</div>
-
 </div>
 
 </div>
 </div>
 
-<!-- Contact Section -->
-<div style="background:linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(0, 245, 255, 0.2)); padding:24px; border-radius:12px; border:1px solid rgba(139, 92, 246, 0.3); text-align:center;">
-<h3 style="font-size:20px; font-weight:800; color:#ffffff; margin-bottom:12px;">📩 Submit Your Project</h3>
-<p style="font-size:14px; color:#a1a1aa; margin-bottom:16px;">
-Send all the information above to:
-</p>
-<div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-<a href="https://x.com/GborSzakl1" target="_blank" style="padding:12px 24px; background:linear-gradient(135deg, #8b5cf6, #00f5ff); border-radius:8px; color:white; font-weight:700; text-decoration:none; display:inline-block;">
-🐦 Twitter: @GborSzakl1
-</a>
-<a href="https://discord.gg/catkitsune" target="_blank" style="padding:12px 24px; background:rgba(255,255,255,0.1); border:1px solid rgba(139, 92, 246, 0.3); border-radius:8px; color:#00f5ff; font-weight:700; text-decoration:none; display:inline-block;">
-💬 Discord Server
-</a>
 </div>
-</div>
-
-</div>
-
-</div>
-
 </main>
 
 <!-- STAKING VIEW -->
@@ -953,7 +865,7 @@ Send all the information above to:
 <!-- Navigation Buttons -->
 <div style="display:flex; gap:12px; align-items:center; justify-content:center; margin-bottom:24px;">
 <button class="top-nav-btn" onclick="showView(event, 'quests')">🎮</button>
-<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🚀</button>
+<button class="top-nav-btn" onclick="showView(event, 'roadmap')">🗺️</button>
 <button class="top-nav-btn active" onclick="showView(event, 'staking')">💎</button>
 </div>
 </div>
@@ -1053,7 +965,7 @@ Send all the information above to:
 </div><!-- /views-container -->
 
 </div><!-- /app -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ==========================================
 // FIREBASE CONFIGURATION
 // ==========================================
@@ -1271,35 +1183,20 @@ function getSeriesFromTokenId(tokenId) {
 // VIEW SWITCHING
 // ==========================================
 function showView(event, viewName) {
-  console.log('showView called with:', viewName);
-  try {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
-    
-    const targetView = document.getElementById('view-' + viewName);
-    console.log('Target view:', targetView);
-    
-    if (targetView) {
-      targetView.classList.add('active');
-    } else {
-      console.error('View not found: view-' + viewName);
-    }
-    
-    if (event && event.target) event.target.classList.add('active');
-    
-    if (viewName === 'staking') {
-      setTimeout(() => updateStakingUI(), 50);
-    }
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } catch (error) {
-    console.error('Error in showView:', error);
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.getElementById('view-' + viewName).classList.add('active');
+  if (event && event.target) event.target.classList.add('active');
+  
+  if (viewName === 'staking') {
+    setTimeout(() => updateStakingUI(), 50);
   }
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-// Make showView globally accessible
+// Override the head version with this better one
 window.showView = showView;
-console.log('✅ showView function loaded and assigned to window');
+console.log('✅ Full showView loaded (with staking support)');
 
 // ==========================================
 // WALLET CONNECTION
@@ -1371,7 +1268,7 @@ function toggleWallet() {
   }
 }
 window.toggleWallet = toggleWallet;
-console.log('✅ toggleWallet function loaded and assigned to window');
+console.log('✅ toggleWallet loaded');
 
 // ==========================================
 // TWITTER LOGIN
@@ -1380,7 +1277,7 @@ function loginWithTwitter() {
   window.location.href = "https://catkitsune.xyz/api/twitter-login";
 }
 window.loginWithTwitter = loginWithTwitter;
-console.log('✅ loginWithTwitter function loaded and assigned to window');
+console.log('✅ loginWithTwitter loaded');
 
 async function loadTwitterUser() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -2089,4 +1986,16 @@ window.onload = async function() {
 
 if (typeof window.ethereum !== 'undefined') {
   window.ethereum.on('accountsChanged', (accounts) => {
-    if (accounts.lengt
+    if (accounts.length === 0) {
+      disconnectWallet();
+    } else if (walletConnected) {
+      walletAddress = accounts[0];
+      updateWalletButton();
+      loadStakingData();
+      showNotification('🔄 Account changed');
+    }
+  });
+}
+</script>
+</body>
+</html>
