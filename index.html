@@ -595,23 +595,16 @@
   </style>
   
   <script>
-  // Define showView early so onclick handlers work
-  function showView(event, viewName) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('view-' + viewName).classList.add('active');
-    if (event && event.target) event.target.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-  window.showView = showView;
-  
-  // Wallet and Twitter placeholders (will be overridden by main script)
-  function toggleWallet() {
-    console.log('Wallet function will load...');
-  }
-  function loginWithTwitter() {
+  // Early function declarations to prevent "not defined" errors
+  window.showView = window.showView || function(event, viewName) {
+    console.log('Placeholder showView, will be replaced by main script');
+  };
+  window.toggleWallet = window.toggleWallet || function() {
+    console.log('Wallet function loading...');
+  };
+  window.loginWithTwitter = window.loginWithTwitter || function() {
     window.location.href = "https://catkitsune.xyz/api/twitter-login";
-  }
+  };
   </script>
 </head>
 <body>
