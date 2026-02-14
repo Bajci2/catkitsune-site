@@ -595,16 +595,34 @@
   </style>
   
   <script>
-  // Early function declarations to prevent "not defined" errors
-  window.showView = window.showView || function(event, viewName) {
-    console.log('Placeholder showView, will be replaced by main script');
+  // CRITICAL: Define functions immediately to prevent "not defined" errors
+  // These will be overridden by the full implementations in body script
+  
+  window.showView = function(event, viewName) {
+    // This placeholder will be replaced
+    console.log('showView placeholder called, waiting for main script...');
   };
-  window.toggleWallet = window.toggleWallet || function() {
-    console.log('Wallet function loading...');
+  
+  window.toggleWallet = function() {
+    // This placeholder will be replaced
+    console.log('toggleWallet placeholder called, waiting for main script...');
   };
-  window.loginWithTwitter = window.loginWithTwitter || function() {
+  
+  window.loginWithTwitter = function() {
+    // This works immediately
     window.location.href = "https://catkitsune.xyz/api/twitter-login";
   };
+  
+  // Auto-initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeFunctions);
+  } else {
+    initializeFunctions();
+  }
+  
+  function initializeFunctions() {
+    console.log('DOM ready, functions will be loaded by main script');
+  }
   </script>
 </head>
 <body>
@@ -1281,6 +1299,7 @@ function showView(event, viewName) {
 
 // Make showView globally accessible
 window.showView = showView;
+console.log('✅ showView function loaded and assigned to window');
 
 // ==========================================
 // WALLET CONNECTION
@@ -1352,6 +1371,7 @@ function toggleWallet() {
   }
 }
 window.toggleWallet = toggleWallet;
+console.log('✅ toggleWallet function loaded and assigned to window');
 
 // ==========================================
 // TWITTER LOGIN
@@ -1360,6 +1380,7 @@ function loginWithTwitter() {
   window.location.href = "https://catkitsune.xyz/api/twitter-login";
 }
 window.loginWithTwitter = loginWithTwitter;
+console.log('✅ loginWithTwitter function loaded and assigned to window');
 
 async function loadTwitterUser() {
   const urlParams = new URLSearchParams(window.location.search);
