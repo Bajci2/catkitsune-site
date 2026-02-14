@@ -486,16 +486,17 @@ body {
 
 /* ==================== DEBUG CONSOLE ==================== */
 .debug-console {
-  margin-top: 24px;
+  margin-top: 12px;
   background: rgba(0,0,0,0.4);
   border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 12px;
-  padding: 16px;
-  min-height: 150px;
-  max-height: 300px;
+  border-radius: 6px;
+  padding: 8px;
+  min-height: 40px;
+  max-height: 60px;
   overflow-y: auto;
+  overflow-x: hidden;
   font-family: 'Courier New', monospace;
-  font-size: 11px;
+  font-size: 6px;
 }
 
 .debug-log {
@@ -778,15 +779,51 @@ body {
       </div>
     </div>
 
-    <!-- COMING SOON CARD -->
+    <!-- THIRD CARD - PLACEHOLDER -->
     <div class="mint-card-3d">
       <div class="card-inner">
-        <div class="card-front" style="display: flex; align-items: center; justify-content: center;">
+        <div class="card-front">
           
-          <div style="text-align: center;">
-            <div style="font-size: 48px; margin-bottom: 20px;">🔜</div>
-            <h2 style="font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 10px;">Coming Soon</h2>
-            <p style="font-size: 12px; color: #a1a1aa;">New Collection</p>
+          <!-- ROTATING NFT SHOWCASE -->
+          <div class="nft-showcase-3d">
+            <div class="showcase-carousel">
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+            </div>
+          </div>
+
+          <!-- CARD HEADER -->
+          <div class="card-header">
+            <div class="card-badge">.......... Collection</div>
+            <h2 class="card-title">.......... - ... HYPE</h2>
+            <p class="card-collection">Series 1 • Limited Edition</p>
+          </div>
+
+          <!-- PROGRESS -->
+          <div class="progress-section">
+            <div class="progress-info">
+              <span>00 / pcs</span>
+              <span>0.0%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- BUTTON -->
+          <button class="mint-button">CONNECT WALLET</button>
+
+          <!-- DEBUG CONSOLE -->
+          <div class="debug-console">
+            <div>Ready to mint...</div>
+            <div>[14:42:16] 3D Mint Experience</div>
           </div>
 
         </div>
