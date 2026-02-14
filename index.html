@@ -604,6 +604,14 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   window.showView = showView;
+  
+  // Wallet and Twitter placeholders (will be overridden by main script)
+  function toggleWallet() {
+    console.log('Wallet function will load...');
+  }
+  function loginWithTwitter() {
+    window.location.href = "https://catkitsune.xyz/api/twitter-login";
+  }
   </script>
 </head>
 <body>
