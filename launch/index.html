@@ -855,19 +855,32 @@ async function connectWallet() {
 // ===========================
 async function loadSupply() {
   try {
+    // Create read-only provider for checking supply without wallet
+    let readProvider, readPaidContract, readFreeContract;
+    
+    if (!contract || !freeContract) {
+      // No wallet connected, use read-only provider
+      readProvider = new ethers.providers.JsonRpcProvider('https://rpc.hyperliquid.xyz/evm');
+      readPaidContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+      readFreeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+    }
+    
     // Try to load from contracts if available
-    if (contract) {
+    const paidContractToUse = contract || readPaidContract;
+    const freeContractToUse = freeContract || readFreeContract;
+    
+    if (paidContractToUse) {
       try {
-        const paidCounter = await contract._tokenIdCounter();
+        const paidCounter = await paidContractToUse._tokenIdCounter();
         currentMintedSupply = paidCounter.toNumber();
       } catch (e) {
         console.log('Could not load paid supply from contract');
       }
     }
     
-    if (freeContract) {
+    if (freeContractToUse) {
       try {
-        const freeCounter = await freeContract._tokenIdCounter();
+        const freeCounter = await freeContractToUse._tokenIdCounter();
         freeCurrentMintedSupply = freeCounter.toNumber();
       } catch (e) {
         console.log('Could not load free supply from contract');
@@ -960,6 +973,13 @@ window.addEventListener('load', () => {
   loadSupply();
   log('3D Mint Experience loaded ✨');
   log('3D Mint Experience loaded ✨', 'info', true);
+  
+  // Auto-refresh supply every 18 seconds
+  setInterval(() => {
+    loadSupply();
+    log('Auto-refreshed supply data 🔄');
+    log('Auto-refreshed supply data 🔄', 'info', true);
+  }, 18000); // 18 seconds
 });
 </script>
 
