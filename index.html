@@ -296,7 +296,6 @@
       padding: 2px 16px;
       background: rgba(10, 14, 26, 0.8);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
       display: flex; align-items: center; justify-content: space-between;
     }
 
@@ -317,10 +316,7 @@
     .logo-text {
       font-size: 24px;
       font-weight: 900;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #ffffff;
     }
 
     .top-actions { display: flex; align-items: center; gap: 8px; }
@@ -561,7 +557,7 @@
 <div class="app">
 <header>
 <div class="logo" onclick="showView(event, 'quests')">
-<img src="https://kephost.net/p/MjI3NDg0NQ.png" alt="CK" class="logo-icon">
+<span class="logo-text">CatKitSune</span>
 </div>
 <div class="top-actions">
 <button class="login-btn mint-tab" onclick="window.location.href='/launch'" style="margin-right: 8px;">
