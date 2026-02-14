@@ -1351,6 +1351,7 @@ function toggleWallet() {
     connectWallet();
   }
 }
+window.toggleWallet = toggleWallet;
 
 // ==========================================
 // TWITTER LOGIN
@@ -1358,6 +1359,7 @@ function toggleWallet() {
 function loginWithTwitter() {
   window.location.href = "https://catkitsune.xyz/api/twitter-login";
 }
+window.loginWithTwitter = loginWithTwitter;
 
 async function loadTwitterUser() {
   const urlParams = new URLSearchParams(window.location.search);
