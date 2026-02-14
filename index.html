@@ -555,9 +555,53 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+    /* ==================== FLOATING PARTICLES ==================== */
+    .particle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: radial-gradient(circle, #ffffff, #8b5cf6);
+      border-radius: 50%;
+      opacity: 0.9;
+      animation: float-up 15s linear infinite;
+      box-shadow: 
+        0 0 20px #8b5cf6,
+        0 0 40px #8b5cf6,
+        0 0 60px rgba(139, 92, 246, 0.5);
+      filter: brightness(1.5);
+    }
+
+    @keyframes float-up {
+      0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.9;
+      }
+      90% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-100px) translateX(100px);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
+<!-- FLOATING PARTICLES -->
+<div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+<div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+<div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+<div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+<div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+<div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+<div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+<div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+<div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+
 <div class="app">
 <header>
 <div class="logo" onclick="showView(event, 'quests')">
