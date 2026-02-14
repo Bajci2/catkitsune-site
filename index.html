@@ -1248,6 +1248,9 @@ function showView(event, viewName) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Make showView globally accessible
+window.showView = showView;
+
 // ==========================================
 // WALLET CONNECTION
 // ==========================================
