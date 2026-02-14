@@ -894,8 +894,8 @@ We'll review and list approved projects on <a href="https://drip.trade" target="
 Send all the information above to:
 </p>
 <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-<a href="mailto:submit@catkitsune.xyz" style="padding:12px 24px; background:linear-gradient(135deg, #8b5cf6, #00f5ff); border-radius:8px; color:white; font-weight:700; text-decoration:none; display:inline-block;">
-📧 Email: submit@catkitsune.xyz
+<a href="https://x.com/GborSzakl1" target="_blank" style="padding:12px 24px; background:linear-gradient(135deg, #8b5cf6, #00f5ff); border-radius:8px; color:white; font-weight:700; text-decoration:none; display:inline-block;">
+🐦 Twitter: @GborSzakl1
 </a>
 <a href="https://discord.gg/catkitsune" target="_blank" style="padding:12px 24px; background:rgba(255,255,255,0.1); border:1px solid rgba(139, 92, 246, 0.3); border-radius:8px; color:#00f5ff; font-weight:700; text-decoration:none; display:inline-block;">
 💬 Discord Server
@@ -1018,7 +1018,7 @@ Send all the information above to:
 </div><!-- /views-container -->
 
 </div><!-- /app -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ==========================================
 // FIREBASE CONFIGURATION
 // ==========================================
@@ -2032,16 +2032,4 @@ window.onload = async function() {
 
 if (typeof window.ethereum !== 'undefined') {
   window.ethereum.on('accountsChanged', (accounts) => {
-    if (accounts.length === 0) {
-      disconnectWallet();
-    } else if (walletConnected) {
-      walletAddress = accounts[0];
-      updateWalletButton();
-      loadStakingData();
-      showNotification('🔄 Account changed');
-    }
-  });
-}
-</script>
-</body>
-</html>
+    if (accounts.lengt
