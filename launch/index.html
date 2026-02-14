@@ -586,13 +586,17 @@ body {
 /* ==================== FLOATING PARTICLES ==================== */
 .particle {
   position: fixed;
-  width: 4px;
-  height: 4px;
-  background: var(--neon-purple);
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #ffffff, var(--neon-purple));
   border-radius: 50%;
-  opacity: 0.6;
+  opacity: 0.9;
   animation: float-up 15s linear infinite;
-  box-shadow: 0 0 10px var(--neon-purple);
+  box-shadow: 
+    0 0 20px var(--neon-purple),
+    0 0 40px var(--neon-purple),
+    0 0 60px rgba(139, 92, 246, 0.5);
+  filter: brightness(1.5);
 }
 
 @keyframes float-up {
@@ -601,10 +605,10 @@ body {
     opacity: 0;
   }
   10% {
-    opacity: 0.6;
+    opacity: 0.9;
   }
   90% {
-    opacity: 0.6;
+    opacity: 0.9;
   }
   100% {
     transform: translateY(-100px) translateX(100px);
