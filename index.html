@@ -593,6 +593,18 @@
       }
     }
   </style>
+  
+  <script>
+  // Define showView early so onclick handlers work
+  function showView(event, viewName) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('view-' + viewName).classList.add('active');
+    if (event && event.target) event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  window.showView = showView;
+  </script>
 </head>
 <body>
 <!-- FLOATING PARTICLES -->
@@ -1240,16 +1252,30 @@ function getSeriesFromTokenId(tokenId) {
 // VIEW SWITCHING
 // ==========================================
 function showView(event, viewName) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
-  document.getElementById('view-' + viewName).classList.add('active');
-  if (event && event.target) event.target.classList.add('active');
-  
-  if (viewName === 'staking') {
-    setTimeout(() => updateStakingUI(), 50);
+  console.log('showView called with:', viewName);
+  try {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.top-nav-btn').forEach(btn => btn.classList.remove('active'));
+    
+    const targetView = document.getElementById('view-' + viewName);
+    console.log('Target view:', targetView);
+    
+    if (targetView) {
+      targetView.classList.add('active');
+    } else {
+      console.error('View not found: view-' + viewName);
+    }
+    
+    if (event && event.target) event.target.classList.add('active');
+    
+    if (viewName === 'staking') {
+      setTimeout(() => updateStakingUI(), 50);
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } catch (error) {
+    console.error('Error in showView:', error);
   }
-  
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Make showView globally accessible
