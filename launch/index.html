@@ -3,61 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CatKitSune - Mint NFT</title>
+<title>CatKitSune - 3D Mint Experience</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
 
 <style>
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-  --primary: #000000;
-  --secondary: #3b82f6;
-  --accent: #8b5cf6;
-  --bg-main: #ffffff;
-  --bg-card: #fafafa;
-  --border: #e5e7eb;
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --radius: 12px;
+  --neon-purple: #8b5cf6;
+  --neon-cyan: #00f5ff;
+  --neon-pink: #ff006e;
+  --dark-bg: #0a0e1a;
+  --dark-card: #151925;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg-main);
-  color: var(--text-primary);
+  font-family: 'Space Grotesk', sans-serif;
+  background: #0a0e1a;
+  color: white;
+  overflow-x: hidden;
   min-height: 100vh;
-  line-height: 1.6;
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== ANIMATED BACKGROUND ==================== */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: radial-gradient(ellipse at top, #1a1f3a 0%, #0a0e1a 50%);
+}
+
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.3;
 }
 
 /* ==================== HEADER ==================== */
-header {
-  background: var(--bg-main);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 0;
-  position: sticky;
+.header {
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.header-content {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
+  padding: 20px 40px;
+  background: rgba(10, 14, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -66,583 +76,713 @@ header {
 .logo {
   display: flex;
   align-items: center;
-  text-decoration: none;
   gap: 12px;
-}
-
-.logo-img {
-  height: 48px;
-  width: auto;
-  display: block;
-}
-
-.logo-text {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.02em;
-}
-
-.back-btn {
-  padding: 8px 16px;
-  background: var(--primary);
-  color: #fff;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  transition: all 0.2s ease;
-  border: none;
   cursor: pointer;
 }
 
-.back-btn:hover {
-  background: #1f2937;
-  transform: translateY(-1px);
+.logo-img {
+  height: 50px;
+  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
 }
 
-/* ==================== CONTAINER ==================== */
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 48px 24px 80px;
+.logo-text {
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.back-btn, .wallet-btn {
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.back-btn:hover, .wallet-btn:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ==================== MAIN CONTAINER ==================== */
+.main-container {
+  position: relative;
+  z-index: 10;
+  padding-top: 100px;
+  min-height: 100vh;
 }
 
 /* ==================== HERO SECTION ==================== */
-.hero {
+.hero-section {
   text-align: center;
-  margin-bottom: 64px;
+  padding: 60px 20px;
+  position: relative;
 }
 
-.hero h1 {
-  font-size: 48px;
+.hero-title {
+  font-size: 72px;
   font-weight: 800;
-  letter-spacing: -0.03em;
-  margin-bottom: 16px;
-  color: var(--primary);
+  background: linear-gradient(135deg, #ffffff, var(--neon-cyan), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+  text-shadow: 0 0 80px rgba(139, 92, 246, 0.5);
+  animation: glow-pulse 3s ease-in-out infinite;
 }
 
-.hero p {
-  font-size: 18px;
-  color: var(--text-secondary);
-  font-weight: 400;
+@keyframes glow-pulse {
+  0%, 100% { filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6)); }
+  50% { filter: drop-shadow(0 0 40px rgba(139, 92, 246, 1)); }
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  color: #a1a1aa;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 0 auto 40px;
+  line-height: 1.6;
 }
 
 /* ==================== STATS BAR ==================== */
 .stats-bar {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  margin-bottom: 48px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 80px;
+  flex-wrap: wrap;
 }
 
-.stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
+.stat-item {
   text-align: center;
-  transition: all 0.2s ease;
+  padding: 20px 40px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 16px;
+  transition: all 0.3s ease;
 }
 
-.stat-card:hover {
-  border-color: var(--primary);
-  box-shadow: var(--shadow-md);
+.stat-item:hover {
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.3);
+  transform: translateY(-5px);
 }
 
 .stat-label {
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  font-weight: 600;
+  letter-spacing: 2px;
+  color: #6b7280;
   margin-bottom: 8px;
 }
 
 .stat-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--primary);
-  letter-spacing: -0.02em;
+  font-size: 36px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.stat-subtext {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-top: 4px;
+/* ==================== 3D MINT CARDS ==================== */
+.mint-cards-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px 100px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
 }
 
-/* ==================== PROGRESS BAR ==================== */
-.progress-wrapper {
-  margin-top: 16px;
+.mint-card-3d {
+  position: relative;
+  perspective: 1500px;
+  height: 700px;
 }
 
-.progress-bar {
-  height: 8px;
-  background: #f3f4f6;
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.progress-fill {
+.card-inner {
+  position: relative;
+  width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, var(--primary) 0%, #374151 100%);
-  width: 0%;
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 999px;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
 }
 
-.progress-text {
-  font-size: 12px;
-  color: var(--text-muted);
-  text-align: center;
-  font-weight: 500;
+.mint-card-3d:hover .card-inner {
+  transform: rotateY(5deg) rotateX(5deg);
 }
 
-/* ==================== MINT SECTIONS ==================== */
-.mint-section {
-  margin-bottom: 80px;
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 24px;
+  overflow: hidden;
 }
 
-.section-header {
-  margin-bottom: 32px;
-  text-align: center;
+.card-front {
+  background: rgba(21, 25, 37, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 
+    0 0 60px rgba(139, 92, 246, 0.2),
+    inset 0 0 60px rgba(139, 92, 246, 0.05);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
 }
 
-.section-badge {
+/* ==================== 3D ROTATING NFT SHOWCASE ==================== */
+.nft-showcase-3d {
+  position: relative;
+  height: 350px;
+  margin-bottom: 30px;
+  perspective: 1200px;
+}
+
+.showcase-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: rotate-showcase 20s linear infinite;
+}
+
+@keyframes rotate-showcase {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.showcase-carousel:hover {
+  animation-play-state: paused;
+}
+
+.nft-item-3d {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  transform-origin: center;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+  transition: all 0.3s ease;
+}
+
+.nft-item-3d:hover {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 50px rgba(0, 245, 255, 0.6);
+  transform: scale(1.1) !important;
+}
+
+.nft-item-3d img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Positioning items in 3D circle */
+.nft-item-3d:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(280px); }
+.nft-item-3d:nth-child(2) { transform: translate(-50%, -50%) rotateY(40deg) translateZ(280px); }
+.nft-item-3d:nth-child(3) { transform: translate(-50%, -50%) rotateY(80deg) translateZ(280px); }
+.nft-item-3d:nth-child(4) { transform: translate(-50%, -50%) rotateY(120deg) translateZ(280px); }
+.nft-item-3d:nth-child(5) { transform: translate(-50%, -50%) rotateY(160deg) translateZ(280px); }
+.nft-item-3d:nth-child(6) { transform: translate(-50%, -50%) rotateY(200deg) translateZ(280px); }
+.nft-item-3d:nth-child(7) { transform: translate(-50%, -50%) rotateY(240deg) translateZ(280px); }
+.nft-item-3d:nth-child(8) { transform: translate(-50%, -50%) rotateY(280deg) translateZ(280px); }
+.nft-item-3d:nth-child(9) { transform: translate(-50%, -50%) rotateY(320deg) translateZ(280px); }
+
+/* ==================== CARD HEADER ==================== */
+.card-header {
+  margin-bottom: 30px;
+}
+
+.card-badge {
   display: inline-block;
-  padding: 6px 12px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+  padding: 8px 16px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 20px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  color: #c4b5fd;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.card-badge.free {
+  background: rgba(0, 245, 255, 0.2);
+  border-color: rgba(0, 245, 255, 0.5);
+  color: #67e8f9;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+}
+
+.card-title {
+  font-size: 32px;
+  font-weight: 800;
   margin-bottom: 12px;
 }
 
-.section-badge.paid {
-  background: #000;
-  color: #fff;
-  border-color: #000;
-}
-
-.section-badge.free {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
-
-.section-title {
-  font-size: 36px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--primary);
-  margin-bottom: 8px;
-}
-
-.section-description {
+.card-collection {
   font-size: 16px;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
+  color: #a1a1aa;
 }
 
-/* ==================== MINT GRID ==================== */
-.mint-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-  align-items: start;
-}
-
-@media (max-width: 1024px) {
-  .mint-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ==================== NFT PREVIEW ==================== */
-.nft-preview {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+/* ==================== PRICE DISPLAY ==================== */
+.price-section {
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
   padding: 24px;
-  position: sticky;
-  top: 100px;
-}
-
-.nft-grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.nft-grid-container img {
-  width: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  transition: all 0.2s ease;
-}
-
-.nft-grid-container img:hover {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-md);
-  border-color: var(--primary);
-}
-
-/* ==================== MINT CARD ==================== */
-.mint-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 32px;
-}
-
-.price-display {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 24px;
   text-align: center;
+  margin-bottom: 24px;
 }
 
 .price-label {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 2px;
+  color: #6b7280;
+  margin-bottom: 12px;
 }
 
-.price-value {
+.price-amount {
   font-size: 48px;
   font-weight: 800;
-  color: var(--primary);
-  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.price-value.free {
-  color: var(--accent);
+.price-amount.free-price {
+  background: linear-gradient(135deg, var(--neon-cyan), #10b981);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.price-subtext {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-top: 4px;
+/* ==================== PROGRESS BAR ==================== */
+.progress-section {
+  margin-bottom: 24px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.progress-bar-container {
+  height: 12px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
+  border-radius: 999px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 /* ==================== MINT BUTTON ==================== */
 .mint-button {
   width: 100%;
-  padding: 16px 24px;
-  background: var(--primary);
-  color: #fff;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 16px;
+  color: white;
+  font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
-  letter-spacing: -0.01em;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+  position: relative;
+  overflow: hidden;
 }
 
-.mint-button:hover:not(:disabled) {
-  background: #1f2937;
+.mint-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: rotate(45deg);
+  animation: button-shine 3s infinite;
+}
+
+@keyframes button-shine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.mint-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 60px rgba(139, 92, 246, 1);
+}
+
+.mint-button:active {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
-
-.mint-button:active:not(:disabled) {
-  transform: translateY(0);
 }
 
 .mint-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  transform: none;
 }
 
-.mint-button.free {
-  background: var(--accent);
-}
-
-.mint-button.free:hover:not(:disabled) {
-  background: #7c3aed;
-}
-
-/* ==================== DEBUG INFO ==================== */
-.debug-info {
+/* ==================== DEBUG CONSOLE ==================== */
+.debug-console {
   margin-top: 24px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 12px;
   padding: 16px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  font-size: 12px;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-  max-height: 300px;
+  max-height: 200px;
   overflow-y: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
 }
 
 .debug-log {
+  padding: 6px 0;
+  color: #a1a1aa;
+  border-left: 3px solid rgba(139, 92, 246, 0.3);
+  padding-left: 12px;
   margin: 4px 0;
-  padding: 8px 12px;
-  border-left: 3px solid #d1d5db;
-  background: var(--bg-card);
-  border-radius: 4px;
-  line-height: 1.5;
-}
-
-.debug-error {
-  border-left-color: #ef4444;
-  background: #fef2f2;
-  color: #dc2626;
 }
 
 .debug-success {
+  color: #6ee7b7;
   border-left-color: #10b981;
-  background: #f0fdf4;
-  color: #059669;
 }
 
-/* ==================== DIVIDER ==================== */
+.debug-error {
+  color: #fca5a5;
+  border-left-color: #ef4444;
+}
+
+/* ==================== SECTION DIVIDER ==================== */
 .section-divider {
-  margin: 80px 0;
+  margin: 80px auto;
+  max-width: 1400px;
+  padding: 0 40px;
+  position: relative;
   text-align: center;
-  position: relative;
 }
 
-.section-divider::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
+.divider-line {
   height: 1px;
-  background: var(--border);
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
+  margin: 20px 0;
 }
 
-.section-divider span {
-  background: var(--bg-main);
-  padding: 0 24px;
-  position: relative;
-  font-weight: 600;
-  color: var(--text-secondary);
-  font-size: 13px;
+.divider-text {
+  display: inline-block;
+  padding: 12px 24px;
+  background: rgba(21, 25, 37, 0.8);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 20px;
+  font-size: 14px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 2px;
+  color: #a1a1aa;
 }
 
 /* ==================== RESPONSIVE ==================== */
+@media (max-width: 1200px) {
+  .mint-cards-container {
+    grid-template-columns: 1fr;
+    gap: 80px;
+  }
+  
+  .hero-title {
+    font-size: 56px;
+  }
+}
+
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 32px;
+  .header {
+    padding: 16px 20px;
   }
-
-  .hero p {
-    font-size: 16px;
+  
+  .hero-title {
+    font-size: 40px;
   }
-
-  .section-title {
-    font-size: 28px;
-  }
-
+  
   .stats-bar {
-    grid-template-columns: 1fr 1fr;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
-
-  .nft-grid-container {
-    grid-template-columns: repeat(2, 1fr);
+  
+  .mint-cards-container {
+    padding: 0 20px 60px;
   }
-
-  .container {
-    padding: 32px 16px 60px;
+  
+  .nft-item-3d {
+    width: 150px;
+    height: 150px;
   }
-
-  .mint-card {
-    padding: 24px;
-  }
-
-  .price-value {
-    font-size: 36px;
+  
+  .nft-item-3d:nth-child(n) {
+    transform: translate(-50%, -50%) rotateY(calc(var(--i) * 40deg)) translateZ(200px);
   }
 }
 
-/* ==================== ANIMATIONS ==================== */
-@keyframes fadeIn {
-  from {
+/* ==================== FLOATING PARTICLES ==================== */
+.particle {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--neon-purple);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float-up 15s linear infinite;
+  box-shadow: 0 0 10px var(--neon-purple);
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(100vh) translateX(0);
     opacity: 0;
-    transform: translateY(10px);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  10% {
+    opacity: 0.6;
   }
-}
-
-.mint-section {
-  animation: fadeIn 0.5s ease-out;
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100px) translateX(100px);
+    opacity: 0;
+  }
 }
 </style>
 </head>
-
 <body>
 
-<!-- ==================== HEADER ==================== -->
-<header>
-  <div class="header-content">
-    <a href="/" class="logo">
-      <img src="https://kephost.net/p/MjI3NDg0NQ.png" alt="CatKitSune" class="logo-img">
-      <span class="logo-text">CatKitSune</span>
-    </a>
-    <a class="back-btn" href="/">← Back to Dashboard</a>
+<!-- ANIMATED BACKGROUND -->
+<div class="animated-bg"></div>
+<div class="grid-overlay"></div>
+
+<!-- FLOATING PARTICLES -->
+<div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+<div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+<div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+<div class="particle" style="left: 40%; animation-delay: 1s;"></div>
+<div class="particle" style="left: 50%; animation-delay: 3s;"></div>
+<div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+<div class="particle" style="left: 70%; animation-delay: 2.5s;"></div>
+<div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
+<div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <img src="https://kephost.net/p/MjI3NDg0NQ.png" alt="CatKitSune" class="logo-img">
+    <span class="logo-text">CatKitSune</span>
   </div>
-</header>
+  <div class="nav-actions">
+    <a href="/" class="back-btn">← Dashboard</a>
+    <button class="wallet-btn" id="walletBtn" onclick="connectWallet()">Connect Wallet</button>
+  </div>
+</div>
 
-<!-- ==================== MAIN CONTAINER ==================== -->
-<div class="container">
-
-  <!-- ==================== HERO ==================== -->
-  <div class="hero">
-    <h1>Mint Your NFT</h1>
-    <p>Join the CatKitSune collection on Hyperliquid. Choose between paid premium NFTs or free community drops.</p>
+<!-- MAIN CONTAINER -->
+<div class="main-container">
+  
+  <!-- HERO SECTION -->
+  <div class="hero-section">
+    <h1 class="hero-title">Enter the Metaverse</h1>
+    <p class="hero-subtitle">Experience next-gen NFT minting with immersive 3D showcases and cutting-edge blockchain technology on Hyperliquid</p>
   </div>
 
-  <!-- ==================== STATS BAR ==================== -->
+  <!-- STATS BAR -->
   <div class="stats-bar">
-    <div class="stat-card">
+    <div class="stat-item">
       <div class="stat-label">Total Minted</div>
       <div class="stat-value" id="totalMinted">—</div>
-      <div class="stat-subtext">out of 522 total</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-item">
       <div class="stat-label">Paid Collection</div>
-      <div class="stat-value" id="paidMinted">—</div>
-      <div class="stat-subtext">/ 300 available</div>
+      <div class="stat-value" id="paidMinted">27/300</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-item">
       <div class="stat-label">Free Collection</div>
-      <div class="stat-value" id="freeMinted">—</div>
-      <div class="stat-subtext">/ 222 available</div>
+      <div class="stat-value" id="freeMinted">0/222</div>
     </div>
-    <div class="stat-card">
+    <div class="stat-item">
       <div class="stat-label">Network</div>
-      <div class="stat-value" style="font-size: 20px;">Hyperliquid</div>
-      <div class="stat-subtext">Chain ID: 999</div>
+      <div class="stat-value" style="font-size: 20px;">HYPE</div>
     </div>
   </div>
 
-  <!-- ==================== PAID MINT SECTION ==================== -->
-  <div class="mint-section">
-    <div class="section-header">
-      <div class="section-badge paid">Premium Collection</div>
-      <h2 class="section-title">CatKitSune NFT</h2>
-      <p class="section-description">Official paid collection with exclusive artwork and utility features</p>
-    </div>
-
-    <div class="mint-grid">
-      <!-- NFT Preview -->
-      <div class="nft-preview">
-        <div class="nft-grid-container">
-          <img src="/launch/1.png" alt="NFT 1">
-          <img src="/launch/2.png" alt="NFT 2">
-          <img src="/launch/3.png" alt="NFT 3">
-          <img src="/launch/4.png" alt="NFT 4">
-          <img src="/launch/5.png" alt="NFT 5">
-          <img src="/launch/6.png" alt="NFT 6">
-          <img src="/launch/7.png" alt="NFT 7">
-          <img src="/launch/8.png" alt="NFT 8">
-          <img src="/launch/9.png" alt="NFT 9">
-        </div>
-        
-        <!-- Progress Bar -->
-        <div class="progress-wrapper">
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
+  <!-- MINT CARDS CONTAINER -->
+  <div class="mint-cards-container">
+    
+    <!-- PAID MINT CARD -->
+    <div class="mint-card-3d">
+      <div class="card-inner">
+        <div class="card-front">
+          
+          <!-- 3D NFT SHOWCASE -->
+          <div class="nft-showcase-3d">
+            <div class="showcase-carousel">
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+1" alt="NFT 1"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+2" alt="NFT 2"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+3" alt="NFT 3"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+4" alt="NFT 4"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+5" alt="NFT 5"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+6" alt="NFT 6"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+7" alt="NFT 7"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+8" alt="NFT 8"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/8b5cf6/ffffff?text=NFT+9" alt="NFT 9"></div>
+            </div>
           </div>
-          <div class="progress-text" id="progressText">Loading supply...</div>
-        </div>
-      </div>
 
-      <!-- Mint Card -->
-      <div class="mint-card">
-        <div class="price-display">
-          <div class="price-label">Mint Price</div>
-          <div class="price-value">0.1 HYPE</div>
-          <div class="price-subtext">+ gas fees</div>
-        </div>
-
-        <button class="mint-button" id="mintButton">Connect Wallet</button>
-
-        <div class="debug-info" id="debugInfo">
-          <div class="debug-log">Ready to connect wallet...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== DIVIDER ==================== -->
-  <div class="section-divider">
-    <span>Free Collection</span>
-  </div>
-
-  <!-- ==================== FREE MINT SECTION ==================== -->
-  <div class="mint-section">
-    <div class="section-header">
-      <div class="section-badge free">Community Drop</div>
-      <h2 class="section-title">VeLoRa Collection</h2>
-      <p class="section-description">Free mint for the community - no cost, just gas fees</p>
-    </div>
-
-    <div class="mint-grid">
-      <!-- NFT Preview -->
-      <div class="nft-preview">
-        <div class="nft-grid-container">
-          <img src="/launch-free/1.png" alt="Free NFT 1">
-          <img src="/launch-free/2.png" alt="Free NFT 2">
-          <img src="/launch-free/3.png" alt="Free NFT 3">
-          <img src="/launch-free/4.png" alt="Free NFT 4">
-          <img src="/launch-free/5.png" alt="Free NFT 5">
-          <img src="/launch-free/7.png" alt="Free NFT 7">
-          <img src="/launch-free/8.png" alt="Free NFT 8">
-          <img src="/launch-free/9.png" alt="Free NFT 9">
-          <img src="/launch-free/10.png" alt="Free NFT 10">
-        </div>
-        
-        <!-- Progress Bar -->
-        <div class="progress-wrapper">
-          <div class="progress-bar">
-            <div class="progress-fill" id="freeProgressFill"></div>
+          <!-- CARD HEADER -->
+          <div class="card-header">
+            <div class="card-badge">Premium Collection</div>
+            <h2 class="card-title">CatKitSune NFT</h2>
+            <p class="card-collection">Series 1 • Limited Edition</p>
           </div>
-          <div class="progress-text" id="freeProgressText">Loading supply...</div>
-        </div>
-      </div>
 
-      <!-- Mint Card -->
-      <div class="mint-card">
-        <div class="price-display">
-          <div class="price-label">Mint Price</div>
-          <div class="price-value free">FREE</div>
-          <div class="price-subtext">only gas fees apply</div>
-        </div>
+          <!-- PRICE SECTION -->
+          <div class="price-section">
+            <div class="price-label">Mint Price</div>
+            <div class="price-amount">0.1 HYPE</div>
+          </div>
 
-        <button class="mint-button free" id="freeMintButton">Connect Wallet</button>
+          <!-- PROGRESS -->
+          <div class="progress-section">
+            <div class="progress-info">
+              <span id="paidSupply">27 / 300</span>
+              <span id="paidPercent">9%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="paidProgress" style="width: 9%"></div>
+            </div>
+          </div>
 
-        <div class="debug-info" id="freeDebugInfo">
-          <div class="debug-log">Ready to connect wallet...</div>
+          <!-- MINT BUTTON -->
+          <button class="mint-button" id="mintButton">Connect Wallet</button>
+
+          <!-- DEBUG CONSOLE -->
+          <div class="debug-console" id="debugInfo">
+            <div class="debug-log">Ready to mint...</div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- FREE MINT CARD -->
+    <div class="mint-card-3d">
+      <div class="card-inner">
+        <div class="card-front">
+          
+          <!-- 3D NFT SHOWCASE -->
+          <div class="nft-showcase-3d">
+            <div class="showcase-carousel">
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+1" alt="Free 1"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+2" alt="Free 2"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+3" alt="Free 3"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+4" alt="Free 4"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+5" alt="Free 5"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+6" alt="Free 6"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+7" alt="Free 7"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+8" alt="Free 8"></div>
+              <div class="nft-item-3d"><img src="https://via.placeholder.com/200x200/00f5ff/ffffff?text=Free+9" alt="Free 9"></div>
+            </div>
+          </div>
+
+          <!-- CARD HEADER -->
+          <div class="card-header">
+            <div class="card-badge free">Community Drop</div>
+            <h2 class="card-title">VeLoRa Collection</h2>
+            <p class="card-collection">Free Mint • Open Edition</p>
+          </div>
+
+          <!-- PRICE SECTION -->
+          <div class="price-section">
+            <div class="price-label">Mint Price</div>
+            <div class="price-amount free-price">FREE</div>
+          </div>
+
+          <!-- PROGRESS -->
+          <div class="progress-section">
+            <div class="progress-info">
+              <span id="freeSupply">0 / 222</span>
+              <span id="freePercent">0%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="freeProgress" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- MINT BUTTON -->
+          <button class="mint-button" id="freeMintButton">Connect Wallet</button>
+
+          <!-- DEBUG CONSOLE -->
+          <div class="debug-console" id="freeDebugInfo">
+            <div class="debug-log">Ready to mint...</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -652,61 +792,30 @@ header {
 // HYPERLIQUID CONFIG
 // ===========================
 const HYPERLIQUID_CONFIG = {
-  chainId: '0x3E7', // 999 decimal (MAINNET)
+  chainId: '0x3E7',
   chainName: 'Hyperliquid',
   rpcUrls: ['https://rpc.hyperliquid.xyz/evm'],
-  nativeCurrency: {
-    name: 'HYPE',
-    symbol: 'HYPE',
-    decimals: 18
-  },
+  nativeCurrency: { name: 'HYPE', symbol: 'HYPE', decimals: 18 },
   blockExplorerUrls: ['https://hypurrscan.io']
 };
 
-// ===========================
-// PAID MINT CONTRACT CONFIG
-// ===========================
 const CONTRACT_ADDRESS = '0x2abF2969E5e9cAAa1D3fF3DF4265dFFcda0D8353';
+const FREE_CONTRACT_ADDRESS = '0x568d76Cb80cAa08A2196467ed5cBdFBD4D74b1eE';
+
 const CONTRACT_ABI = [
   'function mint() public payable',
   'function _tokenIdCounter() public view returns (uint256)',
-  'function MAX_SUPPLY() public view returns (uint256)',
-  'function balanceOf(address owner) public view returns (uint256)',
-  'function owner() public view returns (address)',
-  'function mintPrice() public view returns (uint256)'
+  'function MAX_SUPPLY() public view returns (uint256)'
 ];
+
 const MINT_PRICE = ethers.utils.parseEther('0.1');
-let currentMintedSupply = 27;
-const MAX_SUPPLY = 300;
-
-// ===========================
-// FREE MINT CONTRACT CONFIG
-// ===========================
-const FREE_CONTRACT_ADDRESS = '0x568d76Cb80cAa08A2196467ed5cBdFBD4D74b1eE';
-const FREE_CONTRACT_ABI = [
-  'function mint() public payable',
-  'function _tokenIdCounter() public view returns (uint256)',
-  'function MAX_SUPPLY() public view returns (uint256)',
-  'function balanceOf(address owner) public view returns (uint256)',
-  'function maxPerWallet() public view returns (uint256)'
-];
 const FREE_MINT_PRICE = ethers.utils.parseEther('0');
+
+let provider, signer, contract, freeContract, userAddress;
+let currentMintedSupply = 27;
 let freeCurrentMintedSupply = 0;
+const MAX_SUPPLY = 300;
 const FREE_MAX_SUPPLY = 222;
-
-// ===========================
-// GLOBAL VARIABLES
-// ===========================
-let provider = null;
-let signer = null;
-let contract = null;
-let freeContract = null;
-let userAddress = null;
-
-let isConnecting = false;
-let isSwitchingNetwork = false;
-let connectionAttempts = 0;
-const MAX_CONNECTION_ATTEMPTS = 3;
 
 // ===========================
 // DEBUG LOGGING
@@ -717,418 +826,131 @@ function log(message, type = 'info', isFree = false) {
   const timestamp = new Date().toLocaleTimeString();
   debugDiv.innerHTML += `<div class="${logClass}">[${timestamp}] ${message}</div>`;
   debugDiv.scrollTop = debugDiv.scrollHeight;
-  console.log(`[${isFree ? 'FREE' : 'PAID'}] [${type.toUpperCase()}] ${message}`);
 }
 
 // ===========================
-// UPDATE TOTAL STATS
-// ===========================
-function updateTotalStats() {
-  const total = currentMintedSupply + freeCurrentMintedSupply;
-  document.getElementById('totalMinted').textContent = total;
-  document.getElementById('paidMinted').textContent = currentMintedSupply;
-  document.getElementById('freeMinted').textContent = freeCurrentMintedSupply;
-}
-
-// ===========================
-// WALLET CONNECTION (PAID)
+// WALLET CONNECTION
 // ===========================
 async function connectWallet() {
-  if (CONTRACT_ADDRESS === '0xYourContractAddressHere' || !CONTRACT_ADDRESS.startsWith('0x') || CONTRACT_ADDRESS.length !== 42) {
-    log('❌ CONTRACT ADDRESS NOT CONFIGURED!', 'error');
-    alert('Error: Contract address is not set!');
+  if (typeof window.ethereum === 'undefined') {
+    alert('Please install MetaMask!');
     return;
   }
-
-  if (isConnecting) {
-    log('Connection already in progress, please wait...', 'error');
-    return;
-  }
-
-  if (connectionAttempts >= MAX_CONNECTION_ATTEMPTS) {
-    log('Too many connection attempts. Please refresh the page.', 'error');
-    alert('Too many connection attempts. Please refresh the page and try again.');
-    return;
-  }
-
-  isConnecting = true;
-  connectionAttempts++;
 
   try {
-    log('Checking for MetaMask...');
-    
-    if (typeof window.ethereum === 'undefined') {
-      throw new Error('MetaMask not installed! Please install MetaMask extension.');
-    }
-
-    log('MetaMask detected, requesting accounts...');
-    
-    const accounts = await window.ethereum.request({ 
-      method: 'eth_requestAccounts' 
-    });
-    
+    log('Connecting wallet...');
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddress = accounts[0];
-    log(`Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(38)}`, 'success');
+    log(`Connected: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`, 'success');
 
-    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-    log(`Current network: ${currentChainId}`);
-    
-    if (currentChainId.toLowerCase() !== HYPERLIQUID_CONFIG.chainId.toLowerCase()) {
-      log(`Wrong network! Switching to Hyperliquid...`, 'error');
-      await switchToHyperliquid();
-      
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
-      if (newChainId.toLowerCase() !== HYPERLIQUID_CONFIG.chainId.toLowerCase()) {
-        throw new Error(`Network switch failed. Please manually switch to Hyperliquid mainnet (Chain ID: 999) in MetaMask.`);
-      }
-    }
-
-    provider = new ethers.providers.Web3Provider(window.ethereum, {
-      name: 'hyperliquid',
-      chainId: parseInt(HYPERLIQUID_CONFIG.chainId, 16),
-      ensAddress: null
-    });
+    provider = new ethers.providers.Web3Provider(window.ethereum);
     signer = provider.getSigner();
-
-    log(`Initializing contract...`);
     contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-    log('Contract initialized ✓', 'success');
+    freeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-    updateButtonState('connected');
-    await loadSupplyData();
+    document.getElementById('walletBtn').textContent = `${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
+    document.getElementById('mintButton').textContent = 'Mint Now (0.1 HYPE)';
+    document.getElementById('mintButton').onclick = mintNFT;
+    document.getElementById('freeMintButton').textContent = 'Mint Free';
+    document.getElementById('freeMintButton').onclick = mintFreeNFT;
 
-    connectionAttempts = 0;
-
+    await loadSupply();
   } catch (error) {
-    log(`Connection error: ${error.message}`, 'error');
-    
-    if (error.code === 4001) {
-      alert('Connection cancelled by user');
-    } else {
-      alert(`Connection failed: ${error.message}`);
-    }
-  } finally {
-    isConnecting = false;
+    log(`Error: ${error.message}`, 'error');
   }
 }
 
 // ===========================
-// WALLET CONNECTION (FREE)
+// LOAD SUPPLY
 // ===========================
-async function connectWalletFree() {
-  if (FREE_CONTRACT_ADDRESS === '0xYourFreeContractAddressHere' || !FREE_CONTRACT_ADDRESS.startsWith('0x') || FREE_CONTRACT_ADDRESS.length !== 42) {
-    log('❌ FREE CONTRACT ADDRESS NOT CONFIGURED!', 'error', true);
-    alert('Error: Free mint contract address is not set!');
-    return;
-  }
-
-  if (isConnecting) {
-    log('Connection already in progress, please wait...', 'error', true);
-    return;
-  }
-
-  isConnecting = true;
-  connectionAttempts++;
-
+async function loadSupply() {
   try {
-    log('Checking for MetaMask...', 'info', true);
-    
-    if (typeof window.ethereum === 'undefined') {
-      throw new Error('MetaMask not installed! Please install MetaMask extension.');
-    }
+    const total = currentMintedSupply + freeCurrentMintedSupply;
+    document.getElementById('totalMinted').textContent = total;
+    document.getElementById('paidMinted').textContent = `${currentMintedSupply}/300`;
+    document.getElementById('freeMinted').textContent = `${freeCurrentMintedSupply}/222`;
 
-    log('MetaMask detected, requesting accounts...', 'info', true);
-    
-    const accounts = await window.ethereum.request({ 
-      method: 'eth_requestAccounts' 
-    });
-    
-    userAddress = accounts[0];
-    log(`Connected: ${userAddress.substring(0, 6)}...${userAddress.substring(38)}`, 'success', true);
+    const paidPercent = ((currentMintedSupply / MAX_SUPPLY) * 100).toFixed(1);
+    const freePercent = ((freeCurrentMintedSupply / FREE_MAX_SUPPLY) * 100).toFixed(1);
 
-    const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
-    
-    if (currentChainId.toLowerCase() !== HYPERLIQUID_CONFIG.chainId.toLowerCase()) {
-      log(`Wrong network! Switching to Hyperliquid...`, 'error', true);
-      await switchToHyperliquid();
-      
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const newChainId = await window.ethereum.request({ method: 'eth_chainId' });
-      if (newChainId.toLowerCase() !== HYPERLIQUID_CONFIG.chainId.toLowerCase()) {
-        throw new Error(`Network switch failed. Please manually switch to Hyperliquid mainnet.`);
-      }
-    }
+    document.getElementById('paidSupply').textContent = `${currentMintedSupply} / ${MAX_SUPPLY}`;
+    document.getElementById('paidPercent').textContent = `${paidPercent}%`;
+    document.getElementById('paidProgress').style.width = `${paidPercent}%`;
 
-    provider = new ethers.providers.Web3Provider(window.ethereum, {
-      name: 'hyperliquid',
-      chainId: parseInt(HYPERLIQUID_CONFIG.chainId, 16),
-      ensAddress: null
-    });
-    signer = provider.getSigner();
-
-    log(`Initializing free contract...`, 'info', true);
-    freeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, FREE_CONTRACT_ABI, signer);
-    log('Free contract initialized ✓', 'success', true);
-
-    updateButtonState('connected', true);
-    await loadSupplyData(true);
-
-    connectionAttempts = 0;
-
+    document.getElementById('freeSupply').textContent = `${freeCurrentMintedSupply} / ${FREE_MAX_SUPPLY}`;
+    document.getElementById('freePercent').textContent = `${freePercent}%`;
+    document.getElementById('freeProgress').style.width = `${freePercent}%`;
   } catch (error) {
-    log(`Connection error: ${error.message}`, 'error', true);
-    
-    if (error.code === 4001) {
-      alert('Connection cancelled by user');
-    } else {
-      alert(`Connection failed: ${error.message}`);
-    }
-  } finally {
-    isConnecting = false;
+    console.error(error);
   }
 }
 
 // ===========================
-// NETWORK SWITCHING
-// ===========================
-async function switchToHyperliquid() {
-  if (isSwitchingNetwork) {
-    throw new Error('Network switch already in progress.');
-  }
-
-  isSwitchingNetwork = true;
-
-  try {
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: HYPERLIQUID_CONFIG.chainId }],
-    });
-    log('Switched to Hyperliquid ✓', 'success');
-    
-  } catch (switchError) {
-    if (switchError.code === 4902) {
-      log('Adding Hyperliquid network...');
-      
-      try {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            chainId: HYPERLIQUID_CONFIG.chainId,
-            chainName: HYPERLIQUID_CONFIG.chainName,
-            rpcUrls: HYPERLIQUID_CONFIG.rpcUrls,
-            nativeCurrency: HYPERLIQUID_CONFIG.nativeCurrency,
-            blockExplorerUrls: HYPERLIQUID_CONFIG.blockExplorerUrls
-          }]
-        });
-        log('Hyperliquid network added ✓', 'success');
-      } catch (addError) {
-        throw new Error(`Failed to add Hyperliquid network: ${addError.message}`);
-      }
-    } else {
-      throw switchError;
-    }
-  } finally {
-    isSwitchingNetwork = false;
-  }
-}
-
-// ===========================
-// SUPPLY DATA
-// ===========================
-async function loadSupplyData(isFree = false) {
-  const minted = isFree ? freeCurrentMintedSupply : currentMintedSupply;
-  const max = isFree ? FREE_MAX_SUPPLY : MAX_SUPPLY;
-  const percentage = (minted / max) * 100;
-  
-  const fillId = isFree ? 'freeProgressFill' : 'progressFill';
-  const textId = isFree ? 'freeProgressText' : 'progressText';
-  
-  document.getElementById(fillId).style.width = `${percentage}%`;
-  document.getElementById(textId).textContent = `${minted} / ${max} minted (${percentage.toFixed(1)}%)`;
-  
-  updateTotalStats();
-  
-  log(`Supply: ${minted}/${max} (${percentage.toFixed(1)}%)`, 'success', isFree);
-  
-  try {
-    let readContract = isFree ? freeContract : contract;
-    
-    if (!readContract) {
-      const readProvider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_CONFIG.rpcUrls[0]);
-      const addr = isFree ? FREE_CONTRACT_ADDRESS : CONTRACT_ADDRESS;
-      const abi = isFree ? FREE_CONTRACT_ABI : CONTRACT_ABI;
-      readContract = new ethers.Contract(addr, abi, readProvider);
-    }
-    
-    try {
-      const counter = await readContract._tokenIdCounter();
-      const contractCount = counter.toNumber();
-      if (contractCount > 0) {
-        if (isFree) {
-          freeCurrentMintedSupply = contractCount;
-        } else {
-          currentMintedSupply = contractCount;
-        }
-        log(`Contract counter: ${contractCount} ✓`, 'success', isFree);
-        const newPercentage = (contractCount / max) * 100;
-        document.getElementById(fillId).style.width = `${newPercentage}%`;
-        document.getElementById(textId).textContent = `${contractCount} / ${max} minted (${newPercentage.toFixed(1)}%)`;
-        updateTotalStats();
-      }
-    } catch (e) {
-      // Silently ignore
-    }
-    
-  } catch (error) {
-    // Silently ignore
-  }
-}
-
-// ===========================
-// MINTING (PAID)
+// MINT FUNCTIONS
 // ===========================
 async function mintNFT() {
-  if (!contract || !signer) {
-    log('Wallet not connected!', 'error');
+  if (!contract) {
+    log('Please connect wallet first', 'error');
     return;
   }
 
   try {
-    log('Starting mint transaction...', 'success');
-    updateButtonState('minting');
+    log('Starting mint...', 'success');
+    document.getElementById('mintButton').disabled = true;
+    document.getElementById('mintButton').textContent = 'Minting...';
 
     const tx = await contract.mint({ value: MINT_PRICE });
-
-    log(`Transaction sent: ${tx.hash}`, 'success');
-    log('⏳ Waiting for confirmation...', 'success');
-
-    const receipt = await tx.wait();
-    
-    log(`✅ MINTED SUCCESSFULLY! Block: ${receipt.blockNumber}`, 'success');
+    log(`TX: ${tx.hash}`, 'success');
+    await tx.wait();
+    log('Mint successful! 🎉', 'success');
 
     currentMintedSupply++;
-    await loadSupplyData();
+    await loadSupply();
     
-    updateButtonState('connected');
-    
-    alert(`🎉 NFT Successfully Minted!\n\nTransaction: ${tx.hash.substring(0, 10)}...`);
-
+    document.getElementById('mintButton').disabled = false;
+    document.getElementById('mintButton').textContent = 'Mint Now (0.1 HYPE)';
   } catch (error) {
-    log(`❌ Mint failed: ${error.message}`, 'error');
-    
-    if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
-      alert('Transaction cancelled by user');
-    } else {
-      alert(`Minting failed: ${error.message}`);
-    }
-    
-    updateButtonState('connected');
+    log(`Mint failed: ${error.message}`, 'error');
+    document.getElementById('mintButton').disabled = false;
+    document.getElementById('mintButton').textContent = 'Mint Now (0.1 HYPE)';
   }
 }
 
-// ===========================
-// MINTING (FREE)
-// ===========================
-async function mintNFTFree() {
-  if (!freeContract || !signer) {
-    log('Wallet not connected!', 'error', true);
+async function mintFreeNFT() {
+  if (!freeContract) {
+    log('Please connect wallet first', 'error', true);
     return;
   }
 
   try {
     log('Starting free mint...', 'success', true);
-    updateButtonState('minting', true);
+    document.getElementById('freeMintButton').disabled = true;
+    document.getElementById('freeMintButton').textContent = 'Minting...';
 
     const tx = await freeContract.mint({ value: FREE_MINT_PRICE });
-
-    log(`Transaction sent: ${tx.hash}`, 'success', true);
-    log('⏳ Waiting for confirmation...', 'success', true);
-
-    const receipt = await tx.wait();
-    
-    log(`✅ FREE MINT SUCCESS! Block: ${receipt.blockNumber}`, 'success', true);
+    log(`TX: ${tx.hash}`, 'success', true);
+    await tx.wait();
+    log('Free mint successful! 🎉', 'success', true);
 
     freeCurrentMintedSupply++;
-    await loadSupplyData(true);
+    await loadSupply();
     
-    updateButtonState('connected', true);
-    
-    alert(`🎉 Free NFT Successfully Minted!\n\nTransaction: ${tx.hash.substring(0, 10)}...`);
-
+    document.getElementById('freeMintButton').disabled = false;
+    document.getElementById('freeMintButton').textContent = 'Mint Free';
   } catch (error) {
-    log(`❌ Free mint failed: ${error.message}`, 'error', true);
-    
-    if (error.code === 4001 || error.code === 'ACTION_REJECTED') {
-      alert('Transaction cancelled by user');
-    } else {
-      alert(`Free minting failed: ${error.message}`);
-    }
-    
-    updateButtonState('connected', true);
+    log(`Mint failed: ${error.message}`, 'error', true);
+    document.getElementById('freeMintButton').disabled = false;
+    document.getElementById('freeMintButton').textContent = 'Mint Free';
   }
 }
 
 // ===========================
-// BUTTON STATE MANAGEMENT
-// ===========================
-function updateButtonState(state, isFree = false) {
-  const button = document.getElementById(isFree ? 'freeMintButton' : 'mintButton');
-  
-  switch(state) {
-    case 'connected':
-      button.textContent = isFree ? 'Mint Free NFT' : 'Mint NFT (0.1 HYPE)';
-      button.disabled = false;
-      button.onclick = isFree ? mintNFTFree : mintNFT;
-      break;
-    case 'minting':
-      button.textContent = 'Minting...';
-      button.disabled = true;
-      break;
-    default:
-      button.textContent = 'Connect Wallet';
-      button.disabled = false;
-      button.onclick = isFree ? connectWalletFree : connectWallet;
-  }
-}
-
-// ===========================
-// EVENT LISTENERS
-// ===========================
-document.getElementById('mintButton').addEventListener('click', connectWallet);
-document.getElementById('freeMintButton').addEventListener('click', connectWalletFree);
-
-if (window.ethereum) {
-  window.ethereum.on('chainChanged', () => {
-    window.location.reload();
-  });
-
-  window.ethereum.on('accountsChanged', (accounts) => {
-    if (accounts.length === 0) {
-      updateButtonState('disconnected');
-      updateButtonState('disconnected', true);
-    } else {
-      window.location.reload();
-    }
-  });
-}
-
-// ===========================
-// INITIAL LOAD
+// INIT
 // ===========================
 window.addEventListener('load', () => {
-  log('Page loaded, ready to connect');
-  log('Page loaded, ready to connect', 'info', true);
-  
-  loadSupplyData();
-  loadSupplyData(true);
-  
-  setInterval(async () => {
-    await loadSupplyData();
-    await loadSupplyData(true);
-  }, 5000);
+  loadSupply();
+  log('3D Mint Experience loaded ✨');
+  log('3D Mint Experience loaded ✨', 'info', true);
 });
 </script>
 
