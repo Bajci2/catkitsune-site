@@ -205,18 +205,18 @@ body {
 
 /* ==================== 3D MINT CARDS ==================== */
 .mint-cards-container {
-  max-width: 1400px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 0 40px 100px;
+  padding: 0 20px 50px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  gap: 30px;
 }
 
 .mint-card-3d {
   position: relative;
-  perspective: 1500px;
-  height: 900px;
+  perspective: 750px;
+  height: 450px;
 }
 
 .card-inner {
@@ -245,9 +245,9 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(139, 92, 246, 0.3);
   box-shadow: 
-    0 0 60px rgba(139, 92, 246, 0.2),
-    inset 0 0 60px rgba(139, 92, 246, 0.05);
-  padding: 40px;
+    0 0 30px rgba(139, 92, 246, 0.2),
+    inset 0 0 30px rgba(139, 92, 246, 0.05);
+  padding: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -255,11 +255,11 @@ body {
 /* ==================== 3D ROTATING NFT SHOWCASE ==================== */
 .nft-showcase-3d {
   position: relative;
-  height: 500px;
-  margin-bottom: 40px;
-  perspective: 1500px;
-  margin-top: -50px;
-  padding-top: 20px;
+  height: 250px;
+  margin-bottom: 20px;
+  perspective: 750px;
+  margin-top: -25px;
+  padding-top: 10px;
 }
 
 .showcase-carousel {
@@ -281,15 +281,15 @@ body {
 
 .nft-item-3d {
   position: absolute;
-  width: 220px;
-  height: 220px;
+  width: 110px;
+  height: 110px;
   left: 50%;
   top: 50%;
   transform-origin: center;
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 2px solid rgba(139, 92, 246, 0.3);
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.4);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
   transition: all 0.3s ease;
 }
 
@@ -306,15 +306,15 @@ body {
 }
 
 /* Positioning items in 3D circle - WIDER radius */
-.nft-item-3d:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(400px); }
-.nft-item-3d:nth-child(2) { transform: translate(-50%, -50%) rotateY(40deg) translateZ(400px); }
-.nft-item-3d:nth-child(3) { transform: translate(-50%, -50%) rotateY(80deg) translateZ(400px); }
-.nft-item-3d:nth-child(4) { transform: translate(-50%, -50%) rotateY(120deg) translateZ(400px); }
-.nft-item-3d:nth-child(5) { transform: translate(-50%, -50%) rotateY(160deg) translateZ(400px); }
-.nft-item-3d:nth-child(6) { transform: translate(-50%, -50%) rotateY(200deg) translateZ(400px); }
-.nft-item-3d:nth-child(7) { transform: translate(-50%, -50%) rotateY(240deg) translateZ(400px); }
-.nft-item-3d:nth-child(8) { transform: translate(-50%, -50%) rotateY(280deg) translateZ(400px); }
-.nft-item-3d:nth-child(9) { transform: translate(-50%, -50%) rotateY(320deg) translateZ(400px); }
+.nft-item-3d:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(200px); }
+.nft-item-3d:nth-child(2) { transform: translate(-50%, -50%) rotateY(40deg) translateZ(200px); }
+.nft-item-3d:nth-child(3) { transform: translate(-50%, -50%) rotateY(80deg) translateZ(200px); }
+.nft-item-3d:nth-child(4) { transform: translate(-50%, -50%) rotateY(120deg) translateZ(200px); }
+.nft-item-3d:nth-child(5) { transform: translate(-50%, -50%) rotateY(160deg) translateZ(200px); }
+.nft-item-3d:nth-child(6) { transform: translate(-50%, -50%) rotateY(200deg) translateZ(200px); }
+.nft-item-3d:nth-child(7) { transform: translate(-50%, -50%) rotateY(240deg) translateZ(200px); }
+.nft-item-3d:nth-child(8) { transform: translate(-50%, -50%) rotateY(280deg) translateZ(200px); }
+.nft-item-3d:nth-child(9) { transform: translate(-50%, -50%) rotateY(320deg) translateZ(200px); }
 
 /* ==================== CARD HEADER ==================== */
 .card-header {
@@ -343,9 +343,9 @@ body {
 }
 
 .card-title {
-  font-size: 32px;
+  font-size: 16px;
   font-weight: 800;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .card-collection {
@@ -436,17 +436,17 @@ body {
 /* ==================== MINT BUTTON ==================== */
 .mint-button {
   width: 100%;
-  padding: 20px;
+  padding: 10px;
   background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
   border: none;
-  border-radius: 16px;
+  border-radius: 8px;
   color: white;
-  font-size: 18px;
+  font-size: 9px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
   position: relative;
   overflow: hidden;
