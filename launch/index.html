@@ -866,6 +866,25 @@ async function connectWallet() {
 // ===========================
 async function loadSupply() {
   try {
+    // Try to load from contracts if available
+    if (contract) {
+      try {
+        const paidCounter = await contract._tokenIdCounter();
+        currentMintedSupply = paidCounter.toNumber();
+      } catch (e) {
+        console.log('Could not load paid supply from contract');
+      }
+    }
+    
+    if (freeContract) {
+      try {
+        const freeCounter = await freeContract._tokenIdCounter();
+        freeCurrentMintedSupply = freeCounter.toNumber();
+      } catch (e) {
+        console.log('Could not load free supply from contract');
+      }
+    }
+    
     const total = currentMintedSupply + freeCurrentMintedSupply;
     document.getElementById('totalMinted').textContent = total;
     document.getElementById('paidMinted').textContent = `${currentMintedSupply}/300`;
