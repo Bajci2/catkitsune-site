@@ -647,10 +647,22 @@ Login with Twitter
 <!-- NFT GALLERY - FULL WIDTH -->
 <div style="text-align: center; font-size: 24px; margin-bottom: 40px; font-weight: 800;">Hyperliquid NFT Gallery</div>
 
-<!-- 3D Carousel Container -->
-<div style="position: relative; width: 100%; height: 400px; perspective: 1000px; margin: 100px 0 40px 0;">
-  <div class="nft-gallery-carousel" id="nftGalleryCarousel" style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: rotate-gallery-carousel 80s linear infinite;">
-    <!-- NFT cards will be dynamically generated here by JavaScript -->
+<!-- 3D Carousel Container Wrapper -->
+<div style="position: relative; width: 100%; margin: 100px 0 40px 0;">
+  
+  <!-- Center Hyperliquid Logo (Fixed, 2D, not in 3D space) -->
+  <div style="position: absolute; left: 50%; top: -120px; transform: translateX(-50%); z-index: 1000; pointer-events: none;">
+    <img src="hyperliquid-logo.png" 
+         alt="Hyperliquid Logo" 
+         style="width: 120px; height: auto; filter: brightness(0) saturate(100%) invert(70%) sepia(98%) saturate(2607%) hue-rotate(154deg) brightness(103%) contrast(101%) drop-shadow(0 0 30px rgba(0, 245, 255, 0.8));" />
+  </div>
+  
+  <!-- 3D Carousel Container -->
+  <div style="position: relative; width: 100%; height: 400px; perspective: 1000px;">
+    <!-- Rotating Carousel -->
+    <div class="nft-gallery-carousel" id="nftGalleryCarousel" style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d; animation: rotate-gallery-carousel 80s linear infinite;">
+      <!-- NFT cards will be dynamically generated here by JavaScript -->
+    </div>
   </div>
 </div>
 
