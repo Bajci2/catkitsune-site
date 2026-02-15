@@ -1551,80 +1551,29 @@ async function checkNFTBalances() {
         
         console.log(`✅ ${collection.name}: ${balanceNum}`);
         
-        const nftCardContainer = document.querySelector(`[data-nft-index="${collection.galleryIndex}"]`);
-        const nftElement = document.getElementById(`nft-${collection.galleryIndex}`);
-        
-        if (nftCardContainer && nftElement) {
-          nftCardContainer.style.display = 'flex';
+        // Load image in 3D carousel if user owns NFTs
+        if (balanceNum > 0) {
+          let nftImageURL = collection.image;
           
-          nftElement.textContent = `${balanceNum} owned`;
-          
-          const nftCard = nftCardContainer.querySelector('.nft-card');
-          
-          if (balanceNum > 0) {
-            nftElement.style.color = '#16a34a';
-            nftElement.style.fontWeight = '600';
+          try {
+            const tokenId = await contract.tokenOfOwnerByIndex(walletAddress, 0);
+            console.log(`🖼️ Fetching image for token #${tokenId}...`);
             
-            let nftImageURL = collection.image;
-            
-            try {
-              const tokenId = await contract.tokenOfOwnerByIndex(walletAddress, 0);
-              console.log(`🖼️ Fetching image for token #${tokenId}...`);
-              
-              const realImage = await fetchNFTImage(contract, tokenId);
-              if (realImage) {
-                nftImageURL = realImage;
-                console.log(`✅ Got real image: ${realImage.substring(0, 50)}...`);
-              }
-            } catch (e) {
-              console.log(`⚠️ Could not fetch real image, using placeholder`);
+            const realImage = await fetchNFTImage(contract, tokenId);
+            if (realImage) {
+              nftImageURL = realImage;
+              console.log(`✅ Got real image: ${realImage.substring(0, 50)}...`);
             }
-            
-            let img = nftCard.querySelector('.nft-image');
-            if (!img) {
-              img = document.createElement('img');
-              img.className = 'nft-image';
-              img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:10px;position:absolute;top:0;left:0;z-index:0;';
-              nftCard.insertBefore(img, nftCard.firstChild);
-            }
-            img.src = nftImageURL;
-            img.alt = collection.name;
-            
-            img.onerror = () => {
-              console.log(`❌ Image failed to load, using placeholder`);
-              img.src = collection.image;
-            };
-            
-            const strong = nftCard.querySelector('strong');
-            if (strong) {
-              strong.style.display = 'none';
-            }
-            
-            // Also load image in 3D carousel
-            loadNFTGalleryImage(collection.galleryIndex, nftImageURL);
-          } else {
-            nftElement.style.color = '#6b7280';
-            nftElement.style.fontWeight = '400';
-            
-            const img = nftCard.querySelector('.nft-image');
-            if (img) {
-              img.remove();
-            }
-            
-            const strong = nftCard.querySelector('strong');
-            if (strong) {
-              strong.style.display = 'block';
-              strong.style.position = 'relative';
-              strong.style.zIndex = '1';
-              strong.style.textShadow = 'none';
-              strong.style.color = '#111827';
-              strong.style.background = 'none';
-              strong.style.padding = '0';
-            }
+          } catch (e) {
+            console.log(`⚠️ Could not fetch real image, using placeholder`);
           }
+          
+          // Load image in 3D carousel
+          loadNFTGalleryImage(collection.galleryIndex, nftImageURL);
+          
+          totalNFTs += balanceNum;
         }
         
-        totalNFTs += balanceNum;
       } catch (error) {
         console.error(`❌ ${collection.name}:`, error.message);
         
