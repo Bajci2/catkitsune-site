@@ -247,6 +247,44 @@ body {
   flex-direction: column;
 }
 
+/* ==================== MOBILE FIX ==================== */
+@media (max-width: 768px) {
+  .mint-card-3d {
+    height: auto;
+    min-height: unset;
+    perspective: none;
+  }
+
+  .card-inner {
+    transform: none !important;
+    height: auto;
+  }
+
+  .mint-card-3d:hover .card-inner {
+    transform: none !important;
+  }
+
+  .card-front {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .nft-showcase-3d {
+    height: 180px;
+    padding-top: 30px;
+    margin-bottom: 12px;
+  }
+
+  .card-header {
+    margin-top: 20px;
+  }
+
+  .debug-console {
+    max-height: 50px;
+  }
+}
+
 /* ==================== 3D ROTATING NFT SHOWCASE ==================== */
 .nft-showcase-3d {
   position: relative;
