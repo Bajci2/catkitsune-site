@@ -7,6 +7,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<!-- ✅ WalletConnect – iPhone Safari támogatáshoz -->
+<script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 
 <style>
 * {
@@ -80,11 +82,6 @@ body {
   cursor: pointer;
 }
 
-.logo-img {
-  height: 50px;
-  filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
-}
-
 .logo-text {
   font-size: 24px;
   font-weight: 800;
@@ -112,6 +109,8 @@ body {
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
 }
 
 .back-btn:hover, .wallet-btn:hover {
@@ -144,7 +143,6 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin-bottom: 10px;
-  text-shadow: 0 0 80px rgba(139, 92, 246, 0.5);
   animation: glow-pulse 3s ease-in-out infinite;
 }
 
@@ -231,16 +229,13 @@ body {
   transform: rotateY(5deg) rotateX(5deg);
 }
 
-.card-front, .card-back {
+.card-front {
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   border-radius: 24px;
   overflow: hidden;
-}
-
-.card-front {
   background: rgba(21, 25, 37, 0.6);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(139, 92, 246, 0.3);
@@ -305,7 +300,6 @@ body {
   object-fit: cover;
 }
 
-/* Positioning items in 3D circle - WIDER radius */
 .nft-item-3d:nth-child(1) { transform: translate(-50%, -50%) rotateY(0deg) translateZ(200px); }
 .nft-item-3d:nth-child(2) { transform: translate(-50%, -50%) rotateY(40deg) translateZ(200px); }
 .nft-item-3d:nth-child(3) { transform: translate(-50%, -50%) rotateY(80deg) translateZ(200px); }
@@ -352,40 +346,6 @@ body {
 .card-collection {
   font-size: 8px;
   color: #a1a1aa;
-}
-
-/* ==================== PRICE DISPLAY ==================== */
-.price-section {
-  background: rgba(139, 92, 246, 0.1);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 16px;
-  padding: 24px;
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.price-label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #6b7280;
-  margin-bottom: 12px;
-}
-
-.price-amount {
-  font-size: 48px;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.price-amount.free-price {
-  background: linear-gradient(135deg, var(--neon-cyan), #10b981);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* ==================== PROGRESS BAR ==================== */
@@ -451,6 +411,7 @@ body {
   box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
   position: relative;
   overflow: hidden;
+  font-family: 'Space Grotesk', sans-serif;
 }
 
 .mint-button::before {
@@ -517,31 +478,91 @@ body {
   border-left-color: #ef4444;
 }
 
-/* ==================== SECTION DIVIDER ==================== */
-.section-divider {
-  margin: 80px auto;
-  max-width: 1400px;
-  padding: 0 40px;
-  position: relative;
+/* ==================== WALLETCONNECT MODAL ==================== */
+.wc-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.wc-modal-overlay.active {
+  display: flex;
+}
+
+.wc-modal {
+  background: #151925;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 24px;
+  padding: 32px;
+  max-width: 360px;
+  width: 90%;
   text-align: center;
+  box-shadow: 0 0 60px rgba(139, 92, 246, 0.4);
 }
 
-.divider-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
-  margin: 20px 0;
+.wc-modal h3 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--neon-purple), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.divider-text {
-  display: inline-block;
-  padding: 12px 24px;
-  background: rgba(21, 25, 37, 0.8);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  border-radius: 20px;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+.wc-modal p {
+  font-size: 13px;
   color: #a1a1aa;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.wc-option-btn {
+  width: 100%;
+  padding: 14px 20px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  background: rgba(139, 92, 246, 0.1);
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Space Grotesk', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.wc-option-btn:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: var(--neon-purple);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.wc-option-btn .btn-icon {
+  font-size: 24px;
+}
+
+.wc-cancel-btn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.wc-cancel-btn:hover {
+  color: white;
 }
 
 /* ==================== RESPONSIVE ==================== */
@@ -550,7 +571,6 @@ body {
     grid-template-columns: 1fr;
     gap: 80px;
   }
-  
   .hero-title {
     font-size: 56px;
   }
@@ -560,28 +580,27 @@ body {
   .header {
     padding: 16px 20px;
   }
-  
   .hero-title {
     font-size: 40px;
   }
-  
   .stats-bar {
     flex-direction: column;
     align-items: center;
     gap: 20px;
   }
-  
   .mint-cards-container {
     padding: 0 20px 60px;
   }
-  
   .nft-item-3d {
-    width: 150px;
-    height: 150px;
+    width: 90px;
+    height: 90px;
   }
-  
-  .nft-item-3d:nth-child(n) {
-    transform: translate(-50%, -50%) rotateY(calc(var(--i) * 40deg)) translateZ(200px);
+  .back-btn {
+    display: none;
+  }
+  .wallet-btn {
+    padding: 10px 16px;
+    font-size: 13px;
   }
 }
 
@@ -599,23 +618,15 @@ body {
     0 0 40px var(--neon-purple),
     0 0 60px rgba(139, 92, 246, 0.5);
   filter: brightness(1.5);
+  z-index: 2;
+  pointer-events: none;
 }
 
 @keyframes float-up {
-  0% {
-    transform: translateY(100vh) translateX(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.9;
-  }
-  90% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(-100px) translateX(100px);
-    opacity: 0;
-  }
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
 }
 </style>
 </head>
@@ -636,6 +647,23 @@ body {
 <div class="particle" style="left: 80%; animation-delay: 4.5s;"></div>
 <div class="particle" style="left: 90%; animation-delay: 1.5s;"></div>
 
+<!-- ✅ WALLETCONNECT MODAL -->
+<div class="wc-modal-overlay" id="wcModal">
+  <div class="wc-modal">
+    <h3>🔗 Connect Wallet</h3>
+    <p>Válassz egy wallet opciót a csatlakozáshoz</p>
+    <button class="wc-option-btn" onclick="connectWithMetaMask()">
+      <span class="btn-icon">🦊</span>
+      <span>MetaMask</span>
+    </button>
+    <button class="wc-option-btn" onclick="connectWithWalletConnect()">
+      <span class="btn-icon">📱</span>
+      <span>WalletConnect (Mobile / iPhone)</span>
+    </button>
+    <button class="wc-cancel-btn" onclick="closeWCModal()">Mégsem</button>
+  </div>
+</div>
+
 <!-- HEADER -->
 <div class="header">
   <div class="logo">
@@ -643,7 +671,7 @@ body {
   </div>
   <div class="nav-actions">
     <a href="/" class="back-btn">← Dashboard</a>
-    <button class="wallet-btn" id="walletBtn" onclick="connectWallet()">Connect Wallet</button>
+    <button class="wallet-btn" id="walletBtn" onclick="openConnectModal()">Connect Wallet</button>
   </div>
 </div>
 
@@ -683,8 +711,6 @@ body {
     <div class="mint-card-3d">
       <div class="card-inner">
         <div class="card-front">
-          
-          <!-- 3D NFT SHOWCASE -->
           <div class="nft-showcase-3d">
             <div class="showcase-carousel">
               <div class="nft-item-3d"><img src="/launch/1.png" alt="NFT 1"></div>
@@ -698,15 +724,11 @@ body {
               <div class="nft-item-3d"><img src="/launch/9.png" alt="NFT 9"></div>
             </div>
           </div>
-
-          <!-- CARD HEADER -->
           <div class="card-header">
             <div class="card-badge">Premium Collection</div>
             <h2 class="card-title">CatKitSune Collection - 0.1 HYPE</h2>
             <p class="card-collection">Series 1 • Limited Edition</p>
           </div>
-
-          <!-- PROGRESS -->
           <div class="progress-section">
             <div class="progress-info">
               <span id="paidSupply">27 / 300</span>
@@ -716,15 +738,10 @@ body {
               <div class="progress-bar-fill" id="paidProgress" style="width: 9%"></div>
             </div>
           </div>
-
-          <!-- MINT BUTTON -->
-          <button class="mint-button" id="mintButton">Connect Wallet</button>
-
-          <!-- DEBUG CONSOLE -->
+          <button class="mint-button" id="mintButton" onclick="openConnectModal()">Connect Wallet</button>
           <div class="debug-console" id="debugInfo">
             <div class="debug-log">Ready to mint...</div>
           </div>
-
         </div>
       </div>
     </div>
@@ -733,8 +750,6 @@ body {
     <div class="mint-card-3d">
       <div class="card-inner">
         <div class="card-front">
-          
-          <!-- 3D NFT SHOWCASE -->
           <div class="nft-showcase-3d">
             <div class="showcase-carousel">
               <div class="nft-item-3d"><img src="/launch-free/1.png" alt="Free 1"></div>
@@ -748,15 +763,11 @@ body {
               <div class="nft-item-3d"><img src="/launch-free/10.png" alt="Free 10"></div>
             </div>
           </div>
-
-          <!-- CARD HEADER -->
           <div class="card-header">
             <div class="card-badge free">Community Drop</div>
             <h2 class="card-title">VeLoRa Collection - FREE</h2>
             <p class="card-collection">Free Mint • Open Edition</p>
           </div>
-
-          <!-- PROGRESS -->
           <div class="progress-section">
             <div class="progress-info">
               <span id="freeSupply">0 / 222</span>
@@ -766,15 +777,10 @@ body {
               <div class="progress-bar-fill" id="freeProgress" style="width: 0%"></div>
             </div>
           </div>
-
-          <!-- MINT BUTTON -->
-          <button class="mint-button" id="freeMintButton">Connect Wallet</button>
-
-          <!-- DEBUG CONSOLE -->
+          <button class="mint-button" id="freeMintButton" onclick="openConnectModal()">Connect Wallet</button>
           <div class="debug-console" id="freeDebugInfo">
             <div class="debug-log">Ready to mint...</div>
           </div>
-
         </div>
       </div>
     </div>
@@ -783,30 +789,24 @@ body {
     <div class="mint-card-3d">
       <div class="card-inner">
         <div class="card-front">
-          
-          <!-- ROTATING NFT SHOWCASE -->
           <div class="nft-showcase-3d">
             <div class="showcase-carousel">
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
-              <div class="nft-item-3d"><div style="width: 100%; height: 100%; background: rgba(139, 92, 246, 0.1); border-radius: 8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
+              <div class="nft-item-3d"><div style="width:100%;height:100%;background:rgba(139,92,246,0.1);border-radius:8px;"></div></div>
             </div>
           </div>
-
-          <!-- CARD HEADER -->
           <div class="card-header">
             <div class="card-badge">.......... Collection</div>
             <h2 class="card-title">New Collection - ... HYPE</h2>
             <p class="card-collection">Series 1 • Limited Edition</p>
           </div>
-
-          <!-- PROGRESS -->
           <div class="progress-section">
             <div class="progress-info">
               <span>00 / pcs</span>
@@ -816,22 +816,15 @@ body {
               <div class="progress-bar-fill" style="width: 0%"></div>
             </div>
           </div>
-
-          <!-- BUTTON -->
-          <button class="mint-button">CONNECT WALLET</button>
-
-          <!-- DEBUG CONSOLE -->
+          <button class="mint-button">COMING SOON</button>
           <div class="debug-console">
-            <div>Ready to mint...</div>
-            <div>[14:42:16] 3D Mint Experience</div>
+            <div class="debug-log">3D Mint Experience</div>
           </div>
-
         </div>
       </div>
     </div>
 
   </div>
-
 </div>
 
 <script>
@@ -839,7 +832,7 @@ body {
 // HYPERLIQUID CONFIG
 // ===========================
 const HYPERLIQUID_CONFIG = {
-  chainId: '0x3E7',
+  chainId: '0x3E7', // 999
   chainName: 'Hyperliquid',
   rpcUrls: ['https://rpc.hyperliquid.xyz/evm'],
   nativeCurrency: { name: 'HYPE', symbol: 'HYPE', decimals: 18 },
@@ -855,6 +848,7 @@ const CONTRACT_ABI = [
   'function MAX_SUPPLY() public view returns (uint256)'
 ];
 
+// ✅ JAVÍTOTT ÁR: 0.3 HYPE
 const MINT_PRICE = ethers.utils.parseEther('0.1');
 const FREE_MINT_PRICE = ethers.utils.parseEther('0');
 
@@ -869,6 +863,7 @@ const FREE_MAX_SUPPLY = 222;
 // ===========================
 function log(message, type = 'info', isFree = false) {
   const debugDiv = document.getElementById(isFree ? 'freeDebugInfo' : 'debugInfo');
+  if (!debugDiv) return;
   const logClass = type === 'error' ? 'debug-error' : type === 'success' ? 'debug-success' : 'debug-log';
   const timestamp = new Date().toLocaleTimeString();
   debugDiv.innerHTML += `<div class="${logClass}">[${timestamp}] ${message}</div>`;
@@ -876,74 +871,188 @@ function log(message, type = 'info', isFree = false) {
 }
 
 // ===========================
-// WALLET CONNECTION
+// WALLETCONNECT MODAL
 // ===========================
-async function connectWallet() {
+function openConnectModal() {
+  // Ha már csatlakozva van, ne nyissa meg a modalt
+  if (userAddress) return;
+  document.getElementById('wcModal').classList.add('active');
+}
+
+function closeWCModal() {
+  document.getElementById('wcModal').classList.remove('active');
+}
+
+// ===========================
+// METAMASK CONNECT (Desktop)
+// ===========================
+async function connectWithMetaMask() {
+  closeWCModal();
   if (typeof window.ethereum === 'undefined') {
-    alert('Please install MetaMask!');
+    alert('MetaMask nincs telepítve!\n\nTelefon esetén használd a WalletConnect opciót, vagy nyisd meg az oldalt a MetaMask app beépített böngészőjéből.');
     return;
   }
-
   try {
-    log('Connecting wallet...');
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    userAddress = accounts[0];
-    log(`Connected: ${userAddress.substring(0,6)}...${userAddress.substring(38)}`, 'success');
+    log('Connecting MetaMask...');
+    log('Connecting MetaMask...', 'info', true);
 
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
     provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    // Switch / add Hyperliquid network
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x3E7' }]
+      });
+    } catch (switchError) {
+      if (switchError.code === 4902) {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [HYPERLIQUID_CONFIG]
+        });
+      }
+    }
+
     signer = provider.getSigner();
-    contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-    freeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+    userAddress = await signer.getAddress();
 
-    document.getElementById('walletBtn').textContent = `${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
-    document.getElementById('mintButton').textContent = 'Mint Now (0.1 HYPE)';
-    document.getElementById('mintButton').onclick = mintNFT;
-    document.getElementById('freeMintButton').textContent = 'Mint Free';
-    document.getElementById('freeMintButton').onclick = mintFreeNFT;
-
-    await loadSupply();
+    onWalletConnected();
   } catch (error) {
-    log(`Error: ${error.message}`, 'error');
+    log(`MetaMask error: ${error.message}`, 'error');
+    log(`MetaMask error: ${error.message}`, 'error', true);
   }
 }
 
 // ===========================
-// LOAD SUPPLY
+// WALLETCONNECT (Mobile/iPhone)
+// ===========================
+async function connectWithWalletConnect() {
+  closeWCModal();
+  try {
+    log('Opening WalletConnect QR...');
+    log('Opening WalletConnect QR...', 'info', true);
+
+    const WalletConnectProvider = window.WalletConnectProvider && window.WalletConnectProvider.default
+      ? window.WalletConnectProvider.default
+      : window.WalletConnectProvider;
+
+    if (!WalletConnectProvider) {
+      log('WalletConnect library nem töltődött be!', 'error');
+      log('WalletConnect library nem töltődött be!', 'error', true);
+      return;
+    }
+
+    const wcProvider = new WalletConnectProvider({
+      rpc: {
+        999: 'https://rpc.hyperliquid.xyz/evm'
+      },
+      chainId: 999,
+      qrcodeModalOptions: {
+        mobileLinks: ['metamask', 'rainbow', 'trust']
+      }
+    });
+
+    await wcProvider.enable(); // QR code popup jelenik meg
+
+    provider = new ethers.providers.Web3Provider(wcProvider);
+    signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+
+    // Disconnect listener
+    wcProvider.on('disconnect', () => {
+      log('WalletConnect disconnected', 'error');
+      resetWalletState();
+    });
+
+    onWalletConnected();
+  } catch (error) {
+    if (error.message && error.message.includes('User closed')) {
+      log('QR kód bezárva', 'error');
+    } else {
+      log(`WalletConnect error: ${error.message}`, 'error');
+      log(`WalletConnect error: ${error.message}`, 'error', true);
+    }
+  }
+}
+
+// ===========================
+// ON WALLET CONNECTED
+// ===========================
+function onWalletConnected() {
+  const shortAddr = `${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
+  log(`Connected: ${shortAddr}`, 'success');
+  log(`Connected: ${shortAddr}`, 'success', true);
+
+  contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+  freeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+  // Header wallet gomb frissítése
+  document.getElementById('walletBtn').textContent = shortAddr;
+
+  // Paid mint gomb
+  const mintBtn = document.getElementById('mintButton');
+  mintBtn.textContent = 'Mint Now (0.1 HYPE)';
+  mintBtn.onclick = mintNFT;
+
+  // Free mint gomb
+  const freeMintBtn = document.getElementById('freeMintButton');
+  freeMintBtn.textContent = 'Mint Free';
+  freeMintBtn.onclick = mintFreeNFT;
+
+  // MetaMask account change listener
+  if (window.ethereum) {
+    window.ethereum.on('accountsChanged', (accounts) => {
+      if (accounts.length === 0) {
+        resetWalletState();
+      } else {
+        userAddress = accounts[0];
+        const short = `${userAddress.substring(0,6)}...${userAddress.substring(38)}`;
+        document.getElementById('walletBtn').textContent = short;
+        log(`Account changed: ${short}`);
+      }
+    });
+  }
+
+  loadSupply();
+}
+
+function resetWalletState() {
+  userAddress = null;
+  provider = null;
+  signer = null;
+  contract = null;
+  freeContract = null;
+  document.getElementById('walletBtn').textContent = 'Connect Wallet';
+  document.getElementById('mintButton').textContent = 'Connect Wallet';
+  document.getElementById('mintButton').onclick = openConnectModal;
+  document.getElementById('freeMintButton').textContent = 'Connect Wallet';
+  document.getElementById('freeMintButton').onclick = openConnectModal;
+}
+
+// ===========================
+// LOAD SUPPLY (read-only is OK)
 // ===========================
 async function loadSupply() {
   try {
-    // Create read-only provider for checking supply without wallet
-    let readProvider, readPaidContract, readFreeContract;
-    
-    if (!contract || !freeContract) {
-      // No wallet connected, use read-only provider
-      readProvider = new ethers.providers.JsonRpcProvider('https://rpc.hyperliquid.xyz/evm');
-      readPaidContract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
-      readFreeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+    const readProvider = new ethers.providers.JsonRpcProvider('https://rpc.hyperliquid.xyz/evm');
+    const readPaid = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+    const readFree = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, readProvider);
+
+    try {
+      const paidCounter = await readPaid._tokenIdCounter();
+      currentMintedSupply = paidCounter.toNumber();
+    } catch (e) {
+      console.log('Could not load paid supply');
     }
-    
-    // Try to load from contracts if available
-    const paidContractToUse = contract || readPaidContract;
-    const freeContractToUse = freeContract || readFreeContract;
-    
-    if (paidContractToUse) {
-      try {
-        const paidCounter = await paidContractToUse._tokenIdCounter();
-        currentMintedSupply = paidCounter.toNumber();
-      } catch (e) {
-        console.log('Could not load paid supply from contract');
-      }
+
+    try {
+      const freeCounter = await readFree._tokenIdCounter();
+      freeCurrentMintedSupply = freeCounter.toNumber();
+    } catch (e) {
+      console.log('Could not load free supply');
     }
-    
-    if (freeContractToUse) {
-      try {
-        const freeCounter = await freeContractToUse._tokenIdCounter();
-        freeCurrentMintedSupply = freeCounter.toNumber();
-      } catch (e) {
-        console.log('Could not load free supply from contract');
-      }
-    }
-    
+
     const total = currentMintedSupply + freeCurrentMintedSupply;
     document.getElementById('totalMinted').textContent = total;
     document.getElementById('paidMinted').textContent = `${currentMintedSupply}/300`;
@@ -960,7 +1069,7 @@ async function loadSupply() {
     document.getElementById('freePercent').textContent = `${freePercent}%`;
     document.getElementById('freeProgress').style.width = `${freePercent}%`;
   } catch (error) {
-    console.error(error);
+    console.error('loadSupply error:', error);
   }
 }
 
@@ -969,23 +1078,23 @@ async function loadSupply() {
 // ===========================
 async function mintNFT() {
   if (!contract) {
-    log('Please connect wallet first', 'error');
+    log('Connect wallet first!', 'error');
+    openConnectModal();
     return;
   }
-
   try {
     log('Starting mint...', 'success');
     document.getElementById('mintButton').disabled = true;
     document.getElementById('mintButton').textContent = 'Minting...';
 
     const tx = await contract.mint({ value: MINT_PRICE });
-    log(`TX: ${tx.hash}`, 'success');
+    log(`TX: ${tx.hash.substring(0,12)}...`, 'success');
     await tx.wait();
     log('Mint successful! 🎉', 'success');
 
     currentMintedSupply++;
     await loadSupply();
-    
+
     document.getElementById('mintButton').disabled = false;
     document.getElementById('mintButton').textContent = 'Mint Now (0.1 HYPE)';
   } catch (error) {
@@ -997,23 +1106,23 @@ async function mintNFT() {
 
 async function mintFreeNFT() {
   if (!freeContract) {
-    log('Please connect wallet first', 'error', true);
+    log('Connect wallet first!', 'error', true);
+    openConnectModal();
     return;
   }
-
   try {
     log('Starting free mint...', 'success', true);
     document.getElementById('freeMintButton').disabled = true;
     document.getElementById('freeMintButton').textContent = 'Minting...';
 
     const tx = await freeContract.mint({ value: FREE_MINT_PRICE });
-    log(`TX: ${tx.hash}`, 'success', true);
+    log(`TX: ${tx.hash.substring(0,12)}...`, 'success', true);
     await tx.wait();
     log('Free mint successful! 🎉', 'success', true);
 
     freeCurrentMintedSupply++;
     await loadSupply();
-    
+
     document.getElementById('freeMintButton').disabled = false;
     document.getElementById('freeMintButton').textContent = 'Mint Free';
   } catch (error) {
@@ -1030,13 +1139,16 @@ window.addEventListener('load', () => {
   loadSupply();
   log('3D Mint Experience loaded ✨');
   log('3D Mint Experience loaded ✨', 'info', true);
-  
+
+  // Bezárja a modalt ha a háttérre kattintanak
+  document.getElementById('wcModal').addEventListener('click', function(e) {
+    if (e.target === this) closeWCModal();
+  });
+
   // Auto-refresh supply every 18 seconds
   setInterval(() => {
     loadSupply();
-    log('Auto-refreshed supply data 🔄');
-    log('Auto-refreshed supply data 🔄', 'info', true);
-  }, 18000); // 18 seconds
+  }, 18000);
 });
 </script>
 
