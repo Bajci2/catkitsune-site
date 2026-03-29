@@ -100,10 +100,11 @@ main { flex:1; padding:0 12px 80px; max-width:1200px; margin:0 auto; width:100%;
 
 .top-nav { margin-top:20px; margin-bottom:20px; display:flex; justify-content:center; gap:12px; }
 .top-nav-btn {
-  padding:4px 14px; font-size:13px; border-radius:999px;
+  padding:6px 18px; font-size:13px; border-radius:999px;
   border:1px solid rgba(13,122,82,0.3);
   background:rgba(13,122,82,0.08);
   color:#0a1f16; cursor:pointer; transition:0.2s;
+  font-weight:600;
 }
 .top-nav-btn:hover { background:rgba(13,122,82,0.15); border-color:#0d7a52; }
 .top-nav-btn.active { background:linear-gradient(135deg,#0d7a52,#14b8a6); color:white; border-color:#0d7a52; }
@@ -224,8 +225,8 @@ window.loginWithTwitter = function() { window.location.href="https://catkitsune.
 
 <main class="view active" id="view-quests">
   <div class="top-nav">
-    <button class="top-nav-btn active" onclick="showView(event,'quests')">🎮</button>
-    <button class="top-nav-btn" onclick="showView(event,'roadmap')">🚀</button>
+    <button class="top-nav-btn active" onclick="showView(event,'quests')">🎮 Gallery</button>
+    <button class="top-nav-btn" onclick="showView(event,'roadmap')">🚀 Submit</button>
   </div>
   <div class="content-grid">
     <div style="text-align:center; font-size:24px; margin-bottom:16px; font-weight:800; color:#0a1f16;">
@@ -237,8 +238,8 @@ window.loginWithTwitter = function() { window.location.href="https://catkitsune.
 
 <main class="view" id="view-roadmap">
   <div class="top-nav">
-    <button class="top-nav-btn" onclick="showView(event,'quests')">🎮</button>
-    <button class="top-nav-btn active" onclick="showView(event,'roadmap')">🚀</button>
+    <button class="top-nav-btn" onclick="showView(event,'quests')">🎮 Gallery</button>
+    <button class="top-nav-btn active" onclick="showView(event,'roadmap')">🚀 Submit</button>
   </div>
   <div style="max-width:800px; margin:0 auto;">
     <div style="text-align:center; margin-bottom:32px;">
