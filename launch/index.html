@@ -6,8 +6,8 @@
 <title>CatKitSune - Mint</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -266,8 +266,9 @@ body::after {
 .debug-error  { color: #ef4444; border-left-color: #ef4444; padding-left:10px; margin:3px 0; padding:3px 0; }
 
 /* RESPONSIVE */
-@media (max-width: 1100px) { .mint-cards-container { grid-template-columns: 1fr; gap: 60px; } .mint-card-3d { height: auto; } .card-inner { transform: none !important; height: auto; } .card-front { position: relative; height: auto; overflow: visible; } .nft-showcase-3d { height: 160px; } .card-header { margin-top: 16px; } }
-@media (max-width: 768px)  { .header { padding: 10px 16px; } .hero-title { font-size: 28px; } .stats-bar { gap: 10px; } .back-btn { display: none; } }
+@media (max-width: 1100px) { .mint-cards-container { grid-template-columns: 1fr; gap: 24px; } .mint-card-3d { height: auto; } .card-inner { transform: none !important; height: auto; } .card-front { position: relative; height: auto; overflow: visible; } .card-header { margin-top: 4px; } }
+@media (max-width: 768px)  { .header { padding: 10px 16px; } .hero-title { font-size: 28px; } .stats-bar { gap: 8px; } .back-btn { display: none; } .mint-cards-container { padding: 0 12px 40px; } .nft-showcase-img { height: 180px; } }
+@media (max-width: 480px)  { .hero-title { font-size: 22px; } .stats-bar .stat-item { padding: 8px 12px; } .stat-value { font-size: 15px; } }
 </style>
 </head>
 <body>
