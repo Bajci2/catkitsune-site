@@ -170,46 +170,23 @@ body::after {
 }
 .card-front:hover { box-shadow: 0 12px 40px rgba(13,122,82,0.18); }
 
-/* 3D CAROUSEL */
-.nft-showcase-3d {
-  position: relative; height: 200px;
-  margin-bottom: 16px; perspective: 750px;
-  padding-top: 40px;
+/* NFT IMAGE SHOWCASE */
+.nft-showcase-img {
+  width: 100%;
+  height: 220px;
+  margin-bottom: 16px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(13,122,82,0.2);
+  box-shadow: 0 4px 20px rgba(13,122,82,0.12);
 }
-.showcase-carousel {
-  position: relative; width: 100%; height: 100%;
-  transform-style: preserve-3d;
-  animation: rotate-showcase 40s linear infinite;
+.nft-showcase-img img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
 }
-@keyframes rotate-showcase {
-  from { transform: rotateY(0deg); }
-  to   { transform: rotateY(360deg); }
-}
-.showcase-carousel:hover { animation-play-state: paused; }
-
-.nft-item-3d {
-  position: absolute; width: 100px; height: 100px;
-  left: 50%; top: 50%; transform-origin: center;
-  border-radius: 10px; overflow: hidden;
-  border: 1px solid rgba(13,122,82,0.3);
-  box-shadow: 0 0 12px rgba(13,122,82,0.2);
-  transition: all 0.3s ease;
-}
-.nft-item-3d:hover { border-color: var(--primary); box-shadow: 0 0 30px rgba(13,122,82,0.4); }
-.nft-item-3d img { width: 100%; height: 100%; object-fit: cover; }
-
-.nft-item-3d:nth-child(1) { transform: translate(-50%,-50%) rotateY(0deg)   translateZ(160px); }
-.nft-item-3d:nth-child(2) { transform: translate(-50%,-50%) rotateY(40deg)  translateZ(160px); }
-.nft-item-3d:nth-child(3) { transform: translate(-50%,-50%) rotateY(80deg)  translateZ(160px); }
-.nft-item-3d:nth-child(4) { transform: translate(-50%,-50%) rotateY(120deg) translateZ(160px); }
-.nft-item-3d:nth-child(5) { transform: translate(-50%,-50%) rotateY(160deg) translateZ(160px); }
-.nft-item-3d:nth-child(6) { transform: translate(-50%,-50%) rotateY(200deg) translateZ(160px); }
-.nft-item-3d:nth-child(7) { transform: translate(-50%,-50%) rotateY(240deg) translateZ(160px); }
-.nft-item-3d:nth-child(8) { transform: translate(-50%,-50%) rotateY(280deg) translateZ(160px); }
-.nft-item-3d:nth-child(9) { transform: translate(-50%,-50%) rotateY(320deg) translateZ(160px); }
 
 /* CARD CONTENT */
-.card-header { margin-top: 60px; margin-bottom: 12px; }
+.card-header { margin-top: 4px; margin-bottom: 12px; }
 .card-badge {
   display: inline-block; padding: 4px 10px;
   background: rgba(13,122,82,0.1);
@@ -351,18 +328,8 @@ body::after {
     <div class="mint-card-3d">
       <div class="card-inner">
         <div class="card-front">
-          <div class="nft-showcase-3d">
-            <div class="showcase-carousel">
-              <div class="nft-item-3d"><img src="/launch/1.png" alt="NFT 1"></div>
-              <div class="nft-item-3d"><img src="/launch/2.png" alt="NFT 2"></div>
-              <div class="nft-item-3d"><img src="/launch/3.png" alt="NFT 3"></div>
-              <div class="nft-item-3d"><img src="/launch/4.png" alt="NFT 4"></div>
-              <div class="nft-item-3d"><img src="/launch/5.png" alt="NFT 5"></div>
-              <div class="nft-item-3d"><img src="/launch/6.png" alt="NFT 6"></div>
-              <div class="nft-item-3d"><img src="/launch/7.png" alt="NFT 7"></div>
-              <div class="nft-item-3d"><img src="/launch/8.png" alt="NFT 8"></div>
-              <div class="nft-item-3d"><img src="/launch/9.png" alt="NFT 9"></div>
-            </div>
+          <div class="nft-showcase-img">
+            <img src="/catkitsune.gif" alt="CatKitSune Collection" />
           </div>
           <div class="card-header">
             <div class="card-badge">Premium Collection</div>
@@ -390,18 +357,8 @@ body::after {
     <div class="mint-card-3d">
       <div class="card-inner">
         <div class="card-front">
-          <div class="nft-showcase-3d">
-            <div class="showcase-carousel">
-              <div class="nft-item-3d"><img src="/launch-free/1.png" alt="Free 1"></div>
-              <div class="nft-item-3d"><img src="/launch-free/2.png" alt="Free 2"></div>
-              <div class="nft-item-3d"><img src="/launch-free/3.png" alt="Free 3"></div>
-              <div class="nft-item-3d"><img src="/launch-free/4.png" alt="Free 4"></div>
-              <div class="nft-item-3d"><img src="/launch-free/5.png" alt="Free 5"></div>
-              <div class="nft-item-3d"><img src="/launch-free/7.png" alt="Free 7"></div>
-              <div class="nft-item-3d"><img src="/launch-free/8.png" alt="Free 8"></div>
-              <div class="nft-item-3d"><img src="/launch-free/9.png" alt="Free 9"></div>
-              <div class="nft-item-3d"><img src="/launch-free/10.png" alt="Free 10"></div>
-            </div>
+          <div class="nft-showcase-img">
+            <img src="/velora.gif" alt="VeLoRa Collection" />
           </div>
           <div class="card-header">
             <div class="card-badge free">Community Drop</div>
