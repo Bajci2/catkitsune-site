@@ -270,7 +270,7 @@ main { flex: 1; padding: 0 12px 80px; max-width: 1200px; margin: 0 auto; width: 
    ============================================ */
 .nft-flat-gallery {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 14px;
   margin: 0 auto;
   max-width: 1100px;
@@ -350,14 +350,14 @@ main { flex: 1; padding: 0 12px 80px; max-width: 1200px; margin: 0 auto; width: 
 .nft-flat-card:hover .nft-flat-label { opacity: 1; }
 
 /* Responsive */
-@media (max-width: 900px) {
-  .nft-flat-gallery { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1000px) {
+  .nft-flat-gallery { grid-template-columns: repeat(5, 1fr); }
 }
-@media (max-width: 640px) {
-  .nft-flat-gallery { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (max-width: 700px) {
+  .nft-flat-gallery { grid-template-columns: repeat(4, 1fr); gap: 10px; }
 }
-@media (max-width: 400px) {
-  .nft-flat-gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media (max-width: 480px) {
+  .nft-flat-gallery { grid-template-columns: repeat(3, 1fr); gap: 8px; }
 }
 </style>
 
@@ -642,7 +642,7 @@ let nftPointsEarned = 0;
 // NFT COLLECTIONS
 // ==========================================
 const NFT_COLLECTIONS = [
-  { name: 'Lucky Hypio Winners',   address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb', pointsPerNFT: 1, galleryIndex: 0,  image: 'https://static.drip.trade/collections/hypio_pfp.png' },
+  { name: 'Lucky Hypio Winners',   address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb', pointsPerNFT: 1, galleryIndex: 0,  image: '/hypio_pfp.png' },
   { name: 'Tiny Hyper Cats',       address: '0xCC3D60fF11a268606C6a57bD6Db74b4208f1D30c', pointsPerNFT: 1, galleryIndex: 1,  image: 'https://static.drip.trade/collections/tiny-hyper-cat_pfp.jpg' },
   { name: 'Hypurr',                address: '0x9125E2d6827a00B0F8330D6ef7BEF07730Bac685', pointsPerNFT: 1, galleryIndex: 2,  image: 'https://static.drip.trade/collections/hypurr_pfp.jpg' },
   { name: 'Hyperian Genesis',      address: '0xB0F82655F249FC6561A94eB370d41bD24A861A9d', pointsPerNFT: 1, galleryIndex: 3,  image: 'https://static.drip.trade/collections/hyperian-genesis_pfp.png' },
@@ -663,7 +663,8 @@ const NFT_COLLECTIONS = [
   { name: 'dotHYPE',               address: '0xBf7cE65e6E920052C11690a80EAa3ed2fE752Dd8', pointsPerNFT: 1, galleryIndex: 18, image: 'https://static.drip.trade/collections/dothype_pfp.jpeg' },
   { name: 'Dysto Mfers',           address: '0x4C3f38129b171f02167d05E72a2994810b42f2Aa', pointsPerNFT: 1, galleryIndex: 19, image: 'https://static.drip.trade/collections/dysto-mfers_pfp.jpg' },
   { name: 'Jpegs.cats',            address: '0xB612a8Ed630a322109b983864a3A64579347ED3e', pointsPerNFT: 1, galleryIndex: 20, image: 'https://static.drip.trade/collections/jpegscats_pfp.png' },
-  { name: 'Hypericardo',           address: '0x290e6bD2BA56DA9ab14b5bA4737dba4BAE3ed5c5', pointsPerNFT: 1, galleryIndex: 21, image: 'https://static.drip.trade/collections/hypericardo_pfp.jpg' }
+  { name: 'Hypericardo',           address: '0x290e6bD2BA56DA9ab14b5bA4737dba4BAE3ed5c5', pointsPerNFT: 1, galleryIndex: 21, image: 'https://static.drip.trade/collections/hypericardo_pfp.jpg' },
+  { name: 'VeLoRa',               address: '0x568d76Cb80cAa08A2196467ed5cBdFBD4D74b1eE', pointsPerNFT: 1, galleryIndex: 22, image: 'https://static.drip.trade/collections/velora_pfp.png' }
 ];
 
 const HYPERLIQUID_RPC = 'https://rpc.hyperliquid.xyz/evm';
