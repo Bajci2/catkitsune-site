@@ -642,7 +642,7 @@ let nftPointsEarned = 0;
 // NFT COLLECTIONS
 // ==========================================
 const NFT_COLLECTIONS = [
-  { name: 'Lucky Hypio Winners',   address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb', pointsPerNFT: 1, galleryIndex: 0,  image: 'https://static.drip.trade/collections/hypio_pfp.png' },
+  { name: 'Lucky Hypio Winners',   address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb', pointsPerNFT: 1, galleryIndex: 0,  image: '/hypio_pfp.png' },
   { name: 'Tiny Hyper Cats',       address: '0xCC3D60fF11a268606C6a57bD6Db74b4208f1D30c', pointsPerNFT: 1, galleryIndex: 1,  image: 'https://static.drip.trade/collections/tiny-hyper-cat_pfp.jpg' },
   { name: 'Hypurr',                address: '0x9125E2d6827a00B0F8330D6ef7BEF07730Bac685', pointsPerNFT: 1, galleryIndex: 2,  image: 'https://static.drip.trade/collections/hypurr_pfp.jpg' },
   { name: 'Hyperian Genesis',      address: '0xB0F82655F249FC6561A94eB370d41bD24A861A9d', pointsPerNFT: 1, galleryIndex: 3,  image: 'https://static.drip.trade/collections/hyperian-genesis_pfp.png' },
@@ -664,7 +664,12 @@ const NFT_COLLECTIONS = [
   { name: 'Dysto Mfers',           address: '0x4C3f38129b171f02167d05E72a2994810b42f2Aa', pointsPerNFT: 1, galleryIndex: 19, image: 'https://static.drip.trade/collections/dysto-mfers_pfp.jpg' },
   { name: 'Jpegs.cats',            address: '0xB612a8Ed630a322109b983864a3A64579347ED3e', pointsPerNFT: 1, galleryIndex: 20, image: 'https://static.drip.trade/collections/jpegscats_pfp.png' },
   { name: 'Hypericardo',           address: '0x290e6bD2BA56DA9ab14b5bA4737dba4BAE3ed5c5', pointsPerNFT: 1, galleryIndex: 21, image: 'https://static.drip.trade/collections/hypericardo_pfp.jpg' },
-  { name: 'VeLoRa',               address: '0x568d76Cb80cAa08A2196467ed5cBdFBD4D74b1eE', pointsPerNFT: 1, galleryIndex: 22, image: 'https://static.drip.trade/collections/velora_pfp.png' }
+  { name: 'VeLoRa',               address: '0x568d76Cb80cAa08A2196467ed5cBdFBD4D74b1eE', pointsPerNFT: 1, galleryIndex: 22, image: 'https://static.drip.trade/collections/velora_pfp.png' },
+  { name: 'Hypaos',               address: '0xEdb90B35d9eC8a215E41913300E005C35ecBAEab', pointsPerNFT: 1, galleryIndex: 23, image: 'https://static.drip.trade/collections/hypao_pfp.png' },
+  { name: 'Katza',                address: '0x54d53876f81D1148642A58E923E4524029465820', pointsPerNFT: 1, galleryIndex: 24, image: 'https://static.drip.trade/collections/katza_pfp.png' },
+  { name: 'Coming Soon',          address: '', pointsPerNFT: 0, galleryIndex: 25, image: '' },
+  { name: 'Coming Soon',          address: '', pointsPerNFT: 0, galleryIndex: 26, image: '' },
+  { name: 'Coming Soon',          address: '', pointsPerNFT: 0, galleryIndex: 27, image: '' }
 ];
 
 const HYPERLIQUID_RPC = 'https://rpc.hyperliquid.xyz/evm';
@@ -721,18 +726,25 @@ function initFlatGallery() {
     card.className = 'nft-flat-card';
     card.dataset.index = col.galleryIndex;
 
+    const isEmpty = !col.address;
+
     card.innerHTML = `
       <div class="nft-flat-placeholder">
-        <div class="nft-flat-name">${col.name}</div>
+        <div class="nft-flat-name" style="${isEmpty ? 'opacity:0.4; font-size:8px;' : ''}">${col.name}</div>
+        ${isEmpty ? '<div style="font-size:18px; margin-top:6px; opacity:0.3;">?</div>' : ''}
       </div>
-      <img src="${col.image}" alt="${col.name}" loading="lazy" />
-      <div class="nft-flat-label">${col.name}</div>
+      ${!isEmpty ? `<img src="${col.image}" alt="${col.name}" loading="lazy" />` : ''}
+      ${!isEmpty ? `<div class="nft-flat-label">${col.name}</div>` : ''}
     `;
 
-    const img = card.querySelector('img');
-    img.onerror = function() {
-      this.style.display = 'none';
-    };
+    if (isEmpty) {
+      card.style.border = '1px dashed rgba(139,92,246,0.2)';
+      card.style.background = 'rgba(139,92,246,0.03)';
+      card.style.cursor = 'default';
+    } else {
+      const img = card.querySelector('img');
+      if (img) img.onerror = function() { this.style.display = 'none'; };
+    }
 
     container.appendChild(card);
   });
@@ -894,6 +906,7 @@ async function checkNFTBalances() {
     const provider = new ethers.providers.JsonRpcProvider(HYPERLIQUID_RPC);
     let totalNFTs = 0;
     for (const col of NFT_COLLECTIONS) {
+      if (!col.address) continue; // skip placeholders
       try {
         const contract = new ethers.Contract(col.address, ERC721_ABI, provider);
         const bal = (await contract.balanceOf(walletAddress)).toNumber();
