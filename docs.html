@@ -7,239 +7,181 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
-
 :root {
   --primary: #0d7a52;
   --primary-light: #14b8a6;
   --text: #0a1f16;
   --text-muted: #2d6b52;
-  --bg: #ffffff;
   --border: rgba(13,122,82,0.15);
 }
-
 body {
   font-family: 'Inter', sans-serif;
   background: #fff;
   color: var(--text);
   min-height: 100vh;
 }
-
 body::before {
-  content: '';
-  position: fixed; inset: 0;
+  content:''; position:fixed; inset:0;
   background: radial-gradient(ellipse at top, #f0fdf8 0%, #ffffff 60%);
-  z-index: -2;
+  z-index:-2;
 }
-
 body::after {
-  content: '';
-  position: fixed; inset: 0;
+  content:''; position:fixed; inset:0;
   background-image:
     linear-gradient(rgba(13,122,82,0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(13,122,82,0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  opacity: 0.6; z-index: -1; pointer-events: none;
+  background-size:50px 50px; opacity:0.5; z-index:-1; pointer-events:none;
 }
 
 /* HEADER */
 .header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 12px 32px;
-  background: rgba(255,255,255,0.92);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  padding:12px 32px;
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
 }
-.header-logo {
-  font-size: 18px; font-weight: 800; color: var(--primary);
-  text-decoration: none;
-}
+.header-logo { font-size:18px; font-weight:800; color:var(--primary); text-decoration:none; }
 .header-back {
-  padding: 7px 16px; border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.7);
-  color: var(--text); font-size: 13px; font-weight: 600;
-  text-decoration: none; transition: all 0.2s;
+  padding:7px 16px; border-radius:999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.7);
+  color:var(--text); font-size:13px; font-weight:600;
+  text-decoration:none; transition:all 0.2s;
 }
-.header-back:hover { background: rgba(13,122,82,0.1); border-color: var(--primary); }
+.header-back:hover { background:rgba(13,122,82,0.1); border-color:var(--primary); }
 
-/* LAYOUT */
-.page-wrapper {
-  display: flex;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 90px 24px 80px;
-  gap: 40px;
+/* PAGE */
+.page {
+  max-width:1100px; margin:0 auto;
+  padding:80px 24px 60px;
 }
 
-/* SIDEBAR */
-.sidebar {
-  width: 220px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 80px;
-  height: fit-content;
-}
-.sidebar-title {
-  font-size: 11px; font-weight: 700; color: var(--text-muted);
-  text-transform: uppercase; letter-spacing: 1.5px;
-  margin-bottom: 12px;
-}
-.sidebar-link {
-  display: block; padding: 7px 12px;
-  border-radius: 8px; font-size: 13px; font-weight: 500;
-  color: var(--text-muted); text-decoration: none;
-  transition: all 0.2s; margin-bottom: 2px;
-}
-.sidebar-link:hover { background: rgba(13,122,82,0.08); color: var(--primary); }
-.sidebar-link.active { background: rgba(13,122,82,0.1); color: var(--primary); font-weight: 700; }
-
-/* CONTENT */
-.content { flex: 1; min-width: 0; }
-
-/* HERO BANNER */
+/* HERO */
 .doc-hero {
-  background: linear-gradient(135deg, rgba(13,122,82,0.08), rgba(20,184,166,0.12));
-  border: 1px solid rgba(13,122,82,0.2);
-  border-radius: 20px;
-  padding: 40px;
-  margin-bottom: 48px;
-  text-align: center;
+  background:linear-gradient(135deg,rgba(13,122,82,0.08),rgba(20,184,166,0.12));
+  border:1px solid rgba(13,122,82,0.2);
+  border-radius:20px; padding:32px 40px;
+  margin-bottom:32px; text-align:center;
 }
 .doc-hero-badge {
-  display: inline-block; padding: 4px 14px;
-  background: rgba(13,122,82,0.1); border: 1px solid rgba(13,122,82,0.3);
-  border-radius: 999px; font-size: 11px; font-weight: 700;
-  color: var(--primary); text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 16px;
+  display:inline-block; padding:4px 14px;
+  background:rgba(13,122,82,0.1); border:1px solid rgba(13,122,82,0.3);
+  border-radius:999px; font-size:11px; font-weight:700;
+  color:var(--primary); text-transform:uppercase; letter-spacing:1px;
+  margin-bottom:12px;
 }
-.doc-hero h1 {
-  font-size: 38px; font-weight: 800; color: var(--text);
-  margin-bottom: 8px; line-height: 1.2;
-}
+.doc-hero h1 { font-size:32px; font-weight:800; color:var(--text); margin-bottom:8px; }
 .doc-hero h1 span {
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
 }
-.doc-hero p {
-  font-size: 16px; color: var(--text-muted); line-height: 1.7;
-  max-width: 500px; margin: 0 auto;
+.doc-hero p { font-size:15px; color:var(--text-muted); line-height:1.7; max-width:500px; margin:0 auto; }
+
+/* 2 COLUMN GRID */
+.docs-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
 }
 
-/* SECTIONS */
+/* CARD SECTION */
 .doc-section {
-  margin-bottom: 48px;
-  scroll-margin-top: 100px;
+  background:rgba(255,255,255,0.7);
+  border:1px solid var(--border);
+  border-radius:16px; padding:22px;
+  transition:all 0.2s;
 }
-.section-header {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid rgba(13,122,82,0.1);
-}
-.section-icon { font-size: 24px; }
-.section-title { font-size: 22px; font-weight: 800; color: var(--text); }
+.doc-section:hover { border-color:rgba(13,122,82,0.3); box-shadow:0 4px 20px rgba(13,122,82,0.08); }
 
-/* CARDS */
-.doc-card {
-  background: rgba(255,255,255,0.7);
-  border: 1px solid rgba(13,122,82,0.15);
-  border-radius: 14px;
-  padding: 20px 24px;
-  margin-bottom: 12px;
-  transition: all 0.2s;
+.section-header {
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:16px; padding-bottom:12px;
+  border-bottom:2px solid rgba(13,122,82,0.08);
 }
-.doc-card:hover { border-color: rgba(13,122,82,0.3); box-shadow: 0 4px 16px rgba(13,122,82,0.08); }
-.doc-card p { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+.section-icon { font-size:20px; }
+.section-title { font-size:16px; font-weight:800; color:var(--text); }
+
+/* LISTS */
+.doc-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.doc-list li {
+  display:flex; align-items:center; gap:10px;
+  font-size:13px; color:var(--text-muted); padding:8px 10px;
+  background:rgba(13,122,82,0.04); border-radius:8px;
+  border:1px solid rgba(13,122,82,0.08);
+}
+.doc-list li .icon { font-size:16px; flex-shrink:0; }
 
 /* STEPS */
-.steps { display: flex; flex-direction: column; gap: 12px; }
+.steps { display:flex; flex-direction:column; gap:8px; }
 .step {
-  display: flex; gap: 16px; align-items: flex-start;
-  background: rgba(255,255,255,0.7);
-  border: 1px solid rgba(13,122,82,0.15);
-  border-radius: 14px; padding: 18px 20px;
-  transition: all 0.2s;
+  display:flex; gap:12px; align-items:flex-start;
+  padding:10px 12px;
+  background:rgba(13,122,82,0.04); border-radius:8px;
+  border:1px solid rgba(13,122,82,0.08);
 }
-.step:hover { border-color: rgba(13,122,82,0.3); transform: translateX(4px); }
 .step-num {
-  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: white; font-weight: 800; font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
+  width:26px; height:26px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  color:white; font-weight:800; font-size:12px;
+  display:flex; align-items:center; justify-content:center;
 }
-.step-text strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 2px; }
-.step-text span { font-size: 13px; color: var(--text-muted); }
+.step-text strong { display:block; font-size:13px; color:var(--text); }
+.step-text span { font-size:12px; color:var(--text-muted); }
 
-/* LIST */
-.feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.feature-list li {
-  display: flex; align-items: center; gap: 12px;
-  background: rgba(255,255,255,0.7);
-  border: 1px solid rgba(13,122,82,0.15);
-  border-radius: 10px; padding: 12px 16px;
-  font-size: 14px; color: var(--text-muted);
-  transition: all 0.2s;
-}
-.feature-list li:hover { border-color: rgba(13,122,82,0.3); color: var(--text); }
-.feature-list li span.icon { font-size: 18px; }
-
-/* SAFETY */
-.safety-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-}
+/* SAFETY GRID */
+.safety-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .safety-item {
-  background: rgba(255,255,255,0.7);
-  border: 1px solid rgba(13,122,82,0.15);
-  border-radius: 12px; padding: 16px;
-  display: flex; align-items: center; gap: 10px;
-  font-size: 14px; color: var(--text-muted);
-  transition: all 0.2s;
+  background:rgba(13,122,82,0.04); border:1px solid rgba(13,122,82,0.08);
+  border-radius:8px; padding:10px 12px;
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; color:var(--text-muted);
 }
-.safety-item:hover { border-color: var(--primary); color: var(--text); }
-.safety-item .icon { font-size: 20px; }
 
-/* CTA */
-.cta-box {
-  background: linear-gradient(135deg, rgba(13,122,82,0.1), rgba(20,184,166,0.15));
-  border: 1px solid rgba(13,122,82,0.25);
-  border-radius: 16px; padding: 32px;
-  text-align: center;
-}
-.cta-box h3 { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
-.cta-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+/* CTA — full width */
+.doc-section.full-width { grid-column:1/-1; text-align:center; }
+.cta-box p { font-size:14px; color:var(--text-muted); margin-bottom:16px; line-height:1.6; }
 .cta-btn {
-  display: inline-block; padding: 12px 28px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: white; font-weight: 700; font-size: 14px;
-  border-radius: 999px; text-decoration: none;
-  box-shadow: 0 4px 16px rgba(13,122,82,0.3);
-  transition: all 0.2s; margin: 0 6px;
+  display:inline-block; padding:10px 24px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  color:white; font-weight:700; font-size:13px;
+  border-radius:999px; text-decoration:none;
+  box-shadow:0 4px 16px rgba(13,122,82,0.3);
+  transition:all 0.2s; margin:0 6px;
 }
-.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(13,122,82,0.4); }
+.cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(13,122,82,0.4); }
 .cta-btn.secondary {
-  background: rgba(255,255,255,0.8); color: var(--primary);
-  border: 1px solid rgba(13,122,82,0.3); box-shadow: none;
+  background:rgba(255,255,255,0.8); color:var(--primary);
+  border:1px solid rgba(13,122,82,0.3); box-shadow:none;
 }
 
-/* VISION */
-.vision-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+/* VISION LIST */
+.vision-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
 .vision-list li {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 15px; color: var(--text-muted); padding: 4px 0;
+  display:flex; align-items:center; gap:10px;
+  font-size:13px; color:var(--text-muted);
+  padding:8px 10px;
+  background:rgba(13,122,82,0.04); border-radius:8px;
+  border:1px solid rgba(13,122,82,0.08);
 }
 .vision-list li::before {
-  content: ''; width: 8px; height: 8px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  flex-shrink: 0;
+  content:''; width:8px; height:8px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
 }
 
-@media (max-width: 768px) {
-  .sidebar { display: none; }
-  .page-wrapper { padding: 80px 16px 60px; }
-  .doc-hero { padding: 28px 20px; }
-  .doc-hero h1 { font-size: 28px; }
-  .safety-grid { grid-template-columns: 1fr; }
+.highlight-text {
+  font-size:14px; font-weight:700; color:var(--primary);
+  text-align:center; padding:12px;
+  background:rgba(13,122,82,0.06); border-radius:10px;
+  margin-top:12px;
+}
+
+@media (max-width:768px) {
+  .docs-grid { grid-template-columns:1fr; }
+  .doc-section.full-width { grid-column:1; }
+  .doc-hero { padding:24px 20px; }
+  .doc-hero h1 { font-size:24px; }
 }
 </style>
 </head>
@@ -250,50 +192,34 @@ body::after {
   <a href="/" class="header-back">← Back</a>
 </div>
 
-<div class="page-wrapper">
+<div class="page">
 
-  <!-- SIDEBAR -->
-  <nav class="sidebar">
-    <div class="sidebar-title">Documentation</div>
-    <a href="#what" class="sidebar-link">🧩 What is CatKitSune?</a>
-    <a href="#how" class="sidebar-link">⚙️ How it works</a>
-    <a href="#why" class="sidebar-link">💎 Why CatKitSune?</a>
-    <a href="#safety" class="sidebar-link">🔒 Safety & Trust</a>
-    <a href="#owners" class="sidebar-link">🎯 For Project Owners</a>
-    <a href="#vision" class="sidebar-link">🧠 Vision</a>
-  </nav>
+  <!-- HERO -->
+  <div class="doc-hero">
+    <div class="doc-hero-badge">Documentation</div>
+    <h1>🚀 CatKitSune <span>Launchpad</span></h1>
+    <p>Fast. Curated. Trusted. — A curated NFT launchpad built on Hyperliquid (HyperEVM). We help projects launch, gain traction, and get listed.</p>
+  </div>
 
-  <!-- CONTENT -->
-  <div class="content">
-
-    <!-- HERO -->
-    <div class="doc-hero">
-      <div class="doc-hero-badge">Documentation</div>
-      <h1>🚀 CatKitSune <span>Launchpad</span></h1>
-      <p>Fast. Curated. Trusted. — A curated NFT launchpad built on Hyperliquid (HyperEVM). We help projects launch, gain traction, and get listed.</p>
-    </div>
+  <!-- 2 COLUMN GRID -->
+  <div class="docs-grid">
 
     <!-- WHAT IS -->
-    <div class="doc-section" id="what">
+    <div class="doc-section">
       <div class="section-header">
         <span class="section-icon">🧩</span>
         <h2 class="section-title">What is CatKitSune?</h2>
       </div>
-      <div class="doc-card">
-        <p>CatKitSune is <strong>not a marketplace</strong>. We are a launchpad designed to help new NFT projects on Hyperliquid.</p>
-      </div>
-      <ul class="feature-list">
+      <ul class="doc-list">
         <li><span class="icon">🚀</span> Launch their collection on Hyperliquid</li>
-        <li><span class="icon">👁️</span> Gain visibility in the Hyperliquid ecosystem</li>
-        <li><span class="icon">📋</span> Get listed on platforms like DripTrade or OpenSea</li>
+        <li><span class="icon">👁️</span> Gain visibility in the ecosystem</li>
+        <li><span class="icon">📋</span> Get listed on DripTrade or OpenSea</li>
+        <li><span class="icon">✅</span> Curated, high-quality projects only</li>
       </ul>
-      <div class="doc-card" style="margin-top:12px; background:rgba(13,122,82,0.06);">
-        <p>We focus on <strong style="color:#0d7a52;">curated, high-quality projects only.</strong></p>
-      </div>
     </div>
 
     <!-- HOW IT WORKS -->
-    <div class="doc-section" id="how">
+    <div class="doc-section">
       <div class="section-header">
         <span class="section-icon">⚙️</span>
         <h2 class="section-title">How it works</h2>
@@ -301,42 +227,30 @@ body::after {
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <div class="step-text">
-            <strong>Submit your project</strong>
-            <span>Send us your collection details via Twitter or Discord</span>
-          </div>
+          <div class="step-text"><strong>Submit your project</strong><span>Via Twitter or Discord</span></div>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div class="step-text">
-            <strong>Review process (48–72h)</strong>
-            <span>We review your project and get back to you</span>
-          </div>
+          <div class="step-text"><strong>Review process (48–72h)</strong><span>We review and contact you</span></div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <div class="step-text">
-            <strong>Launch & mint on our platform</strong>
-            <span>Your collection goes live on catkitsune.xyz</span>
-          </div>
+          <div class="step-text"><strong>Launch & mint on our platform</strong><span>Goes live on catkitsune.xyz</span></div>
         </div>
         <div class="step">
           <div class="step-num">4</div>
-          <div class="step-text">
-            <strong>Get listed on DripTrade / OpenSea</strong>
-            <span>We forward approved projects for trading</span>
-          </div>
+          <div class="step-text"><strong>Listed on DripTrade / OpenSea</strong><span>We forward for trading</span></div>
         </div>
       </div>
     </div>
 
     <!-- WHY -->
-    <div class="doc-section" id="why">
+    <div class="doc-section">
       <div class="section-header">
         <span class="section-icon">💎</span>
         <h2 class="section-title">Why CatKitSune?</h2>
       </div>
-      <ul class="feature-list">
+      <ul class="doc-list">
         <li><span class="icon">⚡</span> Fast launch process</li>
         <li><span class="icon">🧠</span> Curated projects only — no spam</li>
         <li><span class="icon">🔒</span> No token approvals required</li>
@@ -346,79 +260,62 @@ body::after {
     </div>
 
     <!-- SAFETY -->
-    <div class="doc-section" id="safety">
+    <div class="doc-section">
       <div class="section-header">
         <span class="section-icon">🔒</span>
         <h2 class="section-title">Safety & Trust</h2>
       </div>
-      <div class="doc-card" style="margin-bottom:16px;">
-        <p><strong>Your safety is our priority.</strong> We do NOT ask for wallet permissions.</p>
-      </div>
       <div class="safety-grid">
-        <div class="safety-item"><span class="icon">❌</span> No token approvals</div>
-        <div class="safety-item"><span class="icon">⚡</span> Direct smart contract mint</div>
-        <div class="safety-item"><span class="icon">🌐</span> Fully on-chain</div>
-        <div class="safety-item"><span class="icon">🚫</span> No external contract interactions</div>
+        <div class="safety-item"><span>❌</span> No token approvals</div>
+        <div class="safety-item"><span>⚡</span> Direct smart contract mint</div>
+        <div class="safety-item"><span>🌐</span> Fully on-chain</div>
+        <div class="safety-item"><span>🚫</span> No external interactions</div>
       </div>
+      <div class="highlight-text">We do NOT ask for wallet permissions.</div>
     </div>
 
     <!-- FOR PROJECT OWNERS -->
-    <div class="doc-section" id="owners">
+    <div class="doc-section">
       <div class="section-header">
         <span class="section-icon">🎯</span>
         <h2 class="section-title">For Project Owners</h2>
       </div>
-      <div class="doc-card">
-        <p>If you are building on Hyperliquid and want to launch your NFT, CatKitSune helps you:</p>
-      </div>
-      <ul class="feature-list" style="margin-top:12px; margin-bottom:20px;">
+      <ul class="doc-list">
         <li><span class="icon">⚡</span> Launch faster</li>
         <li><span class="icon">👁️</span> Get visibility in the ecosystem</li>
         <li><span class="icon">🤝</span> Reach collectors directly</li>
       </ul>
+    </div>
+
+    <!-- VISION -->
+    <div class="doc-section">
+      <div class="section-header">
+        <span class="section-icon">🧠</span>
+        <h2 class="section-title">Vision</h2>
+      </div>
+      <ul class="vision-list">
+        <li>On-chain</li>
+        <li>Community-driven</li>
+        <li>Fast and accessible</li>
+      </ul>
+      <div class="highlight-text">CatKitSune is building that future. 🚀</div>
+    </div>
+
+    <!-- CTA FULL WIDTH -->
+    <div class="doc-section full-width">
+      <div class="section-header" style="justify-content:center; border:none; margin-bottom:8px;">
+        <span class="section-icon">📩</span>
+        <h2 class="section-title">Submit Your Project</h2>
+      </div>
       <div class="cta-box">
-        <h3>👉 Submit your project</h3>
         <p>Ready to launch? Send us your project details via Twitter or Discord.</p>
         <a href="https://x.com/GborSzakl1" target="_blank" class="cta-btn">🐦 Twitter: @GborSzakl1</a>
         <a href="https://discord.gg/6Nfbjp3BcS" target="_blank" class="cta-btn secondary">💬 Discord</a>
       </div>
     </div>
 
-    <!-- VISION -->
-    <div class="doc-section" id="vision">
-      <div class="section-header">
-        <span class="section-icon">🧠</span>
-        <h2 class="section-title">Vision</h2>
-      </div>
-      <div class="doc-card">
-        <p>Our vision is to become the <strong>go-to NFT launchpad on Hyperliquid</strong>. We believe the future of NFTs is:</p>
-      </div>
-      <ul class="vision-list" style="margin-top:16px; margin-bottom:20px;">
-        <li>On-chain</li>
-        <li>Community-driven</li>
-        <li>Fast and accessible</li>
-      </ul>
-      <div class="doc-card" style="background:linear-gradient(135deg,rgba(13,122,82,0.08),rgba(20,184,166,0.08)); border-color:rgba(13,122,82,0.25);">
-        <p style="font-size:16px; font-weight:700; color:#0d7a52; text-align:center;">CatKitSune is building that future. 🚀</p>
-      </div>
-    </div>
-
   </div>
 </div>
 
-<script>
-// Highlight active sidebar link on scroll
-const sections = document.querySelectorAll('.doc-section');
-const links = document.querySelectorAll('.sidebar-link');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 120) current = s.id;
-  });
-  links.forEach(l => {
-    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
-  });
-});
-</script>
 </body>
 </html>
