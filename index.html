@@ -642,7 +642,7 @@ let nftPointsEarned = 0;
 // NFT COLLECTIONS
 // ==========================================
 const NFT_COLLECTIONS = [
-  { name: 'Wealthy Hypo Babies',   address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb', pointsPerNFT: 1, galleryIndex: 0,  image: 'https://pbs.twimg.com/profile_images/1876004126938537984/qpRkjcAX_400x400.jpg' },
+  { name: 'Lucky Hypio Winners',   address: '0x63eb9d77D083cA10C304E28d5191321977fd0Bfb', pointsPerNFT: 1, galleryIndex: 0,  image: '/hypio_pfp.png' },
   { name: 'Tiny Hyper Cats',       address: '0xCC3D60fF11a268606C6a57bD6Db74b4208f1D30c', pointsPerNFT: 1, galleryIndex: 1,  image: 'https://static.drip.trade/collections/tiny-hyper-cat_pfp.jpg' },
   { name: 'Hypurr',                address: '0x9125E2d6827a00B0F8330D6ef7BEF07730Bac685', pointsPerNFT: 1, galleryIndex: 2,  image: 'https://static.drip.trade/collections/hypurr_pfp.jpg' },
   { name: 'Hyperian Genesis',      address: '0xB0F82655F249FC6561A94eB370d41bD24A861A9d', pointsPerNFT: 1, galleryIndex: 3,  image: 'https://static.drip.trade/collections/hyperian-genesis_pfp.png' },
@@ -743,7 +743,12 @@ function loadGalleryImage(index, imageUrl) {
   const card = document.querySelector(`.nft-flat-card[data-index="${index}"]`);
   if (!card) return;
   const img = card.querySelector('img');
-  if (img) img.src = imageUrl;
+  if (!img) return;
+  img.style.display = 'block';
+  img.src = imageUrl;
+  img.onerror = function() {
+    this.style.display = 'none';
+  };
 }
 
 // ==========================================
@@ -891,15 +896,23 @@ async function checkNFTBalances() {
       try {
         const contract = new ethers.Contract(col.address, ERC721_ABI, provider);
         const bal = (await contract.balanceOf(walletAddress)).toNumber();
+        console.log(`📦 ${col.name}: ${bal} NFTs`);
         if (bal > 0) {
-          let imgUrl = col.image;
+          // Always load the collection image first (instant feedback)
+          loadGalleryImage(col.galleryIndex, col.image);
+          totalNFTs += bal;
+
+          // Try to get real NFT image (optional, may fail if no Enumerable)
           try {
             const tokenId = await contract.tokenOfOwnerByIndex(walletAddress, 0);
             const real = await fetchNFTImage(contract, tokenId);
-            if (real) imgUrl = real;
-          } catch {}
-          loadGalleryImage(col.galleryIndex, imgUrl);
-          totalNFTs += bal;
+            if (real) {
+              loadGalleryImage(col.galleryIndex, real);
+              console.log(`✅ ${col.name}: real image loaded for #${tokenId}`);
+            }
+          } catch (e) {
+            console.log(`ℹ️ ${col.name}: using collection image (no Enumerable)`);
+          }
         }
       } catch (e) { console.error(`❌ ${col.name}:`, e.message); }
     }
