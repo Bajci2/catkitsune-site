@@ -198,9 +198,10 @@ window.loginWithTwitter = function() { window.location.href="https://catkitsune.
       🔥
     </button>
     <!-- Connect Wallet -->
-    <button class="login-btn" id="walletBtn" onclick="toggleWallet()" style="padding:8px 10px;" title="Connect Wallet">
+    <button class="login-btn" id="walletBtn" onclick="toggleWallet()" style="padding:8px 10px; position:relative;" title="Connect Wallet">
       <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px;"/>
       <span id="walletText" style="display:none;"></span>
+      <span id="walletDot" style="display:none; position:absolute; top:3px; right:3px; width:8px; height:8px; background:#0d7a52; border-radius:50%; border:2px solid white;"></span>
     </button>
     <!-- Twitter Login -->
     <button class="login-btn" id="twitterBtn" onclick="loginWithTwitter()" style="padding:8px 10px;" title="Login with Twitter">
@@ -435,15 +436,18 @@ async function connectWallet() {
 }
 function disconnectWallet() {
   walletConnected=false; walletAddress='';
-  document.getElementById('walletText').textContent='Connect Wallet';
   document.getElementById('walletBtn').style.background='';
+  document.getElementById('walletBtn').style.borderColor='';
+  document.getElementById('walletBtn').title='Connect Wallet';
+  document.getElementById('walletDot').style.display='none';
   sessionStorage.removeItem('wallet_address');
   showNotification('👋 Wallet disconnected');
 }
 function updateWalletButton() {
-  document.getElementById('walletText').textContent=walletAddress.slice(0,6)+'...'+walletAddress.slice(-4);
+  document.getElementById('walletBtn').title=walletAddress.slice(0,6)+'...'+walletAddress.slice(-4);
   document.getElementById('walletBtn').style.background='rgba(13,122,82,0.15)';
   document.getElementById('walletBtn').style.borderColor='#0d7a52';
+  document.getElementById('walletDot').style.display='block';
   sessionStorage.setItem('wallet_address', walletAddress);
 }
 function toggleWallet() {
