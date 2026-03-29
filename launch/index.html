@@ -290,8 +290,14 @@ body::after {
 <!-- HEADER -->
 <div class="header">
   <div class="nav-actions">
-    <a href="/" class="back-btn">← Dashboard</a>
-    <button class="wallet-btn" id="walletBtn" onclick="openConnectModal()">Connect Wallet</button>
+    <!-- Dashboard back -->
+    <a href="/" class="back-btn" style="padding:8px 12px;" title="Dashboard">
+      🏠
+    </a>
+    <!-- Connect Wallet -->
+    <button class="wallet-btn" id="walletBtn" onclick="openConnectModal()" style="padding:8px 12px;" title="Connect Wallet">
+      <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px; vertical-align:middle;"/>
+    </button>
   </div>
 </div>
 
@@ -472,7 +478,9 @@ function onWalletConnected() {
   log(`Connected: ${short}`,'success'); log(`Connected: ${short}`,'success',true);
   contract     = new ethers.Contract(CONTRACT_ADDRESS,      CONTRACT_ABI, signer);
   freeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-  document.getElementById('walletBtn').textContent = short;
+  document.getElementById('walletBtn').title = short;
+  document.getElementById('walletBtn').style.borderColor = '#0d7a52';
+  document.getElementById('walletBtn').style.background = 'rgba(13,122,82,0.1)';
   const mb = document.getElementById('mintButton');
   mb.textContent = 'Mint Now (0.1 HYPE)'; mb.onclick = mintNFT;
   const fb = document.getElementById('freeMintButton');
@@ -488,7 +496,9 @@ function onWalletConnected() {
 
 function resetWalletState() {
   userAddress=null; provider=null; signer=null; contract=null; freeContract=null;
-  document.getElementById('walletBtn').textContent='Connect Wallet';
+  document.getElementById('walletBtn').title='Connect Wallet';
+  document.getElementById('walletBtn').style.borderColor='';
+  document.getElementById('walletBtn').style.background='';
   document.getElementById('mintButton').textContent='Connect Wallet';
   document.getElementById('mintButton').onclick=openConnectModal;
   document.getElementById('freeMintButton').textContent='Connect Wallet';
