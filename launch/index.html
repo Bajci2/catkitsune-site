@@ -480,27 +480,61 @@ function updateSupplyUI(paid, free) {
   document.getElementById('freeProgress').style.width = `${Math.max(fp, 0)}%`;
 }
 
+// Raw JSON-RPC call — no ethers network detection needed, works on Hyperliquid
+async function rpcCall(to, data) {
+  const body = JSON.stringify({
+    jsonrpc: '2.0', method: 'eth_call',
+    params: [{ to, data }, 'latest'],
+    id: 1
+  });
+  const res = await fetch('https://rpc.hyperliquid.xyz/evm', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body
+  });
+  const json = await res.json();
+  if (json.error) throw new Error(json.error.message);
+  return json.result; // hex string
+}
+
 async function loadSupply() {
   try {
-    const rp = new ethers.providers.JsonRpcProvider('https://rpc.hyperliquid.xyz/evm');
-    const rPaid = new ethers.Contract(CONTRACT_ADDRESS,      CONTRACT_ABI, rp);
-    const rFree = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, rp);
-
+    // _tokenIdCounter() selector = 0x84c4bd4b
+    // totalSupply()     selector = 0x18160ddd
+    // Try _tokenIdCounter first, fall back to totalSupply
     let paid = currentMintedSupply;
     let free = freeCurrentMintedSupply;
 
     try {
-      paid = (await rPaid._tokenIdCounter()).toNumber();
-      currentMintedSupply = paid;
-    } catch(e) { console.warn('paid counter:', e.message); }
+      const hex = await rpcCall(CONTRACT_ADDRESS, '0x84c4bd4b');
+      if (hex && hex !== '0x') {
+        paid = parseInt(hex, 16);
+        currentMintedSupply = paid;
+      }
+    } catch(e) {
+      console.warn('_tokenIdCounter paid failed, trying totalSupply:', e.message);
+      try {
+        const hex = await rpcCall(CONTRACT_ADDRESS, '0x18160ddd');
+        if (hex && hex !== '0x') { paid = parseInt(hex, 16); currentMintedSupply = paid; }
+      } catch(e2) { console.warn('totalSupply paid failed:', e2.message); }
+    }
 
     try {
-      free = (await rFree._tokenIdCounter()).toNumber();
-      freeCurrentMintedSupply = free;
-    } catch(e) { console.warn('free counter:', e.message); }
+      const hex = await rpcCall(FREE_CONTRACT_ADDRESS, '0x84c4bd4b');
+      if (hex && hex !== '0x') {
+        free = parseInt(hex, 16);
+        freeCurrentMintedSupply = free;
+      }
+    } catch(e) {
+      console.warn('_tokenIdCounter free failed, trying totalSupply:', e.message);
+      try {
+        const hex = await rpcCall(FREE_CONTRACT_ADDRESS, '0x18160ddd');
+        if (hex && hex !== '0x') { free = parseInt(hex, 16); freeCurrentMintedSupply = free; }
+      } catch(e2) { console.warn('totalSupply free failed:', e2.message); }
+    }
 
     updateSupplyUI(paid, free);
-    console.log(`✅ Supply — paid: ${paid}, free: ${free}`);
+    console.log(`✅ Supply loaded — paid: ${paid}, free: ${free}`);
   } catch(e) {
     console.error('loadSupply failed:', e);
   }
