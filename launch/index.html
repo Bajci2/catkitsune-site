@@ -480,61 +480,77 @@ function updateSupplyUI(paid, free) {
   document.getElementById('freeProgress').style.width = `${Math.max(fp, 0)}%`;
 }
 
-// Raw JSON-RPC call — no ethers network detection needed, works on Hyperliquid
-async function rpcCall(to, data) {
-  const body = JSON.stringify({
-    jsonrpc: '2.0', method: 'eth_call',
-    params: [{ to, data }, 'latest'],
-    id: 1
-  });
+// Raw JSON-RPC eth_call — no ethers network detection needed
+async function rpcCall(to, selector) {
   const res = await fetch('https://rpc.hyperliquid.xyz/evm', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body
+    body: JSON.stringify({
+      jsonrpc: '2.0', method: 'eth_call',
+      params: [{ to, data: selector }, 'latest'],
+      id: 1
+    })
   });
   const json = await res.json();
   if (json.error) throw new Error(json.error.message);
-  return json.result; // hex string
+  return json.result; // raw hex
 }
+
+// Parse hex result — handles both plain uint256 and OZ Counters struct { uint256 _value }
+// A plain uint256 is 32 bytes. An OZ Counters struct also ABI-encodes as 32 bytes.
+// If the result is 64+ hex chars (32+ bytes), read the last 32 bytes as the value.
+function parseHexUint(hex) {
+  if (!hex || hex === '0x') return 0;
+  const clean = hex.startsWith('0x') ? hex.slice(2) : hex;
+  if (clean.length === 0) return 0;
+  // Take the last 64 hex chars (32 bytes) — handles structs and plain uint256
+  const last32 = clean.slice(-64);
+  return parseInt(last32, 16);
+}
+
+// Try a list of selectors in order, return first non-zero result (or 0 if all fail/zero)
+async function trySelectors(address, selectors) {
+  for (const sel of selectors) {
+    try {
+      const hex = await rpcCall(address, sel);
+      const val = parseHexUint(hex);
+      console.log(`  ${sel} -> ${val}`);
+      if (val > 0) return val;
+    } catch(e) {
+      console.warn(`  ${sel} failed:`, e.message);
+    }
+  }
+  return 0;
+}
+
+// Selectors to try (in order of likelihood for each contract type)
+// 0x84c4bd4b = _tokenIdCounter()
+// 0x18160ddd = totalSupply()
+// 0x98bdf6f5 = tokenIdCounter()
+// 0xa2309ff8 = totalMinted()
+// 0x75794a3c = nextTokenId()
+const COUNTER_SELECTORS = [
+  '0x84c4bd4b', // _tokenIdCounter()
+  '0x18160ddd', // totalSupply()
+  '0x98bdf6f5', // tokenIdCounter()
+  '0xa2309ff8', // totalMinted()
+  '0x75794a3c', // nextTokenId()
+  '0xcf721b15', // mintedCount()
+  '0x61bc221a', // counter()
+];
 
 async function loadSupply() {
   try {
-    // _tokenIdCounter() selector = 0x84c4bd4b
-    // totalSupply()     selector = 0x18160ddd
-    // Try _tokenIdCounter first, fall back to totalSupply
-    let paid = currentMintedSupply;
-    let free = freeCurrentMintedSupply;
+    console.log('🔍 Fetching paid supply...');
+    const paid = await trySelectors(CONTRACT_ADDRESS, COUNTER_SELECTORS);
+    if (paid > 0) currentMintedSupply = paid;
 
-    try {
-      const hex = await rpcCall(CONTRACT_ADDRESS, '0x84c4bd4b');
-      if (hex && hex !== '0x') {
-        paid = parseInt(hex, 16);
-        currentMintedSupply = paid;
-      }
-    } catch(e) {
-      console.warn('_tokenIdCounter paid failed, trying totalSupply:', e.message);
-      try {
-        const hex = await rpcCall(CONTRACT_ADDRESS, '0x18160ddd');
-        if (hex && hex !== '0x') { paid = parseInt(hex, 16); currentMintedSupply = paid; }
-      } catch(e2) { console.warn('totalSupply paid failed:', e2.message); }
-    }
+    console.log('🔍 Fetching free supply...');
+    const free = await trySelectors(FREE_CONTRACT_ADDRESS, COUNTER_SELECTORS);
+    if (free > 0) freeCurrentMintedSupply = free;
 
-    try {
-      const hex = await rpcCall(FREE_CONTRACT_ADDRESS, '0x84c4bd4b');
-      if (hex && hex !== '0x') {
-        free = parseInt(hex, 16);
-        freeCurrentMintedSupply = free;
-      }
-    } catch(e) {
-      console.warn('_tokenIdCounter free failed, trying totalSupply:', e.message);
-      try {
-        const hex = await rpcCall(FREE_CONTRACT_ADDRESS, '0x18160ddd');
-        if (hex && hex !== '0x') { free = parseInt(hex, 16); freeCurrentMintedSupply = free; }
-      } catch(e2) { console.warn('totalSupply free failed:', e2.message); }
-    }
-
-    updateSupplyUI(paid, free);
-    console.log(`✅ Supply loaded — paid: ${paid}, free: ${free}`);
+    updateSupplyUI(currentMintedSupply, freeCurrentMintedSupply);
+    console.log(`✅ Supply — paid: ${currentMintedSupply}, free: ${freeCurrentMintedSupply}`);
   } catch(e) {
     console.error('loadSupply failed:', e);
   }
