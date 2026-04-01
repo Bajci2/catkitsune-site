@@ -291,13 +291,9 @@ body::after {
 <!-- HEADER -->
 <div class="header">
   <div class="nav-actions">
-    <!-- Dashboard back -->
-    <a href="/" class="back-btn" style="padding:8px 12px;" title="Dashboard">
-      🏠
-    </a>
-    <!-- Connect Wallet -->
+    <a href="/" class="back-btn" style="padding:8px 12px;" title="Dashboard">🏠</a>
     <button class="wallet-btn" id="walletBtn" onclick="openConnectModal()" style="padding:8px 12px; position:relative;" title="Connect Wallet">
-      <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" style="width:18px; vertical-align:middle;"/>
+      <span style="font-size:18px; vertical-align:middle;">👛</span>
       <span id="walletDot" style="display:none; position:absolute; top:4px; right:4px; width:8px; height:8px; background:#0d7a52; border-radius:50%; border:2px solid white;"></span>
     </button>
   </div>
@@ -314,15 +310,15 @@ body::after {
   <div class="stats-bar">
     <div class="stat-item">
       <div class="stat-label">Total Minted</div>
-      <div class="stat-value" id="totalMinted">—</div>
+      <div class="stat-value" id="totalMinted">...</div>
     </div>
     <div class="stat-item">
       <div class="stat-label">Paid Collection</div>
-      <div class="stat-value" id="paidMinted">27/300</div>
+      <div class="stat-value" id="paidMinted">...</div>
     </div>
     <div class="stat-item">
       <div class="stat-label">Free Collection</div>
-      <div class="stat-value" id="freeMinted">0/222</div>
+      <div class="stat-value" id="freeMinted">...</div>
     </div>
     <div class="stat-item">
       <div class="stat-label">Network</div>
@@ -346,16 +342,16 @@ body::after {
           </div>
           <div class="progress-section">
             <div class="progress-info">
-              <span id="paidSupply">27 / 300</span>
-              <span id="paidPercent">9%</span>
+              <span id="paidSupply">... / 300</span>
+              <span id="paidPercent">...%</span>
             </div>
             <div class="progress-bar-container">
-              <div class="progress-bar-fill" id="paidProgress" style="width:9%"></div>
+              <div class="progress-bar-fill" id="paidProgress" style="width:0%"></div>
             </div>
           </div>
           <button class="mint-button" id="mintButton" onclick="openConnectModal()">Connect Wallet</button>
           <div class="debug-console" id="debugInfo">
-            <div class="debug-log">Ready to mint...</div>
+            <div class="debug-log">Loading supply...</div>
           </div>
         </div>
       </div>
@@ -375,8 +371,8 @@ body::after {
           </div>
           <div class="progress-section">
             <div class="progress-info">
-              <span id="freeSupply">0 / 222</span>
-              <span id="freePercent">0%</span>
+              <span id="freeSupply">... / 222</span>
+              <span id="freePercent">...%</span>
             </div>
             <div class="progress-bar-container">
               <div class="progress-bar-fill" id="freeProgress" style="width:0%"></div>
@@ -384,7 +380,7 @@ body::after {
           </div>
           <button class="mint-button" id="freeMintButton" onclick="openConnectModal()">Connect Wallet</button>
           <div class="debug-console" id="freeDebugInfo">
-            <div class="debug-log">Ready to mint...</div>
+            <div class="debug-log">Loading supply...</div>
           </div>
         </div>
       </div>
@@ -425,11 +421,11 @@ const CONTRACT_ABI = [
   'function _tokenIdCounter() public view returns (uint256)',
   'function MAX_SUPPLY() public view returns (uint256)'
 ];
-const MINT_PRICE      = ethers.utils.parseEther('0.1');
-const FREE_MINT_PRICE = ethers.utils.parseEther('0');
+const MINT_PRICE      = '100000000000000000'; // 0.1 HYPE in wei — set after ethers loads
+const FREE_MINT_PRICE = '0';
 
 let provider, signer, contract, freeContract, userAddress;
-let currentMintedSupply = 27, freeCurrentMintedSupply = 0;
+let currentMintedSupply = 0, freeCurrentMintedSupply = 0;
 const MAX_SUPPLY = 300, FREE_MAX_SUPPLY = 222;
 
 function log(message, type='info', isFree=false) {
@@ -491,10 +487,9 @@ function onWalletConnected() {
   if (window.ethereum) {
     window.ethereum.on('accountsChanged', (accounts) => {
       if (!accounts.length) resetWalletState();
-      else { userAddress=accounts[0]; document.getElementById('walletBtn').textContent=`${userAddress.substring(0,6)}...${userAddress.substring(38)}`; }
+      else { userAddress=accounts[0]; document.getElementById('walletBtn').title=`${userAddress.substring(0,6)}...${userAddress.substring(38)}`; }
     });
   }
-  loadSupply();
 }
 
 function resetWalletState() {
@@ -509,26 +504,70 @@ function resetWalletState() {
   document.getElementById('freeMintButton').onclick=openConnectModal;
 }
 
+// ─────────────────────────────────────────────────────────────
+// FIX: Wait for ethers to be available before calling loadSupply
+// ─────────────────────────────────────────────────────────────
+function waitForEthers(cb, attempts=0) {
+  if (typeof ethers !== 'undefined') {
+    cb();
+  } else if (attempts < 30) {
+    setTimeout(() => waitForEthers(cb, attempts + 1), 200);
+  } else {
+    console.warn('ethers.js never loaded after 6s');
+    // Show fallback static values so UI is not blank
+    updateSupplyUI(27, 0);
+  }
+}
+
+function updateSupplyUI(paid, free) {
+  const total = paid + free;
+  document.getElementById('totalMinted').textContent = total;
+  document.getElementById('paidMinted').textContent  = `${paid}/300`;
+  document.getElementById('freeMinted').textContent  = `${free}/222`;
+
+  const pp = ((paid / MAX_SUPPLY) * 100).toFixed(1);
+  const fp = ((free / FREE_MAX_SUPPLY) * 100).toFixed(1);
+
+  document.getElementById('paidSupply').textContent   = `${paid} / ${MAX_SUPPLY}`;
+  document.getElementById('paidPercent').textContent  = `${pp}%`;
+  document.getElementById('paidProgress').style.width = `${pp}%`;
+
+  document.getElementById('freeSupply').textContent   = `${free} / ${FREE_MAX_SUPPLY}`;
+  document.getElementById('freePercent').textContent  = `${fp}%`;
+  document.getElementById('freeProgress').style.width = `${fp}%`;
+}
+
 async function loadSupply() {
   try {
     const rp = new ethers.providers.JsonRpcProvider('https://rpc.hyperliquid.xyz/evm');
-    const rPaid = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, rp);
+    const rPaid = new ethers.Contract(CONTRACT_ADDRESS,      CONTRACT_ABI, rp);
     const rFree = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, rp);
-    try { currentMintedSupply = (await rPaid._tokenIdCounter()).toNumber(); } catch(e){}
-    try { freeCurrentMintedSupply = (await rFree._tokenIdCounter()).toNumber(); } catch(e){}
-    const total = currentMintedSupply + freeCurrentMintedSupply;
-    document.getElementById('totalMinted').textContent = total;
-    document.getElementById('paidMinted').textContent  = `${currentMintedSupply}/300`;
-    document.getElementById('freeMinted').textContent  = `${freeCurrentMintedSupply}/222`;
-    const pp = ((currentMintedSupply/MAX_SUPPLY)*100).toFixed(1);
-    const fp = ((freeCurrentMintedSupply/FREE_MAX_SUPPLY)*100).toFixed(1);
-    document.getElementById('paidSupply').textContent  = `${currentMintedSupply} / ${MAX_SUPPLY}`;
-    document.getElementById('paidPercent').textContent = `${pp}%`;
-    document.getElementById('paidProgress').style.width= `${pp}%`;
-    document.getElementById('freeSupply').textContent  = `${freeCurrentMintedSupply} / ${FREE_MAX_SUPPLY}`;
-    document.getElementById('freePercent').textContent = `${fp}%`;
-    document.getElementById('freeProgress').style.width= `${fp}%`;
-  } catch(e) { console.error('loadSupply:', e); }
+
+    let paid = 0, free = 0;
+
+    try {
+      const raw = await rPaid._tokenIdCounter();
+      paid = raw.toNumber();
+      currentMintedSupply = paid;
+    } catch(e) {
+      console.warn('paid counter error:', e.message);
+      paid = currentMintedSupply; // keep last known value
+    }
+
+    try {
+      const raw = await rFree._tokenIdCounter();
+      free = raw.toNumber();
+      freeCurrentMintedSupply = free;
+    } catch(e) {
+      console.warn('free counter error:', e.message);
+      free = freeCurrentMintedSupply;
+    }
+
+    updateSupplyUI(paid, free);
+    console.log(`✅ Supply loaded — paid: ${paid}, free: ${free}`);
+  } catch(e) {
+    console.error('loadSupply failed:', e);
+  }
 }
 
 async function mintNFT() {
@@ -537,11 +576,14 @@ async function mintNFT() {
     log('Starting mint...','success');
     document.getElementById('mintButton').disabled=true;
     document.getElementById('mintButton').textContent='Minting...';
-    const tx = await contract.mint({ value:MINT_PRICE });
+    const tx = await contract.mint({ value: ethers.utils.parseEther('0.1') });
     log(`TX: ${tx.hash.substring(0,12)}...`,'success');
     await tx.wait();
     log('Mint successful! 🎉','success');
-    currentMintedSupply++; await loadSupply();
+    currentMintedSupply++;
+    updateSupplyUI(currentMintedSupply, freeCurrentMintedSupply);
+    // Also re-fetch from chain to confirm
+    setTimeout(loadSupply, 3000);
     document.getElementById('mintButton').disabled=false;
     document.getElementById('mintButton').textContent='Mint Now (0.1 HYPE)';
   } catch(e) {
@@ -557,11 +599,13 @@ async function mintFreeNFT() {
     log('Starting free mint...','success',true);
     document.getElementById('freeMintButton').disabled=true;
     document.getElementById('freeMintButton').textContent='Minting...';
-    const tx = await freeContract.mint({ value:FREE_MINT_PRICE });
+    const tx = await freeContract.mint({ value: ethers.utils.parseEther('0') });
     log(`TX: ${tx.hash.substring(0,12)}...`,'success',true);
     await tx.wait();
     log('Free mint successful! 🎉','success',true);
-    freeCurrentMintedSupply++; await loadSupply();
+    freeCurrentMintedSupply++;
+    updateSupplyUI(currentMintedSupply, freeCurrentMintedSupply);
+    setTimeout(loadSupply, 3000);
     document.getElementById('freeMintButton').disabled=false;
     document.getElementById('freeMintButton').textContent='Mint Free';
   } catch(e) {
@@ -571,11 +615,19 @@ async function mintFreeNFT() {
   }
 }
 
+// ─────────────────────────────────────────────────────────────
+// INIT — wait for ethers.js before doing anything
+// ─────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  loadSupply();
-  log('Mint page loaded ✨'); log('Mint page loaded ✨','info',true);
   document.getElementById('wcModal').addEventListener('click', function(e){ if(e.target===this) closeWCModal(); });
-  setInterval(loadSupply, 18000);
+
+  waitForEthers(() => {
+    log('Mint page loaded ✨');
+    log('Mint page loaded ✨','info',true);
+    loadSupply();
+    // Refresh every 18 seconds
+    setInterval(loadSupply, 18000);
+  });
 });
 </script>
 </body>
