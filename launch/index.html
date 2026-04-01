@@ -4,24 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CatKitSune - Mint</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script defer src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-
 :root {
   --primary: #0d7a52;
   --primary-light: #14b8a6;
-  --bg: #ffffff;
-  --bg-card: rgba(255,255,255,0.7);
-  --border: rgba(13,122,82,0.2);
   --text: #0a1f16;
   --text-muted: #2d6b52;
 }
-
 body {
   font-family: 'Inter', sans-serif;
   background: #ffffff;
@@ -30,14 +22,12 @@ body {
   position: relative;
   overflow-x: hidden;
 }
-
 body::before {
   content: '';
   position: fixed; inset: 0;
   background: radial-gradient(ellipse at top, #f0fdf8 0%, #ffffff 60%);
   z-index: -2;
 }
-
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -48,7 +38,6 @@ body::after {
   opacity: 0.5; z-index: -1; pointer-events: none;
 }
 
-/* HEADER */
 .header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 12px 32px;
@@ -57,9 +46,7 @@ body::after {
   border-bottom: 1px solid rgba(13,122,82,0.15);
   display: flex; justify-content: space-between; align-items: center;
 }
-
 .nav-actions { display: flex; gap: 12px; align-items: center; }
-
 .back-btn, .wallet-btn {
   padding: 8px 18px;
   background: rgba(255,255,255,0.7);
@@ -69,7 +56,7 @@ body::after {
   font-weight: 600; cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex; align-items: center; justify-content: center;
   font-family: 'Inter', sans-serif;
   font-size: 13px;
 }
@@ -79,7 +66,6 @@ body::after {
   transform: translateY(-2px);
 }
 
-/* WALLETCONNECT MODAL */
 .wc-modal-overlay {
   display: none; position: fixed; inset: 0;
   background: rgba(0,0,0,0.3); z-index: 9999;
@@ -93,7 +79,9 @@ body::after {
   border-radius: 24px; padding: 32px;
   max-width: 360px; width: 90%; text-align: center;
   box-shadow: 0 20px 60px rgba(13,122,82,0.15);
+  animation: modalIn 0.3s ease;
 }
+@keyframes modalIn { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
 .wc-modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--primary); }
 .wc-modal p { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
 .wc-option-btn {
@@ -105,26 +93,18 @@ body::after {
   display: flex; align-items: center; gap: 12px;
 }
 .wc-option-btn:hover { background: rgba(13,122,82,0.15); border-color: var(--primary); transform: translateY(-2px); }
-.wc-option-btn .btn-icon { font-size: 22px; }
 .wc-cancel-btn { background: none; border: none; color: var(--text-muted); font-size: 13px; cursor: pointer; margin-top: 8px; font-family: 'Inter', sans-serif; }
 .wc-cancel-btn:hover { color: var(--text); }
 
-/* MAIN */
 .main-container { padding-top: 80px; min-height: 100vh; }
-
-/* HERO */
 .hero-section { text-align: center; padding: 32px 20px 24px; }
-.hero-title {
-  font-size: 40px; font-weight: 800; color: var(--text);
-  margin-bottom: 10px;
-}
+.hero-title { font-size: 40px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
 .hero-title span {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .hero-subtitle { font-size: 14px; color: var(--text-muted); max-width: 400px; margin: 0 auto 8px; line-height: 1.6; }
 
-/* STATS BAR */
 .stats-bar {
   display: flex; justify-content: center; gap: 16px;
   margin-bottom: 40px; flex-wrap: wrap; padding: 0 20px;
@@ -144,12 +124,10 @@ body::after {
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-/* MINT CARDS */
 .mint-cards-container {
   max-width: 1050px; margin: 0 auto; padding: 0 20px 60px;
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
 }
-
 .mint-card-3d { position: relative; perspective: 750px; height: 460px; }
 .card-inner {
   position: relative; width: 100%; height: 100%;
@@ -157,7 +135,6 @@ body::after {
   transform-style: preserve-3d;
 }
 .mint-card-3d:hover .card-inner { transform: rotateY(3deg) rotateX(3deg); }
-
 .card-front {
   position: absolute; width: 100%; height: 100%;
   backface-visibility: hidden; border-radius: 20px; overflow: hidden;
@@ -170,22 +147,14 @@ body::after {
 }
 .card-front:hover { box-shadow: 0 12px 40px rgba(13,122,82,0.18); }
 
-/* NFT IMAGE SHOWCASE */
 .nft-showcase-img {
-  width: 100%;
-  height: 220px;
-  margin-bottom: 16px;
-  border-radius: 14px;
-  overflow: hidden;
+  width: 100%; height: 220px; margin-bottom: 16px;
+  border-radius: 14px; overflow: hidden;
   border: 1px solid rgba(13,122,82,0.2);
   box-shadow: 0 4px 20px rgba(13,122,82,0.12);
 }
-.nft-showcase-img img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-}
+.nft-showcase-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* CARD CONTENT */
 .card-header { margin-top: 4px; margin-bottom: 12px; }
 .card-badge {
   display: inline-block; padding: 4px 10px;
@@ -195,22 +164,13 @@ body::after {
   text-transform: uppercase; letter-spacing: 1px;
   margin-bottom: 8px; color: var(--primary); font-weight: 700;
 }
-.card-badge.free {
-  background: rgba(20,184,166,0.1);
-  border-color: rgba(20,184,166,0.4);
-  color: #0d9488;
-}
+.card-badge.free { background: rgba(20,184,166,0.1); border-color: rgba(20,184,166,0.4); color: #0d9488; }
 .card-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; color: var(--text); }
 .card-collection { font-size: 11px; color: var(--text-muted); }
 
-/* PROGRESS */
 .progress-section { margin-bottom: 16px; }
 .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); font-weight: 600; }
-.progress-bar-container {
-  height: 10px; background: rgba(13,122,82,0.08);
-  border-radius: 999px; overflow: hidden;
-  border: 1px solid rgba(13,122,82,0.15);
-}
+.progress-bar-container { height: 10px; background: rgba(13,122,82,0.08); border-radius: 999px; overflow: hidden; border: 1px solid rgba(13,122,82,0.15); }
 .progress-bar-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--primary), var(--primary-light));
@@ -225,7 +185,6 @@ body::after {
 }
 @keyframes shimmer { 0%{transform:translateX(-100%);} 100%{transform:translateX(100%);} }
 
-/* MINT BUTTON */
 .mint-button {
   width: 100%; padding: 12px;
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -251,7 +210,6 @@ body::after {
 .mint-button:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(13,122,82,0.4); }
 .mint-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-/* DEBUG CONSOLE */
 .debug-console {
   margin-top: 10px;
   background: rgba(13,122,82,0.04);
@@ -265,43 +223,38 @@ body::after {
 .debug-success{ color: #0d7a52; border-left-color: #0d7a52; padding-left:10px; margin:3px 0; padding:3px 0; }
 .debug-error  { color: #ef4444; border-left-color: #ef4444; padding-left:10px; margin:3px 0; padding:3px 0; }
 
-/* RESPONSIVE */
-@media (max-width: 1100px) { .mint-cards-container { grid-template-columns: 1fr; gap: 24px; } .mint-card-3d { height: auto; } .card-inner { transform: none !important; height: auto; } .card-front { position: relative; height: auto; overflow: visible; } .card-header { margin-top: 4px; } }
+@media (max-width: 1100px) { .mint-cards-container { grid-template-columns: 1fr; gap: 24px; } .mint-card-3d { height: auto; } .card-inner { transform: none !important; height: auto; } .card-front { position: relative; height: auto; overflow: visible; } }
 @media (max-width: 768px)  { .header { padding: 10px 16px; } .hero-title { font-size: 28px; } .stats-bar { gap: 8px; } .back-btn { display: none; } .mint-cards-container { padding: 0 12px 40px; } .nft-showcase-img { height: 180px; } }
 @media (max-width: 480px)  { .hero-title { font-size: 22px; } .stats-bar .stat-item { padding: 8px 12px; } .stat-value { font-size: 15px; } }
 </style>
 </head>
 <body>
 
-<!-- WALLETCONNECT MODAL -->
 <div class="wc-modal-overlay" id="wcModal">
   <div class="wc-modal">
     <h3>🔗 Connect Wallet</h3>
     <p>Válassz egy wallet opciót a csatlakozáshoz</p>
     <button class="wc-option-btn" onclick="connectWithMetaMask()">
-      <span class="btn-icon">🦊</span><span>MetaMask</span>
+      <span style="font-size:22px;">🦊</span><span>MetaMask</span>
     </button>
     <button class="wc-option-btn" onclick="connectWithWalletConnect()">
-      <span class="btn-icon">📱</span><span>WalletConnect (Mobile / iPhone)</span>
+      <span style="font-size:22px;">📱</span><span>WalletConnect (Mobile / iPhone)</span>
     </button>
     <button class="wc-cancel-btn" onclick="closeWCModal()">Mégsem</button>
   </div>
 </div>
 
-<!-- HEADER -->
 <div class="header">
   <div class="nav-actions">
     <a href="/" class="back-btn" style="padding:8px 12px;" title="Dashboard">🏠</a>
     <button class="wallet-btn" id="walletBtn" onclick="openConnectModal()" style="padding:8px 12px; position:relative;" title="Connect Wallet">
-      <span style="font-size:18px; vertical-align:middle;">👛</span>
+      <span style="font-size:18px;">👛</span>
       <span id="walletDot" style="display:none; position:absolute; top:4px; right:4px; width:8px; height:8px; background:#0d7a52; border-radius:50%; border:2px solid white;"></span>
     </button>
   </div>
 </div>
 
-<!-- MAIN -->
 <div class="main-container">
-
   <div class="hero-section">
     <h1 class="hero-title">Mint Your <span>NFT</span></h1>
     <p class="hero-subtitle">Next-gen NFT minting on Hyperliquid blockchain</p>
@@ -327,7 +280,6 @@ body::after {
   </div>
 
   <div class="mint-cards-container">
-
     <!-- PAID MINT -->
     <div class="mint-card-3d">
       <div class="card-inner">
@@ -401,9 +353,12 @@ body::after {
         </div>
       </div>
     </div>
-
   </div>
 </div>
+
+<!-- Load ethers + WalletConnect SYNCHRONOUSLY so they're ready before any JS runs -->
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 
 <script>
 const HYPERLIQUID_CONFIG = {
@@ -421,8 +376,6 @@ const CONTRACT_ABI = [
   'function _tokenIdCounter() public view returns (uint256)',
   'function MAX_SUPPLY() public view returns (uint256)'
 ];
-const MINT_PRICE      = '100000000000000000'; // 0.1 HYPE in wei — set after ethers loads
-const FREE_MINT_PRICE = '0';
 
 let provider, signer, contract, freeContract, userAddress;
 let currentMintedSupply = 0, freeCurrentMintedSupply = 0;
@@ -437,8 +390,13 @@ function log(message, type='info', isFree=false) {
   d.scrollTop = d.scrollHeight;
 }
 
-function openConnectModal() { if (userAddress) return; document.getElementById('wcModal').classList.add('active'); }
-function closeWCModal() { document.getElementById('wcModal').classList.remove('active'); }
+function openConnectModal() {
+  if (userAddress) return;
+  document.getElementById('wcModal').classList.add('active');
+}
+function closeWCModal() {
+  document.getElementById('wcModal').classList.remove('active');
+}
 
 async function connectWithMetaMask() {
   closeWCModal();
@@ -476,9 +434,10 @@ function onWalletConnected() {
   log(`Connected: ${short}`,'success'); log(`Connected: ${short}`,'success',true);
   contract     = new ethers.Contract(CONTRACT_ADDRESS,      CONTRACT_ABI, signer);
   freeContract = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-  document.getElementById('walletBtn').title = short;
-  document.getElementById('walletBtn').style.borderColor = '#0d7a52';
-  document.getElementById('walletBtn').style.background = 'rgba(13,122,82,0.1)';
+  const btn = document.getElementById('walletBtn');
+  btn.title = short;
+  btn.style.borderColor = '#0d7a52';
+  btn.style.background = 'rgba(13,122,82,0.1)';
   document.getElementById('walletDot').style.display = 'block';
   const mb = document.getElementById('mintButton');
   mb.textContent = 'Mint Now (0.1 HYPE)'; mb.onclick = mintNFT;
@@ -487,36 +446,20 @@ function onWalletConnected() {
   if (window.ethereum) {
     window.ethereum.on('accountsChanged', (accounts) => {
       if (!accounts.length) resetWalletState();
-      else { userAddress=accounts[0]; document.getElementById('walletBtn').title=`${userAddress.substring(0,6)}...${userAddress.substring(38)}`; }
+      else { userAddress = accounts[0]; btn.title = `${userAddress.substring(0,6)}...${userAddress.substring(38)}`; }
     });
   }
 }
 
 function resetWalletState() {
   userAddress=null; provider=null; signer=null; contract=null; freeContract=null;
-  document.getElementById('walletBtn').title='Connect Wallet';
-  document.getElementById('walletBtn').style.borderColor='';
-  document.getElementById('walletBtn').style.background='';
+  const btn = document.getElementById('walletBtn');
+  btn.title='Connect Wallet'; btn.style.borderColor=''; btn.style.background='';
   document.getElementById('walletDot').style.display='none';
   document.getElementById('mintButton').textContent='Connect Wallet';
   document.getElementById('mintButton').onclick=openConnectModal;
   document.getElementById('freeMintButton').textContent='Connect Wallet';
   document.getElementById('freeMintButton').onclick=openConnectModal;
-}
-
-// ─────────────────────────────────────────────────────────────
-// FIX: Wait for ethers to be available before calling loadSupply
-// ─────────────────────────────────────────────────────────────
-function waitForEthers(cb, attempts=0) {
-  if (typeof ethers !== 'undefined') {
-    cb();
-  } else if (attempts < 30) {
-    setTimeout(() => waitForEthers(cb, attempts + 1), 200);
-  } else {
-    console.warn('ethers.js never loaded after 6s');
-    // Show fallback static values so UI is not blank
-    updateSupplyUI(27, 0);
-  }
 }
 
 function updateSupplyUI(paid, free) {
@@ -530,11 +473,11 @@ function updateSupplyUI(paid, free) {
 
   document.getElementById('paidSupply').textContent   = `${paid} / ${MAX_SUPPLY}`;
   document.getElementById('paidPercent').textContent  = `${pp}%`;
-  document.getElementById('paidProgress').style.width = `${pp}%`;
+  document.getElementById('paidProgress').style.width = `${Math.max(pp, 0)}%`;
 
   document.getElementById('freeSupply').textContent   = `${free} / ${FREE_MAX_SUPPLY}`;
   document.getElementById('freePercent').textContent  = `${fp}%`;
-  document.getElementById('freeProgress').style.width = `${fp}%`;
+  document.getElementById('freeProgress').style.width = `${Math.max(fp, 0)}%`;
 }
 
 async function loadSupply() {
@@ -543,28 +486,21 @@ async function loadSupply() {
     const rPaid = new ethers.Contract(CONTRACT_ADDRESS,      CONTRACT_ABI, rp);
     const rFree = new ethers.Contract(FREE_CONTRACT_ADDRESS, CONTRACT_ABI, rp);
 
-    let paid = 0, free = 0;
+    let paid = currentMintedSupply;
+    let free = freeCurrentMintedSupply;
 
     try {
-      const raw = await rPaid._tokenIdCounter();
-      paid = raw.toNumber();
+      paid = (await rPaid._tokenIdCounter()).toNumber();
       currentMintedSupply = paid;
-    } catch(e) {
-      console.warn('paid counter error:', e.message);
-      paid = currentMintedSupply; // keep last known value
-    }
+    } catch(e) { console.warn('paid counter:', e.message); }
 
     try {
-      const raw = await rFree._tokenIdCounter();
-      free = raw.toNumber();
+      free = (await rFree._tokenIdCounter()).toNumber();
       freeCurrentMintedSupply = free;
-    } catch(e) {
-      console.warn('free counter error:', e.message);
-      free = freeCurrentMintedSupply;
-    }
+    } catch(e) { console.warn('free counter:', e.message); }
 
     updateSupplyUI(paid, free);
-    console.log(`✅ Supply loaded — paid: ${paid}, free: ${free}`);
+    console.log(`✅ Supply — paid: ${paid}, free: ${free}`);
   } catch(e) {
     console.error('loadSupply failed:', e);
   }
@@ -582,8 +518,7 @@ async function mintNFT() {
     log('Mint successful! 🎉','success');
     currentMintedSupply++;
     updateSupplyUI(currentMintedSupply, freeCurrentMintedSupply);
-    // Also re-fetch from chain to confirm
-    setTimeout(loadSupply, 3000);
+    setTimeout(loadSupply, 4000);
     document.getElementById('mintButton').disabled=false;
     document.getElementById('mintButton').textContent='Mint Now (0.1 HYPE)';
   } catch(e) {
@@ -605,7 +540,7 @@ async function mintFreeNFT() {
     log('Free mint successful! 🎉','success',true);
     freeCurrentMintedSupply++;
     updateSupplyUI(currentMintedSupply, freeCurrentMintedSupply);
-    setTimeout(loadSupply, 3000);
+    setTimeout(loadSupply, 4000);
     document.getElementById('freeMintButton').disabled=false;
     document.getElementById('freeMintButton').textContent='Mint Free';
   } catch(e) {
@@ -615,20 +550,15 @@ async function mintFreeNFT() {
   }
 }
 
-// ─────────────────────────────────────────────────────────────
-// INIT — wait for ethers.js before doing anything
-// ─────────────────────────────────────────────────────────────
-window.addEventListener('load', () => {
-  document.getElementById('wcModal').addEventListener('click', function(e){ if(e.target===this) closeWCModal(); });
+// Modal backdrop close
+document.getElementById('wcModal').addEventListener('click', function(e){ if(e.target===this) closeWCModal(); });
 
-  waitForEthers(() => {
-    log('Mint page loaded ✨');
-    log('Mint page loaded ✨','info',true);
-    loadSupply();
-    // Refresh every 18 seconds
-    setInterval(loadSupply, 18000);
-  });
-});
+// ── INIT ─────────────────────────────────────────────────────
+// ethers is loaded synchronously above so it's always ready here
+loadSupply();
+log('Mint page loaded ✨');
+log('Mint page loaded ✨','info',true);
+setInterval(loadSupply, 18000);
 </script>
 </body>
 </html>
